@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<head>
+    <title layout:fragment="title">Hệ thống quản lý dịch vụ chăm sóc da</title>
+    <style>
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 600;
+            color: #0d6efd;
+        }
+        
+        .nav-link {
+            color: #333;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+        
+        .nav-link:hover {
+            color: #0d6efd;
+        }
+        
+        .nav-link.active {
+            color: #0d6efd;
+        }
+        
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-menu .dropdown-menu {
+            min-width: 200px;
+            padding: 0.5rem 0;
+        }
+        
+        .user-menu .dropdown-item {
+            padding: 0.5rem 1rem;
+            color: #333;
+        }
+        
+        .user-menu .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #0d6efd;
+        }
+        
+        .user-menu .dropdown-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 0.5rem;
+        }
+        
+        .main-content {
+            padding: 2rem 0;
+        }
+        
+        .footer {
+            background-color: #f8f9fa;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .footer-link {
+            color: #6c757d;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-link:hover {
+            color: #0d6efd;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-link {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" th:href="@{/}">
+                <i class="fas fa-spa me-2"></i>Skincare System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}" th:classappend="${#httpServletRequest.requestURI == '/' ? 'active' : ''}">
+                            <i class="fas fa-home me-1"></i>Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/services}" th:classappend="${#httpServletRequest.requestURI.startsWith('/services') ? 'active' : ''}">
+                            <i class="fas fa-spa me-1"></i>Dịch vụ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/specialists}" th:classappend="${#httpServletRequest.requestURI.startsWith('/specialists') ? 'active' : ''}">
+                            <i class="fas fa-user-md me-1"></i>Chuyên viên
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/about}" th:classappend="${#httpServletRequest.requestURI.startsWith('/about') ? 'active' : ''}">
+                            <i class="fas fa-info-circle me-1"></i>Giới thiệu
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/contact}" th:classappend="${#httpServletRequest.requestURI.startsWith('/contact') ? 'active' : ''}">
+                            <i class="fas fa-envelope me-1"></i>Liên hệ
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" th:if="${#authorization.expression('!isAuthenticated()')}">
+                        <a class="nav-link" th:href="@{/login}">
+                            <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
+                        </a>
+                    </li>
+                    <li class="nav-item" th:if="${#authorization.expression('!isAuthenticated()')}">
+                        <a class="nav-link" th:href="@{/register}">
+                            <i class="fas fa-user-plus me-1"></i>Đăng ký
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown user-menu" th:if="${#authorization.expression('isAuthenticated()')}">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span th:text="${#authentication.principal.fullName}">Tên người dùng</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" th:href="@{/profile}">
+                                    <i class="fas fa-user"></i>Thông tin cá nhân
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/appointments/my-appointments}">
+                                    <i class="fas fa-calendar-alt"></i>Lịch hẹn của tôi
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/reviews/my-reviews}">
+                                    <i class="fas fa-star"></i>Đánh giá của tôi
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" th:href="@{/logout}">
+                                    <i class="fas fa-sign-out-alt"></i>Đăng xuất
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div layout:fragment="content">
+            <!-- Content will be inserted here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Về chúng tôi</h5>
+                    <p class="text-muted">
+                        Hệ thống quản lý dịch vụ chăm sóc da chuyên nghiệp, 
+                        cung cấp các dịch vụ chất lượng cao với đội ngũ chuyên viên giàu kinh nghiệm.
+                    </p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Liên kết nhanh</h5>
+                    <a href="#" class="footer-link">Trang chủ</a>
+                    <a href="#" class="footer-link">Dịch vụ</a>
+                    <a href="#" class="footer-link">Chuyên viên</a>
+                    <a href="#" class="footer-link">Giới thiệu</a>
+                    <a href="#" class="footer-link">Liên hệ</a>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Liên hệ</h5>
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-map-marker-alt me-2"></i>123 Đường ABC, Quận 1, TP.HCM
+                    </p>
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-phone me-2"></i>(84) 123 456 789
+                    </p>
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-envelope me-2"></i>contact@skincare.com
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="text-muted mb-0">
+                        &copy; 2024 Skincare System. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-muted me-3">Điều khoản sử dụng</a>
+                    <a href="#" class="text-muted">Chính sách bảo mật</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <th:block layout:fragment="scripts">
+        <!-- Additional scripts will be inserted here -->
+    </th:block>
+</body>
+</html> 
