@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Lịch - Trung Tâm Chăm Sóc Da</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+        }
+        .booking-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .form-section {
+            margin-bottom: 30px;
+        }
+        .form-section-title {
+            border-bottom: 2px solidrgb(69, 107, 146);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+        .time-slot {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        .time-slot:hover {
+            border-color: #2c3e50;
+        }
+        .time-slot.selected {
+            background-color: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+        .time-slot.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #f8f9fa;
+        }
+        .service-option {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .service-option:hover {
+            border-color: #2c3e50;
+        }
+        .service-option.selected {
+            border-color: #2c3e50;
+            background-color: rgba(44, 62, 80, 0.1);
+        }
+        .service-option .service-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .service-option .service-price {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        .service-option .service-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-top: 2px solid #2c3e50;
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .calendar-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #calendar {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #calendar th {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+        }
+        #calendar td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            height: 60px;
+            vertical-align: top;
+            width: 14.28%;
+        }
+        .calendar-date {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .calendar-day {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .calendar-day:hover {
+            background-color: rgba(44, 62, 80, 0.1);
+        }
+        .calendar-day.selected {
+            background-color: #2c3e50;
+            color: white;
+        }
+        .calendar-day.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #f8f9fa;
+        }
+        .calendar-day.today {
+            background-color: #e9f5ea;
+        }
+        .prev-month, .next-month {
+            color: #aaa;
+        }
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .calendar-nav button {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #2c3e50;
+        }
+        .calendar-month {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .staff-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .staff-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            width: calc(33.33% - 10px);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .staff-card:hover {
+            border-color: #2c3e50;
+        }
+        .staff-card.selected {
+            border-color: #2c3e50;
+            background-color: rgba(44, 62, 80, 0.1);
+        }
+        .staff-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .staff-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .staff-role {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        .navbar {
+            background-color: #2c3e50!important;
+        }
+        .nav-link {
+            color: white!important;
+        }
+        .btn-primary {
+            background-color: #2c3e50;
+            border-color: #2c3e50;
+        }
+        .btn-primary:hover {
+            background-color: #1a252f;
+            border-color: #1a252f;
+        }
+        @media (max-width: 768px) {
+            .staff-card {
+                width: calc(50% - 10px);
+            }
+        }
+        @media (max-width: 576px) {
+            .staff-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">Trung Tâm Chăm Sóc Da</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Trang Chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/services">Dịch Vụ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/news">Tin Tức</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">Giới Thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Liên Hệ</a>
+                    </li>
+                </ul>
+                <div class="navbar-nav">
+                    <a class="nav-link active" href="/booking">Đặt Lịch</a>
+                    <a class="nav-link" href="/login">Đăng Nhập</a>
+                    <a class="nav-link" href="/register">Đăng Ký</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Booking Content -->
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Đặt Lịch Hẹn</h1>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="booking-container">
+                    <form id="booking-form">
+                        <!-- Thông tin cá nhân -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Thông Tin Cá Nhân</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="fullName">Họ và Tên <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="fullName" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="phone">Số Điện Thoại <span class="text-danger">*</span></label>
+                                        <input type="tel" class="form-control" id="phone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">Email <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address">Địa Chỉ</label>
+                                        <input type="text" class="form-control" id="address">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chọn dịch vụ -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Chọn Dịch Vụ</h3>
+                            <div class="service-option" data-price="500000" onclick="selectService(this)">
+                                <div class="service-name">Điều Trị Da Mặt</div>
+                                <div class="service-description">Liệu pháp làm sạch sâu giúp trẻ hóa làn da của bạn</div>
+                                <div class="service-price">500.000đ</div>
+                            </div>
+                            <div class="service-option" data-price="600000" onclick="selectService(this)">
+                                <div class="service-name">Điều Trị Mụn</div>
+                                <div class="service-description">Điều trị chuyên biệt cho da mụn, giảm mụn hiệu quả</div>
+                                <div class="service-price">600.000đ</div>
+                            </div>
+                            <div class="service-option" data-price="800000" onclick="selectService(this)">
+                                <div class="service-name">Chống Lão Hóa</div>
+                                <div class="service-description">Liệu pháp chống lão hóa, giúp da săn chắc và trẻ trung</div>
+                                <div class="service-price">800.000đ</div>
+                            </div>
+                        </div>
+
+                        <!-- Chọn nhân viên -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Chọn Nhân Viên</h3>
+                            <div class="staff-container">
+                                <div class="staff-card" onclick="selectStaff(this)">
+                                    <img src="https://via.placeholder.com/80" alt="Nhân viên" class="staff-image">
+                                    <div class="staff-name">Nguyễn Thị A</div>
+                                    <div class="staff-role">Chuyên Gia Chăm Sóc Da</div>
+                                </div>
+                                <div class="staff-card" onclick="selectStaff(this)">
+                                    <img src="https://via.placeholder.com/80" alt="Nhân viên" class="staff-image">
+                                    <div class="staff-name">Trần Văn B</div>
+                                    <div class="staff-role">Chuyên Gia Trị Liệu</div>
+                                </div>
+                                <div class="staff-card" onclick="selectStaff(this)">
+                                    <img src="https://via.placeholder.com/80" alt="Nhân viên" class="staff-image">
+                                    <div class="staff-name">Lê Thị C</div>
+                                    <div class="staff-role">Chuyên Gia Điều Trị Mụn</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Chọn ngày -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Chọn Ngày</h3>
+                            <div class="calendar-container">
+                                <div class="calendar-nav">
+                                    <button type="button" id="prevMonth">&lt;</button>
+                                    <div class="calendar-month" id="currentMonth">Tháng 3, 2024</div>
+                                    <button type="button" id="nextMonth">&gt;</button>
+                                </div>
+                                <table id="calendar">
+                                    <thead>
+                                        <tr>
+                                            <th>CN</th>
+                                            <th>T2</th>
+                                            <th>T3</th>
+                                            <th>T4</th>
+                                            <th>T5</th>
+                                            <th>T6</th>
+                                            <th>T7</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="calendarBody">
+                                        <!-- JavaScript sẽ điền vào ở đây -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Chọn giờ -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Chọn Giờ</h3>
+                            <div class="row">
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot" onclick="selectTime(this)">09:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot" onclick="selectTime(this)">10:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot" onclick="selectTime(this)">11:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot disabled">12:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot" onclick="selectTime(this)">13:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot" onclick="selectTime(this)">14:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot" onclick="selectTime(this)">15:00</div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="time-slot" onclick="selectTime(this)">16:00</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Ghi chú -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Ghi Chú</h3>
+                            <div class="form-group">
+                                <textarea class="form-control" id="notes" rows="3" placeholder="Nhập ghi chú hoặc yêu cầu đặc biệt (nếu có)"></textarea>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Xác Nhận Đặt Lịch</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="booking-container">
+                    <h3 class="form-section-title">Tóm Tắt Đặt Lịch</h3>
+                    <div id="booking-summary">
+                        <div class="summary-item">
+                            <div>Dịch vụ</div>
+                            <div id="selectedService">Chưa chọn</div>
+                        </div>
+                        <div class="summary-item">
+                            <div>Nhân viên</div>
+                            <div id="selectedStaff">Chưa chọn</div>
+                        </div>
+                        <div class="summary-item">
+                            <div>Ngày</div>
+                            <div id="selectedDate">Chưa chọn</div>
+                        </div>
+                        <div class="summary-item">
+                            <div>Giờ</div>
+                            <div id="selectedTime">Chưa chọn</div>
+                        </div>
+                        <div class="summary-total">
+                            <div>Tổng cộng</div>
+                            <div id="totalPrice">0đ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Trung Tâm Chăm Sóc Da</h5>
+                    <p>Dịch vụ chăm sóc da chuyên nghiệp, giúp bạn luôn tự tin và rạng rỡ</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Liên Hệ</h5>
+                    <p>123 Đường Đẹp, Quận 1<br>
+                    Thành Phố Hồ Chí Minh<br>
+                    Điện Thoại: 0123 456 789<br>
+                    Email: lienhe@trungtatchamsocspa.com</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Giờ Làm Việc</h5>
+                    <p>Thứ 2 - Thứ 6: 9:00 - 20:00<br>
+                    Thứ 7: 10:00 - 17:00<br>
+                    Chủ Nhật: Nghỉ</p>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>&copy; 2024 Trung Tâm Chăm Sóc Da. Bản quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Chọn dịch vụ
+        function selectService(element) {
+            document.querySelectorAll('.service-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            
+            const serviceName = element.querySelector('.service-name').textContent;
+            const servicePrice = element.getAttribute('data-price');
+            
+            document.getElementById('selectedService').textContent = serviceName;
+            document.getElementById('totalPrice').textContent = parseInt(servicePrice).toLocaleString() + 'đ';
+        }
+        
+        // Chọn nhân viên
+        function selectStaff(element) {
+            document.querySelectorAll('.staff-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            
+            const staffName = element.querySelector('.staff-name').textContent;
+            document.getElementById('selectedStaff').textContent = staffName;
+        }
+        
+        // Chọn giờ
+        function selectTime(element) {
+            if (element.classList.contains('disabled')) return;
+            
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                if (!slot.classList.contains('disabled')) {
+                    slot.classList.remove('selected');
+                }
+            });
+            element.classList.add('selected');
+            
+            document.getElementById('selectedTime').textContent = element.textContent;
+        }
+        
+        // Khởi tạo lịch
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCalendar();
+            
+            document.getElementById('prevMonth').addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                generateCalendar();
+            });
+            
+            document.getElementById('nextMonth').addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                generateCalendar();
+            });
+            
+            document.getElementById('booking-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Đặt lịch thành công! Chúng tôi sẽ liên hệ với bạn để xác nhận.');
+            });
+        });
+        
+        let currentDate = new Date();
+        let selectedDate = null;
+        
+        function generateCalendar() {
+            const month = currentDate.getMonth();
+            const year = currentDate.getFullYear();
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            
+            const firstDayIndex = firstDay.getDay();
+            const lastDayDate = lastDay.getDate();
+            
+            document.getElementById('currentMonth').textContent = 
+                'Tháng ' + (month + 1) + ', ' + year;
+            
+            let calendarHTML = '';
+            
+            let day = 1;
+            for (let i = 0; i < 6; i++) {
+                let row = '<tr>';
+                
+                for (let j = 0; j < 7; j++) {
+                    if (i === 0 && j < firstDayIndex) {
+                        // Ngày của tháng trước
+                        const prevMonthLastDay = new Date(year, month, 0).getDate();
+                        const prevDay = prevMonthLastDay - (firstDayIndex - j - 1);
+                        row += `<td class="prev-month">${prevDay}</td>`;
+                    } else if (day > lastDayDate) {
+                        // Ngày của tháng sau
+                        const nextDay = day - lastDayDate;
+                        row += `<td class="next-month">${nextDay}</td>`;
+                        day++;
+                    } else {
+                        // Ngày của tháng hiện tại
+                        const today = new Date();
+                        const isToday = day === today.getDate() && 
+                                        month === today.getMonth() && 
+                                        year === today.getFullYear();
+                        
+                        const isDisabled = (j === 0); // Chủ nhật không làm việc
+                        
+                        let className = 'calendar-day';
+                        if (isToday) className += ' today';
+                        if (isDisabled) className += ' disabled';
+                        if (selectedDate && day === selectedDate.getDate() && 
+                            month === selectedDate.getMonth() && 
+                            year === selectedDate.getFullYear()) {
+                            className += ' selected';
+                        }
+                        
+                        const clickEvent = isDisabled ? '' : 
+                            `onclick="selectDay(${day}, ${month}, ${year}, this)"`;
+                        
+                        row += `<td class="${className}" ${clickEvent}>${day}</td>`;
+                        day++;
+                    }
+                }
+                
+                row += '</tr>';
+                calendarHTML += row;
+                
+                if (day > lastDayDate) {
+                    break;
+                }
+            }
+            
+            document.getElementById('calendarBody').innerHTML = calendarHTML;
+        }
+        
+        function selectDay(day, month, year, element) {
+            document.querySelectorAll('.calendar-day').forEach(day => {
+                if (!day.classList.contains('disabled')) {
+                    day.classList.remove('selected');
+                }
+            });
+            
+            element.classList.add('selected');
+            selectedDate = new Date(year, month, day);
+            
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('selectedDate').textContent = 
+                selectedDate.toLocaleDateString('vi-VN', options);
+        }
+    </script>
+</body>
+</html> 
