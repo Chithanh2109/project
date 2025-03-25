@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Beauty Spa</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .blog-page {
+            padding-top: 80px;
+            background-color: var(--light-gray);
+        }
+
+        .blog-header {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                        url('/images/blog-header.jpg') center/cover;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            margin-bottom: 3rem;
+        }
+
+        .blog-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-header p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .blog-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .blog-posts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .blog-post {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-5px);
+        }
+
+        .post-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-post:hover .post-image img {
+            transform: scale(1.05);
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-color-light);
+        }
+
+        .post-meta .category {
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            margin-right: 1rem;
+            font-weight: 500;
+        }
+
+        .post-meta .date {
+            display: flex;
+            align-items: center;
+        }
+
+        .post-meta .date i {
+            margin-right: 0.3rem;
+        }
+
+        .post-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+
+        .post-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .post-title a:hover {
+            color: var(--primary-color);
+        }
+
+        .post-excerpt {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .post-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .post-link:hover {
+            color: var(--primary-color-dark);
+        }
+
+        .post-link i {
+            margin-left: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .blog-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-widget {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-widget h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar-widget h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 50px;
+            background-color: var(--primary-color);
+        }
+
+        .search-form {
+            position: relative;
+        }
+
+        .search-form input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            padding-right: 3rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .search-form button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 3rem;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .search-form button:hover {
+            color: var(--primary-color-dark);
+        }
+
+        .category-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .category-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .category-list a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .category-list a:hover {
+            color: var(--primary-color);
+        }
+
+        .category-list .count {
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+            padding: 0.1rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .popular-posts {
+            list-style: none;
+            padding: 0;
+        }
+
+        .popular-posts li {
+            display: flex;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .popular-posts li:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .popular-post-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .popular-post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .popular-post-content h4 {
+            font-size: 0.95rem;
+            margin: 0 0 0.3rem;
+        }
+
+        .popular-post-content h4 a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .popular-post-content h4 a:hover {
+            color: var(--primary-color);
+        }
+
+        .popular-post-content .post-date {
+            font-size: 0.8rem;
+            color: var(--text-color-light);
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag-cloud a {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            border-radius: 3px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .tag-cloud a:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .pagination a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            margin: 0 0.3rem;
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--text-color);
+            background-color: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+        }
+
+        .pagination a.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        @media (max-width: 992px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .blog-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .blog-posts {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <i class="fas fa-spa"></i> Beauty Spa
+            </a>
+            <div class="nav-links">
+                <a href="/">Trang chủ</a>
+                <a href="/services">Dịch vụ</a>
+                <a href="/booking">Đặt lịch</a>
+                <a href="/about">Về chúng tôi</a>
+                <a href="/contact">Liên hệ</a>
+                <a href="/blog" class="active">Blog</a>
+                <a href="/login" class="btn btn-primary">Đăng nhập</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Blog Page Content -->
+    <div class="blog-page">
+        <div class="blog-header">
+            <div>
+                <h1>Blog làm đẹp</h1>
+                <p>Khám phá các bài viết về làm đẹp, chăm sóc da và sức khỏe</p>
+            </div>
+        </div>
+
+        <div class="blog-content">
+            <div class="blog-grid">
+                <div class="blog-main">
+                    <div class="blog-posts">
+                        <!-- Blog Post 1 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-1.jpg" alt="Chăm sóc da mùa hè">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Chăm sóc da</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 15/06/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/1">5 Bí quyết chăm sóc da mùa hè hiệu quả</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Mùa hè với nắng nóng và độ ẩm cao đòi hỏi chế độ chăm sóc da đặc biệt. Hãy cùng tìm hiểu 5 bí quyết giúp làn da khỏe mạnh...
+                                </p>
+                                <a href="/blog/1" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 2 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-2.jpg" alt="Thực phẩm tốt cho da">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Dinh dưỡng</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 08/06/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/2">Top 10 thực phẩm tốt cho da bạn nên bổ sung hàng ngày</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Làn da đẹp không chỉ đến từ các sản phẩm chăm sóc bên ngoài mà còn từ chế độ dinh dưỡng hợp lý...
+                                </p>
+                                <a href="/blog/2" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 3 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-3.jpg" alt="Massage trị liệu">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Massage</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 01/06/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/3">Lợi ích tuyệt vời của massage trị liệu đối với sức khỏe</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Massage trị liệu không chỉ giúp thư giãn mà còn mang lại nhiều lợi ích sức khỏe khác. Hãy cùng tìm hiểu...
+                                </p>
+                                <a href="/blog/3" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 4 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-4.jpg" alt="Chăm sóc tóc">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Chăm sóc tóc</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 25/05/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/4">Cách chăm sóc tóc hư tổn trở nên suôn mượt</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Tóc hư tổn là vấn đề phổ biến mà nhiều chị em gặp phải. Bài viết này sẽ chia sẻ những phương pháp hiệu quả...
+                                </p>
+                                <a href="/blog/4" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 5 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-5.jpg" alt="Xu hướng makeup">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Makeup</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 18/05/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/5">Xu hướng makeup tự nhiên đang thống trị 2024</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Năm 2024 chứng kiến sự lên ngôi của phong cách makeup tự nhiên, nhẹ nhàng. Cùng khám phá cách trang điểm...
+                                </p>
+                                <a href="/blog/5" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 6 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-6.jpg" alt="Bài tập yoga">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Yoga</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 10/05/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/6">7 bài tập yoga đơn giản giúp thư giãn sau ngày làm việc</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Yoga không chỉ giúp duy trì vóc dáng mà còn là phương pháp thư giãn hiệu quả. Hãy cùng thực hiện 7 bài tập...
+                                </p>
+                                <a href="/blog/6" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <a href="#" class="active">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#"><i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="blog-sidebar">
+                    <!-- Search Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Tìm kiếm</h3>
+                        <form class="search-form">
+                            <input type="text" placeholder="Tìm kiếm bài viết...">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+
+                    <!-- Categories Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Danh mục</h3>
+                        <ul class="category-list">
+                            <li><a href="#">Chăm sóc da <span class="count">12</span></a></li>
+                            <li><a href="#">Chăm sóc tóc <span class="count">8</span></a></li>
+                            <li><a href="#">Makeup <span class="count">6</span></a></li>
+                            <li><a href="#">Massage <span class="count">5</span></a></li>
+                            <li><a href="#">Dinh dưỡng <span class="count">7</span></a></li>
+                            <li><a href="#">Yoga <span class="count">4</span></a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Popular Posts Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Bài viết phổ biến</h3>
+                        <ul class="popular-posts">
+                            <li>
+                                <div class="popular-post-image">
+                                    <img src="/images/blog/blog-1.jpg" alt="Chăm sóc da mùa hè">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4><a href="/blog/1">5 Bí quyết chăm sóc da mùa hè hiệu quả</a></h4>
+                                    <span class="post-date">15/06/2024</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="popular-post-image">
+                                    <img src="/images/blog/blog-3.jpg" alt="Massage trị liệu">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4><a href="/blog/3">Lợi ích tuyệt vời của massage trị liệu</a></h4>
+                                    <span class="post-date">01/06/2024</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="popular-post-image">
+                                    <img src="/images/blog/blog-5.jpg" alt="Xu hướng makeup">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4><a href="/blog/5">Xu hướng makeup tự nhiên đang thống trị 2024</a></h4>
+                                    <span class="post-date">18/05/2024</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tags Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Từ khóa</h3>
+                        <div class="tag-cloud">
+                            <a href="#">Làm đẹp</a>
+                            <a href="#">Chăm sóc da</a>
+                            <a href="#">Spa</a>
+                            <a href="#">Massage</a>
+                            <a href="#">Skincare</a>
+                            <a href="#">Tóc</a>
+                            <a href="#">Mặt nạ</a>
+                            <a href="#">Dưỡng ẩm</a>
+                            <a href="#">Trị mụn</a>
+                            <a href="#">Makeup</a>
+                            <a href="#">Dinh dưỡng</a>
+                            <a href="#">Làm trắng</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Về chúng tôi</h3>
+                <p>Beauty Spa - Nơi chăm sóc sắc đẹp của bạn</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Liên kết nhanh</h3>
+                <ul>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><a href="/services">Dịch vụ</a></li>
+                    <li><a href="/booking">Đặt lịch</a></li>
+                    <li><a href="/about">Về chúng tôi</a></li>
+                    <li><a href="/contact">Liên hệ</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Liên hệ</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> +84 123 456 789</li>
+                    <li><i class="fas fa-envelope"></i> info@beautyspa.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Beauty Spa. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Beauty Spa</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .blog-page {
+            padding-top: 80px;
+            background-color: var(--light-gray);
+        }
+
+        .blog-header {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                        url('/images/blog-header.jpg') center/cover;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            margin-bottom: 3rem;
+        }
+
+        .blog-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-header p {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .blog-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .blog-posts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .blog-post {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-5px);
+        }
+
+        .post-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-post:hover .post-image img {
+            transform: scale(1.05);
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.85rem;
+            color: var(--text-color-light);
+        }
+
+        .post-meta .category {
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            margin-right: 1rem;
+            font-weight: 500;
+        }
+
+        .post-meta .date {
+            display: flex;
+            align-items: center;
+        }
+
+        .post-meta .date i {
+            margin-right: 0.3rem;
+        }
+
+        .post-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-color);
+        }
+
+        .post-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .post-title a:hover {
+            color: var(--primary-color);
+        }
+
+        .post-excerpt {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .post-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .post-link:hover {
+            color: var(--primary-color-dark);
+        }
+
+        .post-link i {
+            margin-left: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .blog-sidebar {
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-widget {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-widget h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .sidebar-widget h3:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 50px;
+            background-color: var(--primary-color);
+        }
+
+        .search-form {
+            position: relative;
+        }
+
+        .search-form input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            padding-right: 3rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .search-form button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 3rem;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .search-form button:hover {
+            color: var(--primary-color-dark);
+        }
+
+        .category-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .category-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .category-list a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .category-list a:hover {
+            color: var(--primary-color);
+        }
+
+        .category-list .count {
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+            padding: 0.1rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .popular-posts {
+            list-style: none;
+            padding: 0;
+        }
+
+        .popular-posts li {
+            display: flex;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .popular-posts li:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .popular-post-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .popular-post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .popular-post-content h4 {
+            font-size: 0.95rem;
+            margin: 0 0 0.3rem;
+        }
+
+        .popular-post-content h4 a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .popular-post-content h4 a:hover {
+            color: var(--primary-color);
+        }
+
+        .popular-post-content .post-date {
+            font-size: 0.8rem;
+            color: var(--text-color-light);
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag-cloud a {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background-color: #f0f0f0;
+            color: var(--text-color);
+            border-radius: 3px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .tag-cloud a:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .pagination a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            margin: 0 0.3rem;
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--text-color);
+            background-color: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+        }
+
+        .pagination a.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        @media (max-width: 992px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .blog-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .blog-posts {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <i class="fas fa-spa"></i> Beauty Spa
+            </a>
+            <div class="nav-links">
+                <a href="/">Trang chủ</a>
+                <a href="/services">Dịch vụ</a>
+                <a href="/booking">Đặt lịch</a>
+                <a href="/about">Về chúng tôi</a>
+                <a href="/contact">Liên hệ</a>
+                <a href="/blog" class="active">Blog</a>
+                <a href="/login" class="btn btn-primary">Đăng nhập</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Blog Page Content -->
+    <div class="blog-page">
+        <div class="blog-header">
+            <div>
+                <h1>Blog làm đẹp</h1>
+                <p>Khám phá các bài viết về làm đẹp, chăm sóc da và sức khỏe</p>
+            </div>
+        </div>
+
+        <div class="blog-content">
+            <div class="blog-grid">
+                <div class="blog-main">
+                    <div class="blog-posts">
+                        <!-- Blog Post 1 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-1.jpg" alt="Chăm sóc da mùa hè">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Chăm sóc da</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 15/06/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/1">5 Bí quyết chăm sóc da mùa hè hiệu quả</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Mùa hè với nắng nóng và độ ẩm cao đòi hỏi chế độ chăm sóc da đặc biệt. Hãy cùng tìm hiểu 5 bí quyết giúp làn da khỏe mạnh...
+                                </p>
+                                <a href="/blog/1" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 2 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-2.jpg" alt="Thực phẩm tốt cho da">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Dinh dưỡng</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 08/06/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/2">Top 10 thực phẩm tốt cho da bạn nên bổ sung hàng ngày</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Làn da đẹp không chỉ đến từ các sản phẩm chăm sóc bên ngoài mà còn từ chế độ dinh dưỡng hợp lý...
+                                </p>
+                                <a href="/blog/2" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 3 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-3.jpg" alt="Massage trị liệu">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Massage</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 01/06/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/3">Lợi ích tuyệt vời của massage trị liệu đối với sức khỏe</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Massage trị liệu không chỉ giúp thư giãn mà còn mang lại nhiều lợi ích sức khỏe khác. Hãy cùng tìm hiểu...
+                                </p>
+                                <a href="/blog/3" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 4 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-4.jpg" alt="Chăm sóc tóc">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Chăm sóc tóc</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 25/05/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/4">Cách chăm sóc tóc hư tổn trở nên suôn mượt</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Tóc hư tổn là vấn đề phổ biến mà nhiều chị em gặp phải. Bài viết này sẽ chia sẻ những phương pháp hiệu quả...
+                                </p>
+                                <a href="/blog/4" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 5 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-5.jpg" alt="Xu hướng makeup">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Makeup</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 18/05/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/5">Xu hướng makeup tự nhiên đang thống trị 2024</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Năm 2024 chứng kiến sự lên ngôi của phong cách makeup tự nhiên, nhẹ nhàng. Cùng khám phá cách trang điểm...
+                                </p>
+                                <a href="/blog/5" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 6 -->
+                        <div class="blog-post">
+                            <div class="post-image">
+                                <img src="/images/blog/blog-6.jpg" alt="Bài tập yoga">
+                            </div>
+                            <div class="post-content">
+                                <div class="post-meta">
+                                    <span class="category">Yoga</span>
+                                    <span class="date"><i class="far fa-calendar"></i> 10/05/2024</span>
+                                </div>
+                                <h3 class="post-title">
+                                    <a href="/blog/6">7 bài tập yoga đơn giản giúp thư giãn sau ngày làm việc</a>
+                                </h3>
+                                <p class="post-excerpt">
+                                    Yoga không chỉ giúp duy trì vóc dáng mà còn là phương pháp thư giãn hiệu quả. Hãy cùng thực hiện 7 bài tập...
+                                </p>
+                                <a href="/blog/6" class="post-link">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination">
+                        <a href="#" class="active">1</a>
+                        <a href="#">2</a>
+                        <a href="#">3</a>
+                        <a href="#"><i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="blog-sidebar">
+                    <!-- Search Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Tìm kiếm</h3>
+                        <form class="search-form">
+                            <input type="text" placeholder="Tìm kiếm bài viết...">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+
+                    <!-- Categories Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Danh mục</h3>
+                        <ul class="category-list">
+                            <li><a href="#">Chăm sóc da <span class="count">12</span></a></li>
+                            <li><a href="#">Chăm sóc tóc <span class="count">8</span></a></li>
+                            <li><a href="#">Makeup <span class="count">6</span></a></li>
+                            <li><a href="#">Massage <span class="count">5</span></a></li>
+                            <li><a href="#">Dinh dưỡng <span class="count">7</span></a></li>
+                            <li><a href="#">Yoga <span class="count">4</span></a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Popular Posts Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Bài viết phổ biến</h3>
+                        <ul class="popular-posts">
+                            <li>
+                                <div class="popular-post-image">
+                                    <img src="/images/blog/blog-1.jpg" alt="Chăm sóc da mùa hè">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4><a href="/blog/1">5 Bí quyết chăm sóc da mùa hè hiệu quả</a></h4>
+                                    <span class="post-date">15/06/2024</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="popular-post-image">
+                                    <img src="/images/blog/blog-3.jpg" alt="Massage trị liệu">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4><a href="/blog/3">Lợi ích tuyệt vời của massage trị liệu</a></h4>
+                                    <span class="post-date">01/06/2024</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="popular-post-image">
+                                    <img src="/images/blog/blog-5.jpg" alt="Xu hướng makeup">
+                                </div>
+                                <div class="popular-post-content">
+                                    <h4><a href="/blog/5">Xu hướng makeup tự nhiên đang thống trị 2024</a></h4>
+                                    <span class="post-date">18/05/2024</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tags Widget -->
+                    <div class="sidebar-widget">
+                        <h3>Từ khóa</h3>
+                        <div class="tag-cloud">
+                            <a href="#">Làm đẹp</a>
+                            <a href="#">Chăm sóc da</a>
+                            <a href="#">Spa</a>
+                            <a href="#">Massage</a>
+                            <a href="#">Skincare</a>
+                            <a href="#">Tóc</a>
+                            <a href="#">Mặt nạ</a>
+                            <a href="#">Dưỡng ẩm</a>
+                            <a href="#">Trị mụn</a>
+                            <a href="#">Makeup</a>
+                            <a href="#">Dinh dưỡng</a>
+                            <a href="#">Làm trắng</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Về chúng tôi</h3>
+                <p>Beauty Spa - Nơi chăm sóc sắc đẹp của bạn</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Liên kết nhanh</h3>
+                <ul>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><a href="/services">Dịch vụ</a></li>
+                    <li><a href="/booking">Đặt lịch</a></li>
+                    <li><a href="/about">Về chúng tôi</a></li>
+                    <li><a href="/contact">Liên hệ</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Liên hệ</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> +84 123 456 789</li>
+                    <li><i class="fas fa-envelope"></i> info@beautyspa.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Beauty Spa. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 
