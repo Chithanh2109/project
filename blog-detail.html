@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết bài viết - Beauty Spa</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .blog-detail {
+            padding-top: 80px;
+            background-color: var(--light-gray);
+        }
+
+        .article-header {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                        url('/images/blog/blog-1.jpg') center/cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            margin-bottom: 3rem;
+        }
+
+        .article-header-content {
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .article-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .article-meta .category {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+        }
+
+        .article-meta .date {
+            display: flex;
+            align-items: center;
+        }
+
+        .article-meta .date i {
+            margin-right: 0.5rem;
+        }
+
+        .article-meta .author {
+            display: flex;
+            align-items: center;
+        }
+
+        .article-meta .author img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .article-body {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .article-body p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            color: var(--text-color);
+        }
+
+        .article-body h2 {
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            font-size: 1.8rem;
+        }
+
+        .article-body h3 {
+            color: var(--text-color);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.4rem;
+        }
+
+        .article-body ul {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .article-body ul li {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .article-body img {
+            width: 100%;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .article-tags a {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background-color: var(--primary-color-light);
+            color: var(--primary-color);
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .article-tags a:hover {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        .article-share {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .article-share span {
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .share-buttons a {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--white);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .share-buttons a:hover {
+            transform: translateY(-3px);
+        }
+
+        .share-buttons .facebook {
+            background-color: #1877f2;
+        }
+
+        .share-buttons .twitter {
+            background-color: #1da1f2;
+        }
+
+        .share-buttons .linkedin {
+            background-color: #0077b5;
+        }
+
+        .share-buttons .pinterest {
+            background-color: #e60023;
+        }
+
+        .related-posts {
+            margin-top: 4rem;
+        }
+
+        .related-posts h2 {
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .related-post {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .related-post:hover {
+            transform: translateY(-5px);
+        }
+
+        .related-post-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .related-post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .related-post:hover .related-post-image img {
+            transform: scale(1.05);
+        }
+
+        .related-post-content {
+            padding: 1.5rem;
+        }
+
+        .related-post-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .related-post-title a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .related-post-title a:hover {
+            color: var(--primary-color);
+        }
+
+        .related-post-date {
+            font-size: 0.85rem;
+            color: var(--text-color-light);
+        }
+
+        @media (max-width: 768px) {
+            .article-header h1 {
+                font-size: 2rem;
+            }
+
+            .article-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .related-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <i class="fas fa-spa"></i> Beauty Spa
+            </a>
+            <div class="nav-links">
+                <a href="/">Trang chủ</a>
+                <a href="/services">Dịch vụ</a>
+                <a href="/booking">Đặt lịch</a>
+                <a href="/about">Về chúng tôi</a>
+                <a href="/contact">Liên hệ</a>
+                <a href="/blog" class="active">Blog</a>
+                <a href="/login" class="btn btn-primary">Đăng nhập</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Blog Detail Content -->
+    <div class="blog-detail">
+        <div class="article-header">
+            <div class="article-header-content">
+                <h1>5 Bí quyết chăm sóc da mùa hè hiệu quả</h1>
+                <div class="article-meta">
+                    <span class="category">Chăm sóc da</span>
+                    <span class="date"><i class="far fa-calendar"></i> 15/06/2024</span>
+                    <span class="author">
+                        <img src="/images/blog/author.jpg" alt="Tác giả">
+                        Nguyễn Thị An
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="article-content">
+            <div class="article-body">
+                <p>Mùa hè với nắng nóng và độ ẩm cao đòi hỏi các biện pháp chăm sóc da đặc biệt. Bài viết này sẽ chia sẻ 5 bí quyết giúp làn da của bạn luôn khỏe mạnh và rạng rỡ trong mùa hè.</p>
+
+                <h2>1. Bảo vệ da khỏi ánh nắng mặt trời</h2>
+                <p>Kem chống nắng là sản phẩm không thể thiếu trong mùa hè. Hãy chọn loại kem chống nắng có chỉ số SPF ít nhất là 30 và PA+++. Thoa kem chống nắng 30 phút trước khi ra ngoài và thoa lại sau mỗi 2-3 giờ.</p>
+                <img src="https://images.unsplash.com/photo-1556228841-a3d3b96c5511?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Kem chống nắng">
+
+                <h2>2. Giữ ẩm cho da</h2>
+                <p>Dù da có thể tiết nhiều dầu hơn trong mùa hè, việc giữ ẩm vẫn cực kỳ quan trọng. Hãy chọn kem dưỡng ẩm dạng gel hoặc lotion nhẹ, không chứa dầu để tránh làm bí da.</p>
+                <img src="https://images.unsplash.com/photo-1570554886111-e80fcca6a029?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Dưỡng ẩm mùa hè">
+
+                <h2>3. Làm sạch đúng cách</h2>
+                <p>Trong mùa hè, da tiết nhiều mồ hôi và dầu hơn. Hãy rửa mặt hai lần mỗi ngày với sữa rửa mặt nhẹ nhàng, không chứa xà phòng để loại bỏ bụi bẩn, dầu thừa mà không làm khô da.</p>
+                <img src="https://images.unsplash.com/photo-1556228720-195a672f1c24?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Làm sạch da">
+
+                <h2>4. Tẩy tế bào chết đều đặn</h2>
+                <p>Việc tẩy tế bào chết 1-2 lần/tuần giúp loại bỏ tế bào chết, thông thoáng lỗ chân lông và ngăn ngừa mụn. Hãy chọn sản phẩm tẩy tế bào chết nhẹ nhàng phù hợp với loại da của bạn.</p>
+                <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Tẩy tế bào chết">
+
+                <h2>5. Bổ sung nước và chất chống oxy hóa</h2>
+                <p>Uống đủ nước và ăn nhiều thực phẩm giàu chất chống oxy hóa như dưa hấu, berries, cà chua không chỉ tốt cho sức khỏe mà còn giúp da tươi sáng, chống lại tác hại của gốc tự do từ tia UV.</p>
+                <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Thực phẩm chống oxy hóa">
+
+                <h3>Lời kết</h3>
+                <p>Với những bí quyết trên, hy vọng làn da của bạn sẽ luôn khỏe đẹp dù đối mặt với nắng nóng mùa hè. Hãy nhớ rằng, việc chăm sóc da cần kiên trì và đều đặn để có kết quả tốt nhất.</p>
+
+                <div class="article-tags">
+                    <a href="#">Chăm sóc da</a>
+                    <a href="#">Mùa hè</a>
+                    <a href="#">Skincare</a>
+                    <a href="#">Dưỡng ẩm</a>
+                    <a href="#">Chống nắng</a>
+                </div>
+
+                <div class="article-share">
+                    <span>Chia sẻ bài viết:</span>
+                    <div class="share-buttons">
+                        <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="pinterest"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="related-posts">
+                <h2>Bài viết liên quan</h2>
+                <div class="related-grid">
+                    <div class="related-post">
+                        <div class="related-post-image">
+                            <img src="/images/blog/blog-2.jpg" alt="Thực phẩm tốt cho da">
+                        </div>
+                        <div class="related-post-content">
+                            <h3 class="related-post-title">
+                                <a href="/blog/2">Top 10 thực phẩm tốt cho da</a>
+                            </h3>
+                            <span class="related-post-date">08/06/2024</span>
+                        </div>
+                    </div>
+
+                    <div class="related-post">
+                        <div class="related-post-image">
+                            <img src="/images/blog/blog-4.jpg" alt="Chăm sóc tóc">
+                        </div>
+                        <div class="related-post-content">
+                            <h3 class="related-post-title">
+                                <a href="/blog/4">Cách chăm sóc tóc hư tổn</a>
+                            </h3>
+                            <span class="related-post-date">25/05/2024</span>
+                        </div>
+                    </div>
+
+                    <div class="related-post">
+                        <div class="related-post-image">
+                            <img src="/images/blog/blog-5.jpg" alt="Xu hướng makeup">
+                        </div>
+                        <div class="related-post-content">
+                            <h3 class="related-post-title">
+                                <a href="/blog/5">Xu hướng makeup tự nhiên 2024</a>
+                            </h3>
+                            <span class="related-post-date">18/05/2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Về chúng tôi</h3>
+                <p>Beauty Spa - Nơi chăm sóc sắc đẹp của bạn</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Liên kết nhanh</h3>
+                <ul>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><a href="/services">Dịch vụ</a></li>
+                    <li><a href="/booking">Đặt lịch</a></li>
+                    <li><a href="/about">Về chúng tôi</a></li>
+                    <li><a href="/contact">Liên hệ</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Liên hệ</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> +84 123 456 789</li>
+                    <li><i class="fas fa-envelope"></i> info@beautyspa.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Beauty Spa. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 
