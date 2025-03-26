@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * Model đại diện cho đánh giá dịch vụ từ khách hàng
+ * Model đại diện cho đánh giá của người dùng về dịch vụ
  */
 @Entity
 @Table(name = "reviews")
@@ -15,11 +15,11 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "service_id", nullable = false)
     private SkinCareService service;
     
@@ -29,11 +29,9 @@ public class Review {
     @Column(length = 1000)
     private String comment;
     
-    @OneToOne
-    @JoinColumn(name = "appointment_id")
-    private Appointment appointment;
-    
     private boolean approved = false;
+    
+    private boolean featured = false;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -104,20 +102,20 @@ public class Review {
         this.comment = comment;
     }
     
-    public Appointment getAppointment() {
-        return appointment;
-    }
-    
-    public void setAppointment(Appointment appointment) {
-        this.appointment = appointment;
-    }
-    
     public boolean isApproved() {
         return approved;
     }
     
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+    
+    public boolean isFeatured() {
+        return featured;
+    }
+    
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
     }
     
     public LocalDateTime getCreatedAt() {
@@ -147,9 +145,10 @@ public class Review {
     public String toString() {
         return "Review{" +
                 "id=" + id +
-                ", user=" + (user != null ? user.getUsername() : "none") +
-                ", service=" + (service != null ? service.getName() : "none") +
+                ", user=" + (user != null ? user.getUsername() : "null") +
+                ", service=" + (service != null ? service.getName() : "null") +
                 ", rating=" + rating +
+                ", approved=" + approved +
                 '}';
     }
 } 
