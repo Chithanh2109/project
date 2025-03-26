@@ -58,7 +58,7 @@ public interface SkinCareServiceRepository extends JpaRepository<SkinCareService
     List<SkinCareService> findByTargetSkinConcern(String skinConcern);
     
     /**
-     * Tìm các dịch vụ phổ biến nhất dựa trên số lượng đặt lịch
+     * Tìm dịch vụ phổ biến nhất dựa trên số lượng đặt lịch
      */
     @Query(value = "SELECT s.* FROM skin_services s " +
             "JOIN appointments a ON s.id = a.service_id " +
