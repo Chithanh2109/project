@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đánh giá - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <style>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 1000;
+            padding-top: 60px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .avatar-sm {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .rating-stars {
+            color: #ffc107;
+        }
+        .badge-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        .badge-approved {
+            background-color: #28a745;
+            color: white;
+        }
+        .badge-rejected {
+            background-color: #dc3545;
+            color: white;
+        }
+        .badge-featured {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .review-text {
+            max-height: 100px;
+            overflow-y: auto;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding-top: 0;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-spa me-2"></i>
+                SkinCare Admin
+            </a>
+            
+            <!-- Toggler -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Top Nav Menu -->
+            <div class="collapse navbar-collapse" id="topNavbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="Thông báo">
+                            <i class="fas fa-bell"></i>
+                            <span class="badge rounded-pill bg-danger">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>
+                            <span sec:authentication="name">Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Hồ sơ</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Cài đặt</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+        <div class="position-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/dashboard}">
+                        <i class="fas fa-tachometer-alt me-2"></i>
+                        Bảng điều khiển
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/users}">
+                        <i class="fas fa-users me-2"></i>
+                        Quản lý người dùng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/services}">
+                        <i class="fas fa-spa me-2"></i>
+                        Quản lý dịch vụ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/reviews/admin/manage}">
+                        <i class="fas fa-star me-2"></i>
+                        Quản lý đánh giá
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/appointments}">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Quản lý lịch hẹn
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/products}">
+                        <i class="fas fa-pump-soap me-2"></i>
+                        Quản lý sản phẩm
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/reports}">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Báo cáo thống kê
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/settings}">
+                        <i class="fas fa-cogs me-2"></i>
+                        Cài đặt hệ thống
+                    </a>
+                </li>
+                <li class="nav-item mt-3">
+                    <a class="nav-link text-danger" th:href="@{/}">
+                        <i class="fas fa-store me-2"></i>
+                        Về trang chính
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2">Quản lý đánh giá</h1>
+            <div class="btn-toolbar">
+                <div class="btn-group me-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-download me-1"></i>Xuất Excel
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-print me-1"></i>In
+                    </button>
+                </div>
+                <button type="button" class="btn btn-sm btn-primary">
+                    <i class="fas fa-cog me-1"></i>Cài đặt
+                </button>
+            </div>
+        </div>
+
+        <!-- Alert Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${success}">Thông báo thành công</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span th:text="${error}">Thông báo lỗi</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs mb-4">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#pending-reviews">
+                    <i class="fas fa-clock me-1"></i>
+                    Đang chờ duyệt
+                    <span class="badge rounded-pill bg-warning text-dark" th:text="${pendingReviews.size()}">0</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#approved-reviews">
+                    <i class="fas fa-check-circle me-1"></i>
+                    Đã duyệt
+                    <span class="badge rounded-pill bg-primary" th:text="${approvedReviews.size()}">0</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#featured-reviews">
+                    <i class="fas fa-award me-1"></i>
+                    Đánh giá nổi bật
+                    <span class="badge rounded-pill bg-info" th:text="${approvedReviews.stream().filter(r -> r.featured).count()}">0</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Pending Reviews Tab -->
+            <div class="tab-pane fade show active" id="pending-reviews">
+                <!-- Search and Filter -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm đánh giá...">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fas fa-filter me-1"></i>Lọc
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">Đánh giá sao</h6></li>
+                                <li><a class="dropdown-item" href="#">5 sao</a></li>
+                                <li><a class="dropdown-item" href="#">4 sao</a></li>
+                                <li><a class="dropdown-item" href="#">3 sao</a></li>
+                                <li><a class="dropdown-item" href="#">2 sao</a></li>
+                                <li><a class="dropdown-item" href="#">1 sao</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><h6 class="dropdown-header">Thời gian</h6></li>
+                                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                                <li><a class="dropdown-item" href="#">Tuần này</a></li>
+                                <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending Reviews Table -->
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Người dùng</th>
+                                        <th scope="col">Dịch vụ</th>
+                                        <th scope="col">Đánh giá</th>
+                                        <th scope="col">Nội dung</th>
+                                        <th scope="col">Ngày tạo</th>
+                                        <th scope="col">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Empty State -->
+                                    <tr th:if="${pendingReviews.empty}">
+                                        <td colspan="7" class="text-center py-4">
+                                            <div class="text-muted">
+                                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                                <p>Không có đánh giá nào đang chờ duyệt</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Review List -->
+                                    <tr th:each="review, iter : ${pendingReviews}">
+                                        <td th:text="${iter.count}">1</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img th:src="${review.user.profileImage != null ? review.user.profileImage : '/images/default-avatar.jpg'}" 
+                                                     class="avatar-sm me-2" alt="Avatar">
+                                                <div>
+                                                    <div th:text="${review.user.fullName}">Tên người dùng</div>
+                                                    <small class="text-muted" th:text="${review.user.email}">email@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div th:text="${review.service.name}">Tên dịch vụ</div>
+                                                <small class="text-muted" th:text="${review.service.category.displayName}">Danh mục</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="rating-stars">
+                                                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                                    <i th:class="${i <= review.rating ? 'fas fa-star' : 'far fa-star'}"></i>
+                                                </th:block>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="review-text" th:text="${review.comment}">Nội dung đánh giá</div>
+                                        </td>
+                                        <td th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2023</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <form th:action="@{'/reviews/admin/approve/' + ${review.id}}" method="post" class="me-1">
+                                                    <button type="submit" class="btn btn-sm btn-success" title="Phê duyệt">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                </form>
+                                                <form th:action="@{'/reviews/admin/reject/' + ${review.id}}" method="post">
+                                                    <button type="submit" class="btn btn-sm btn-danger" title="Từ chối">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                                <button type="button" class="btn btn-sm btn-primary ms-1" 
+                                                        data-bs-toggle="modal" th:data-bs-target="${'#viewReviewModal-' + review.id}" title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Approved Reviews Tab -->
+            <div class="tab-pane fade" id="approved-reviews">
+                <!-- Search and Filter -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm đánh giá...">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="fas fa-filter me-1"></i>Lọc
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">Đánh giá sao</h6></li>
+                                <li><a class="dropdown-item" href="#">5 sao</a></li>
+                                <li><a class="dropdown-item" href="#">4 sao</a></li>
+                                <li><a class="dropdown-item" href="#">3 sao</a></li>
+                                <li><a class="dropdown-item" href="#">2 sao</a></li>
+                                <li><a class="dropdown-item" href="#">1 sao</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><h6 class="dropdown-header">Thời gian</h6></li>
+                                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                                <li><a class="dropdown-item" href="#">Tuần này</a></li>
+                                <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approved Reviews Table -->
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Người dùng</th>
+                                        <th scope="col">Dịch vụ</th>
+                                        <th scope="col">Đánh giá</th>
+                                        <th scope="col">Nội dung</th>
+                                        <th scope="col">Trạng thái</th>
+                                        <th scope="col">Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Empty State -->
+                                    <tr th:if="${approvedReviews.empty}">
+                                        <td colspan="7" class="text-center py-4">
+                                            <div class="text-muted">
+                                                <i class="fas fa-inbox fa-3x mb-3"></i>
+                                                <p>Không có đánh giá nào đã được duyệt</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Review List -->
+                                    <tr th:each="review, iter : ${approvedReviews}">
+                                        <td th:text="${iter.count}">1</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img th:src="${review.user.profileImage != null ? review.user.profileImage : '/images/default-avatar.jpg'}" 
+                                                     class="avatar-sm me-2" alt="Avatar">
+                                                <div>
+                                                    <div th:text="${review.user.fullName}">Tên người dùng</div>
+                                                    <small class="text-muted" th:text="${review.user.email}">email@example.com</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <div th:text="${review.service.name}">Tên dịch vụ</div>
+                                                <small class="text-muted" th:text="${review.service.category.displayName}">Danh mục</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="rating-stars">
+                                                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                                    <i th:class="${i <= review.rating ? 'fas fa-star' : 'far fa-star'}"></i>
+                                                </th:block>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="review-text" th:text="${review.comment}">Nội dung đánh giá</div>
+                                        </td>
+                                        <td>
+                                            <span th:if="${review.featured}" class="badge badge-featured">
+                                                <i class="fas fa-award me-1"></i>Nổi bật
+                                            </span>
+                                            <span th:unless="${review.featured}" class="badge badge-approved">
+                                                <i class="fas fa-check me-1"></i>Đã duyệt
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <form th:if="${!review.featured}" th:action="@{'/reviews/admin/feature/' + ${review.id}}" method="post" class="me-1">
+                                                    <button type="submit" class="btn btn-sm btn-info" title="Đánh dấu nổi bật">
+                                                        <i class="fas fa-award"></i>
+                                                    </button>
+                                                </form>
+                                                <button type="button" class="btn btn-sm btn-primary" 
+                                                        data-bs-toggle="modal" th:data-bs-target="${'#viewReviewModal-' + review.id}" title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="card-footer">
+                        <nav>
+                            <ul class="pagination justify-content-center mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trước</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Sau</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Featured Reviews Tab -->
+            <div class="tab-pane fade" id="featured-reviews">
+                <div class="row">
+                    <div th:each="review : ${approvedReviews}" th:if="${review.featured}" class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-info text-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span><i class="fas fa-award me-2"></i>Đánh giá nổi bật</span>
+                                    <div class="rating-stars">
+                                        <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                            <i th:class="${i <= review.rating ? 'fas fa-star' : 'far fa-star'}"></i>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex mb-3">
+                                    <img th:src="${review.user.profileImage != null ? review.user.profileImage : '/images/default-avatar.jpg'}" 
+                                         class="avatar-sm me-2" alt="Avatar">
+                                    <div>
+                                        <div class="fw-bold" th:text="${review.user.fullName}">Tên người dùng</div>
+                                        <small class="text-muted" th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy')}">01/01/2023</small>
+                                    </div>
+                                </div>
+                                
+                                <p class="card-text" th:text="${review.comment}">Nội dung đánh giá</p>
+                                
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <small class="text-muted" th:text="${'Dịch vụ: ' + review.service.name}">Dịch vụ: Tên dịch vụ</small>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" 
+                                                data-bs-toggle="modal" th:data-bs-target="${'#viewReviewModal-' + review.id}">
+                                            <i class="fas fa-eye me-1"></i>Chi tiết
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div th:if="${approvedReviews.stream().noneMatch(r -> r.featured)}" class="col-12 text-center py-5">
+                        <div class="text-muted">
+                            <i class="fas fa-award fa-3x mb-3"></i>
+                            <h5>Không có đánh giá nổi bật</h5>
+                            <p>Đánh dấu đánh giá là nổi bật để hiển thị ở đây và trên trang chủ</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Review Detail Modals -->
+        <div th:each="review : ${pendingReviews}">
+            <div class="modal fade" th:id="${'viewReviewModal-' + review.id}" tabindex="-1" aria-labelledby="viewReviewModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewReviewModalLabel">Chi tiết đánh giá</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h6>Thông tin đánh giá</h6>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="fw-bold me-2">Đánh giá:</span>
+                                            <div class="rating-stars">
+                                                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                                    <i th:class="${i <= review.rating ? 'fas fa-star' : 'far fa-star'}"></i>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="fw-bold">Nội dung:</span>
+                                            <p class="mt-1" th:text="${review.comment}">Nội dung đánh giá</p>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="fw-bold">Thời gian tạo:</span>
+                                            <span th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm:ss')}">01/01/2023 12:00:00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Thông tin người dùng</h6>
+                                    <hr>
+                                    <div class="d-flex mb-3">
+                                        <img th:src="${review.user.profileImage != null ? review.user.profileImage : '/images/default-avatar.jpg'}" 
+                                             style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" alt="Avatar">
+                                        <div class="ms-2">
+                                            <div class="fw-bold" th:text="${review.user.fullName}">Tên người dùng</div>
+                                            <div class="small text-muted" th:text="${review.user.email}">email@example.com</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="mt-4">Thông tin dịch vụ</h6>
+                                    <hr>
+                                    <div>
+                                        <div class="fw-bold" th:text="${review.service.name}">Tên dịch vụ</div>
+                                        <div class="small text-muted" th:text="${review.service.category.displayName}">Danh mục</div>
+                                        <div class="small text-primary mt-1" th:text="${#numbers.formatDecimal(review.service.price, 0, 'COMMA', 0, 'POINT') + ' VND'}">Giá dịch vụ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <form th:action="@{'/reviews/admin/approve/' + ${review.id}}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-success">Phê duyệt</button>
+                            </form>
+                            <form th:action="@{'/reviews/admin/reject/' + ${review.id}}" method="post" class="d-inline ms-2">
+                                <button type="submit" class="btn btn-danger">Từ chối</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div th:each="review : ${approvedReviews}">
+            <div class="modal fade" th:id="${'viewReviewModal-' + review.id}" tabindex="-1" aria-labelledby="viewReviewModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="viewReviewModalLabel">Chi tiết đánh giá</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h6>Thông tin đánh giá</h6>
+                                    <hr>
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="fw-bold me-2">Đánh giá:</span>
+                                            <div class="rating-stars">
+                                                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                                    <i th:class="${i <= review.rating ? 'fas fa-star' : 'far fa-star'}"></i>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="fw-bold">Nội dung:</span>
+                                            <p class="mt-1" th:text="${review.comment}">Nội dung đánh giá</p>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="fw-bold">Thời gian tạo:</span>
+                                            <span th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy HH:mm:ss')}">01/01/2023 12:00:00</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="fw-bold">Trạng thái:</span>
+                                            <span th:if="${review.featured}" class="badge badge-featured">
+                                                <i class="fas fa-award me-1"></i>Nổi bật
+                                            </span>
+                                            <span th:unless="${review.featured}" class="badge badge-approved">
+                                                <i class="fas fa-check me-1"></i>Đã duyệt
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Thông tin người dùng</h6>
+                                    <hr>
+                                    <div class="d-flex mb-3">
+                                        <img th:src="${review.user.profileImage != null ? review.user.profileImage : '/images/default-avatar.jpg'}" 
+                                             style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover;" alt="Avatar">
+                                        <div class="ms-2">
+                                            <div class="fw-bold" th:text="${review.user.fullName}">Tên người dùng</div>
+                                            <div class="small text-muted" th:text="${review.user.email}">email@example.com</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <h6 class="mt-4">Thông tin dịch vụ</h6>
+                                    <hr>
+                                    <div>
+                                        <div class="fw-bold" th:text="${review.service.name}">Tên dịch vụ</div>
+                                        <div class="small text-muted" th:text="${review.service.category.displayName}">Danh mục</div>
+                                        <div class="small text-primary mt-1" th:text="${#numbers.formatDecimal(review.service.price, 0, 'COMMA', 0, 'POINT') + ' VND'}">Giá dịch vụ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <form th:if="${!review.featured}" th:action="@{'/reviews/admin/feature/' + ${review.id}}" method="post">
+                                <button type="submit" class="btn btn-info">Đánh dấu nổi bật</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
