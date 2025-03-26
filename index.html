@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skincare Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <a href="/" class="logo">
+                <i class="fas fa-spa"></i> Beauty Spa
+            </a>
+            <div class="nav-links">
+                <a href="/">Trang chủ</a>
+                <a href="/services">Dịch vụ</a>
+                <a href="/booking">Đặt lịch</a>
+                <a href="/about">Về chúng tôi</a>
+                <a href="/contact">Liên hệ</a>
+                <a href="/login" class="btn btn-primary">Đăng nhập</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content animate-fade-in">
+            <h1>Chào mừng đến với Beauty Spa</h1>
+            <p>Khám phá các dịch vụ chăm sóc da chuyên nghiệp của chúng tôi</p>
+            <a href="/booking" class="btn btn-primary">Đặt lịch ngay</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services">
+        <div class="section-title">
+            <h2>Dịch vụ của chúng tôi</h2>
+            <p>Khám phá các dịch vụ chăm sóc da chất lượng cao</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card animate-fade-in">
+                <img src="/images/facial.jpg" alt="Facial Treatment" class="service-image">
+                <div class="service-content">
+                    <h3>Chăm sóc da mặt</h3>
+                    <p>Dịch vụ chăm sóc da mặt chuyên sâu với các sản phẩm cao cấp</p>
+                    <a href="/services/facial" class="btn btn-primary">Chi tiết</a>
+                </div>
+            </div>
+            <div class="service-card animate-fade-in">
+                <img src="/images/massage.jpg" alt="Massage" class="service-image">
+                <div class="service-content">
+                    <h3>Massage</h3>
+                    <p>Massage thư giãn và trị liệu chuyên nghiệp</p>
+                    <a href="/services/massage" class="btn btn-primary">Chi tiết</a>
+                </div>
+            </div>
+            <div class="service-card animate-fade-in">
+                <img src="/images/skin-care.jpg" alt="Skin Care" class="service-image">
+                <div class="service-content">
+                    <h3>Chăm sóc da</h3>
+                    <p>Chăm sóc da toàn diện với các liệu pháp đặc biệt</p>
+                    <a href="/services/skin-care" class="btn btn-primary">Chi tiết</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="booking">
+        <div class="section-title">
+            <h2>Đặt lịch ngay</h2>
+            <p>Dễ dàng đặt lịch trực tuyến</p>
+        </div>
+        <div class="booking-form animate-fade-in">
+            <form th:action="@{/booking}" method="post">
+                <div class="form-group">
+                    <label for="service">Chọn dịch vụ</label>
+                    <select id="service" name="service" class="form-control" required>
+                        <option value="">-- Chọn dịch vụ --</option>
+                        <option value="facial">Chăm sóc da mặt</option>
+                        <option value="massage">Massage</option>
+                        <option value="skin-care">Chăm sóc da</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Ngày hẹn</label>
+                    <input type="date" id="date" name="date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="time">Giờ hẹn</label>
+                    <input type="time" id="time" name="time" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Đặt lịch</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Về chúng tôi</h3>
+                <p>Beauty Spa - Nơi chăm sóc sắc đẹp của bạn</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Liên kết nhanh</h3>
+                <ul>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><a href="/services">Dịch vụ</a></li>
+                    <li><a href="/booking">Đặt lịch</a></li>
+                    <li><a href="/about">Về chúng tôi</a></li>
+                    <li><a href="/contact">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Liên hệ</h3>
+                <ul>
+                    <li><i class="fas fa-phone"></i> +84 123 456 789</li>
+                    <li><i class="fas fa-envelope"></i> info@beautyspa.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Beauty Spa. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add animation on scroll
+        window.addEventListener('scroll', function() {
+            const elements = document.querySelectorAll('.animate-fade-in');
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                if(position.top < window.innerHeight) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
