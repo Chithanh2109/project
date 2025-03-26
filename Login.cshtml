@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Đăng Nhập";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/koi-login-style.css" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div class="background-container">
+        <h1 class="title">Koi Breeding Games</h1> <!-- Tiêu đề chính -->
+        <div class="login-box">
+            <h2>Đăng Nhập</h2>
+            <form asp-action="Login" method="post">
+                <div class="form-group">
+                    <label for="username">Tài khoản</label>
+                    <input type="text" name="username" id="username" class="form-control" placeholder="Nhập tài khoản" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật Khẩu</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="Nhập mật khẩu" required>
+                </div>
+
+                <button type="submit" class="btn">Đăng Nhập</button>
+            </form>
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            }
+
+            <p>Không có tài khoản? <a href="/Account/Register">Đăng Ký Ngay</a></p>
+            <p> <a href="/Account/CheckAcc">Quên mật khẩu?</a></p>
+        </div>
+
+        <a href="@Url.Action("Naptien", "Naptien")" class="button">Nạp Tiền</a>
+    </div>
+</body>
+</html>
