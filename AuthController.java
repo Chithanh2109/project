@@ -1,29 +1,22 @@
-package com.apihub.controller;
+package com.skincare.controller;
 
-/**
- * Điều khiển xác thực người dùng
- * Lưu ý: Class này được chuyển thành Java thuần tạm thời
- * Cần cài đặt Maven và chạy 'mvn install' để sử dụng Spring Boot
- */
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
 public class AuthController {
 
-    /**
-     * Hiển thị trang đăng nhập
-     */
+    @GetMapping("/login")
     public String showLoginPage() {
         return "login";
     }
 
-    /**
-     * Hiển thị trang đăng ký
-     */
+    @GetMapping("/register")
     public String showRegisterPage() {
         return "register";
     }
 
-    /**
-     * Hiển thị trang quên mật khẩu
-     */
+    @GetMapping("/forgot-password")
     public String showForgotPasswordPage() {
         return "forgot-password";
     }
