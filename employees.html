@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đội Ngũ Nhân Viên - Trung Tâm Chăm Sóc Da</title>
+    
+    <!-- Import Common Styles -->
+    <th:block th:replace="fragments/styles :: styles"></th:block>
+    
+    <!-- Employee Styles -->
+    <style>
+        .employee-section {
+            padding: 60px 0;
+            background-color: #f8f9fa;
+        }
+        .employee-card {
+            border: 1px solid #e1e1e1;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .employee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        .employee-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 3px solid #2c3e50;
+        }
+        .employee-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .employee-position {
+            font-size: 1rem;
+            color: #fff;
+            background-color: #2c3e50;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .employee-position.blue {
+            background-color: #3498db;
+        }
+        .employee-position.green {
+            background-color: #2ecc71;
+        }
+        .employee-position.purple {
+            background-color: #9b59b6;
+        }
+        .employee-position.orange {
+            background-color: #e67e22;
+        }
+        .employee-position.red {
+            background-color: #e74c3c;
+        }
+        .page-header {
+            padding: 40px 0;
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div th:replace="fragments/header :: simple-navbar"></div>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1>Đội Ngũ Chuyên Gia</h1>
+            <p class="lead">Gặp gỡ những chuyên gia chăm sóc da tận tâm của chúng tôi</p>
+        </div>
+    </div>
+
+    <!-- Employees Section -->
+    <section class="employee-section">
+        <div class="container">
+            <div class="row">
+                <!-- Nhân viên 1 -->
+                <div class="col-md-4">
+                    <div class="card employee-card">
+                        <img src="https://i.imgur.com/7rkxJyX.jpg" class="employee-img" alt="Nguyễn Thị A">
+                        <h3 class="employee-name">Nguyễn Thị A</h3>
+                        <div class="employee-position blue">Chuyên Gia Chăm Sóc Da</div>
+                    </div>
+                </div>
+                
+                <!-- Nhân viên 2 -->
+                <div class="col-md-4">
+                    <div class="card employee-card">
+                        <img src="https://i.imgur.com/XwLGgks.jpg" class="employee-img" alt="Trần Văn B">
+                        <h3 class="employee-name">Trần Văn B</h3>
+                        <div class="employee-position green">Chuyên Gia Trị Liệu</div>
+                    </div>
+                </div>
+                
+                <!-- Nhân viên 3 -->
+                <div class="col-md-4">
+                    <div class="card employee-card">
+                        <img src="https://i.imgur.com/TbgSzVd.jpg" class="employee-img" alt="Lê Thị C">
+                        <h3 class="employee-name">Lê Thị C</h3>
+                        <div class="employee-position purple">Chuyên Gia Điều Trị Mụn</div>
+                    </div>
+                </div>
+                
+                <!-- Nhân viên 4 -->
+                <div class="col-md-4">
+                    <div class="card employee-card">
+                        <img src="https://i.imgur.com/EPxZWYr.jpg" class="employee-img" alt="Phạm Văn D">
+                        <h3 class="employee-name">Phạm Văn D</h3>
+                        <div class="employee-position orange">Chuyên Gia Trẻ Hóa Da</div>
+                    </div>
+                </div>
+                
+                <!-- Nhân viên 5 -->
+                <div class="col-md-4">
+                    <div class="card employee-card">
+                        <img src="https://i.imgur.com/R6kYGbb.jpg" class="employee-img" alt="Hoàng Thị E">
+                        <h3 class="employee-name">Hoàng Thị E</h3>
+                        <div class="employee-position red">Bác Sĩ Da Liễu</div>
+                    </div>
+                </div>
+                
+                <!-- Nhân viên 6 -->
+                <div class="col-md-4">
+                    <div class="card employee-card">
+                        <img src="https://i.imgur.com/F3dmGdN.jpg" class="employee-img" alt="Nguyễn Văn F">
+                        <h3 class="employee-name">Nguyễn Văn F</h3>
+                        <div class="employee-position blue">Chuyên Gia Massage</div>
+                    </div>
+                </div>
+                
+                <!-- Nhân viên 7 -->
+                <div class="col-md-4">
+                    <div class="card employee-card">
+                        <img src="https://i.imgur.com/jM1DMc4.jpg" class="employee-img" alt="Trần Thị G">
+                        <h3 class="employee-name">Trần Thị G</h3>
+                        <div class="employee-position green">Chuyên Viên Tư Vấn</div>
+                    </div>
+                </div>
+                
+                <!-- Nhân viên 8 -->
+                <div class="col-md-4">
+                    <div class="card employee-card">
+                        <img src="https://i.imgur.com/VWsmxk4.jpg" class="employee-img" alt="Lý Văn H">
+                        <h3 class="employee-name">Lý Văn H</h3>
+                        <div class="employee-position purple">Kỹ Thuật Viên</div>
+                    </div>
+                </div>
+                
+                <!-- Nhân viên 9 -->
+                <div class="col-md-4">
+                    <div class="card employee-card">
+                        <img src="https://i.imgur.com/3fwSYeB.jpg" class="employee-img" alt="Võ Thị I">
+                        <h3 class="employee-name">Võ Thị I</h3>
+                        <div class="employee-position orange">Chuyên Gia Làm Đẹp</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking CTA -->
+    <section class="py-5 bg-light">
+        <div class="container text-center">
+            <h2>Đặt Lịch Với Chuyên Gia</h2>
+            <p class="lead mb-4">Hãy lựa chọn chuyên gia phù hợp cho nhu cầu chăm sóc da của bạn</p>
+            <a href="/booking" class="btn btn-primary btn-lg">Đặt Lịch Ngay</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+    
+    <!-- Import Scripts -->
+    <th:block th:replace="fragments/scripts :: scripts"></th:block>
+</body>
+</html> 
