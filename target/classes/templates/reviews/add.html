@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm đánh giá - Skin Care Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .rating {
+            direction: rtl;
+            unicode-bidi: bidi-override;
+            color: #ddd;
+            font-size: 30px;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            display: inline-block;
+            cursor: pointer;
+        }
+        .rating > label:hover,
+        .rating > label:hover ~ label,
+        .rating > input:checked ~ label {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-primary text-white py-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Skin Care Service</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/}">Trang chủ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/services}">Dịch vụ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/about}">Giới thiệu</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/contact}">Liên hệ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/profile}">Tài khoản</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Breadcrumb navigation -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/services}">Dịch vụ</a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/services/' + ${service.id}}" th:text="${service.name}">Tên dịch vụ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Viết đánh giá</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0">Viết đánh giá của bạn về dịch vụ</h2>
+                    </div>
+                    <div class="card-body">
+                        <!-- Service Info Summary -->
+                        <div class="d-flex mb-4 pb-3 border-bottom">
+                            <img th:src="${service.imageUrl != null ? service.imageUrl : '/images/default-service.jpg'}" 
+                                class="me-3 rounded" style="width: 80px; height: 80px; object-fit: cover;" alt="Service Image">
+                            <div>
+                                <h3 class="h5" th:text="${service.name}">Tên dịch vụ</h3>
+                                <p class="text-muted small mb-0" th:text="${service.category.displayName}">Danh mục</p>
+                                <p class="text-primary mb-0" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT') + ' VND'}">Giá dịch vụ</p>
+                            </div>
+                        </div>
+
+                        <!-- Review Form -->
+                        <form th:action="@{/reviews/add}" method="post" th:object="${review}">
+                            <input type="hidden" name="serviceId" th:value="${service.id}">
+
+                            <!-- Rating -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Đánh giá của bạn <span class="text-danger">*</span></label>
+                                <div class="rating mb-2">
+                                    <input type="radio" id="star5" name="rating" value="5" th:field="*{rating}" required>
+                                    <label for="star5" title="5 sao"><i class="fas fa-star"></i></label>
+                                    
+                                    <input type="radio" id="star4" name="rating" value="4" th:field="*{rating}">
+                                    <label for="star4" title="4 sao"><i class="fas fa-star"></i></label>
+                                    
+                                    <input type="radio" id="star3" name="rating" value="3" th:field="*{rating}">
+                                    <label for="star3" title="3 sao"><i class="fas fa-star"></i></label>
+                                    
+                                    <input type="radio" id="star2" name="rating" value="2" th:field="*{rating}">
+                                    <label for="star2" title="2 sao"><i class="fas fa-star"></i></label>
+                                    
+                                    <input type="radio" id="star1" name="rating" value="1" th:field="*{rating}">
+                                    <label for="star1" title="1 sao"><i class="fas fa-star"></i></label>
+                                </div>
+                                <small class="text-muted">Chọn số sao phù hợp với trải nghiệm của bạn</small>
+                            </div>
+
+                            <!-- Review Comment -->
+                            <div class="mb-4">
+                                <label for="comment" class="form-label fw-bold">Nhận xét chi tiết</label>
+                                <textarea class="form-control" id="comment" th:field="*{comment}" rows="5" 
+                                    placeholder="Chia sẻ trải nghiệm của bạn về dịch vụ này. Điều gì bạn thích? Điều gì cần cải thiện?"></textarea>
+                                <small class="text-muted">Tối thiểu 0 ký tự, tối đa 1000 ký tự</small>
+                            </div>
+                            
+                            <!-- Review Notice -->
+                            <div class="alert alert-info small mb-4">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Đánh giá của bạn sẽ được hiển thị sau khi được quản trị viên phê duyệt. Chúng tôi đánh giá cao những ý kiến chân thực, tôn trọng và hữu ích.
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <a th:href="@{'/services/' + ${service.id}}" class="btn btn-outline-secondary me-md-2">Hủy</a>
+                                <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5>Liên hệ</h5>
+                    <address class="mb-0">
+                        <p><i class="fas fa-map-marker-alt me-2"></i> 123 Đường ABC, Quận XYZ, TP. HCM</p>
+                        <p><i class="fas fa-phone me-2"></i> (84) 123-456-789</p>
+                        <p><i class="fas fa-envelope me-2"></i> info@skincare-service.com</p>
+                    </address>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5>Giờ làm việc</h5>
+                    <p>Thứ Hai - Thứ Sáu: 9:00 - 20:00</p>
+                    <p>Thứ Bảy - Chủ Nhật: 10:00 - 18:00</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Theo dõi chúng tôi</h5>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 Skin Care Service. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

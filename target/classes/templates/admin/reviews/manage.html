@@ -178,14 +178,14 @@
             <h1 class="h2">Quản lý đánh giá</h1>
             <div class="btn-toolbar">
                 <div class="btn-group me-2">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" title="Xuất dữ liệu Excel">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">
                         <i class="fas fa-download me-1"></i>Xuất Excel
                     </button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary" title="In dữ liệu">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">
                         <i class="fas fa-print me-1"></i>In
                     </button>
                 </div>
-                <button type="button" class="btn btn-sm btn-primary" title="Cài đặt đánh giá">
+                <button type="button" class="btn btn-sm btn-primary">
                     <i class="fas fa-cog me-1"></i>Cài đặt
                 </button>
             </div>
@@ -244,7 +244,7 @@
                     </div>
                     <div class="col-md-6 text-md-end">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" title="Lọc đánh giá">
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
                                 <i class="fas fa-filter me-1"></i>Lọc
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -334,8 +334,8 @@
                                                     </button>
                                                 </form>
                                                 <button type="button" class="btn btn-sm btn-primary ms-1" 
-                                                        data-bs-toggle="modal" th:data-bs-target="${'#viewReviewModal-' + review.id}" title="Xem chi tiết đánh giá">
-                                                    <i class="fas fa-eye me-1"></i>Chi tiết
+                                                        data-bs-toggle="modal" th:data-bs-target="${'#viewReviewModal-' + review.id}" title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -361,7 +361,7 @@
                     </div>
                     <div class="col-md-6 text-md-end">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" title="Lọc đánh giá">
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
                                 <i class="fas fa-filter me-1"></i>Lọc
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -452,9 +452,9 @@
                                                         <i class="fas fa-award"></i>
                                                     </button>
                                                 </form>
-                                                <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                        data-bs-toggle="modal" th:data-bs-target="${'#viewReviewModal-' + review.id}" title="Xem chi tiết đánh giá">
-                                                    <i class="fas fa-eye me-1"></i>Chi tiết
+                                                <button type="button" class="btn btn-sm btn-primary" 
+                                                        data-bs-toggle="modal" th:data-bs-target="${'#viewReviewModal-' + review.id}" title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
                                         </td>
@@ -514,7 +514,7 @@
                                     <small class="text-muted" th:text="${'Dịch vụ: ' + review.service.name}">Dịch vụ: Tên dịch vụ</small>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                data-bs-toggle="modal" th:data-bs-target="${'#viewReviewModal-' + review.id}" title="Xem chi tiết đánh giá">
+                                                data-bs-toggle="modal" th:data-bs-target="${'#viewReviewModal-' + review.id}">
                                             <i class="fas fa-eye me-1"></i>Chi tiết
                                         </button>
                                     </div>

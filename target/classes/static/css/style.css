@@ -1,0 +1,237 @@
+/* Global styles */
+:root {
+    --primary-color: #5C6BC0;
+    --secondary-color: #8E24AA;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --success-color: #4CAF50;
+    --warning-color: #FFC107;
+    --danger-color: #F44336;
+    --gray-color: #6c757d;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #4a59b5;
+    border-color: #4a59b5;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Header styles */
+header {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Card styles */
+.card {
+    transition: transform 0.3s ease;
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Service detail styles */
+.service-image {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Testimonial styles */
+.testimonial {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.testimonial-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Form styles */
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(92, 107, 192, 0.25);
+    border-color: var(--primary-color);
+}
+
+/* Footer styles */
+footer a {
+    color: #fff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    header .btn {
+        margin-bottom: 5px;
+    }
+}
+
+/* Custom animation */
+.fade-in {
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Service booking calendar */
+.calendar {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.calendar-date {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calendar-date:hover {
+    background-color: var(--light-color);
+}
+
+.calendar-date.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Profile page */
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--primary-color);
+}
+
+/* Dashboard */
+.dashboard-stat {
+    border-left: 5px solid var(--primary-color);
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.dashboard-stat:hover {
+    transform: translateY(-5px);
+}
+
+/* Appointment card */
+.appointment-card {
+    border-left: 5px solid;
+    margin-bottom: 20px;
+}
+
+.appointment-card.pending {
+    border-color: var(--warning-color);
+}
+
+.appointment-card.confirmed {
+    border-color: var(--primary-color);
+}
+
+.appointment-card.completed {
+    border-color: var(--success-color);
+}
+
+.appointment-card.cancelled {
+    border-color: var(--danger-color);
+}
+
+/* Badge styles */
+.badge.bg-therapist {
+    background-color: var(--secondary-color);
+}
+
+.badge.bg-customer {
+    background-color: var(--primary-color);
+}
+
+/* Rating stars */
+.rating .bi-star-fill {
+    color: #FFC107;
+}
+
+/* Service filter */
+.filter-badge {
+    cursor: pointer;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.filter-badge:hover, .filter-badge.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4a59b5;
+} 

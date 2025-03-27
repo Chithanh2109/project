@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${service.name + ' - Đánh giá - Skin Care Service'}">Đánh giá dịch vụ - Skin Care Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .review-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .rating-bar {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .rating-bar-fill {
+            height: 100%;
+            background-color: #ffc107;
+            border-radius: 5px;
+        }
+        .service-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-primary text-white py-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Skin Care Service</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/}">Trang chủ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white active" th:href="@{/services}">Dịch vụ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/about}">Giới thiệu</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/contact}">Liên hệ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/profile}">Tài khoản</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Breadcrumb navigation -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/services}">Dịch vụ</a></li>
+                <li class="breadcrumb-item"><a th:href="@{'/services/' + ${service.id}}" th:text="${service.name}">Tên dịch vụ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Đánh giá</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <!-- Service Info Sidebar -->
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <div class="card shadow-sm mb-4">
+                    <img th:src="${service.imageUrl != null ? service.imageUrl : '/images/default-service.jpg'}" 
+                         class="service-image" alt="Service Image">
+                    <div class="card-body">
+                        <h2 class="h4 mb-2" th:text="${service.name}">Tên dịch vụ</h2>
+                        <p class="mb-2">
+                            <span class="badge bg-primary me-2" th:text="${service.category.displayName}">Danh mục</span>
+                            <span class="text-muted">
+                                <i class="fas fa-clock me-1"></i>
+                                <span th:text="${service.durationMinutes + ' phút'}">60 phút</span>
+                            </span>
+                        </p>
+                        <h4 class="text-primary mb-3" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT') + ' VND'}">Giá dịch vụ</h4>
+                        <p th:text="${#strings.abbreviate(service.description, 150)}">Mô tả dịch vụ...</p>
+                        
+                        <div class="d-grid mt-3">
+                            <a th:href="@{'/services/' + ${service.id}}" class="btn btn-outline-primary mb-2">Xem chi tiết dịch vụ</a>
+                            <a th:href="@{'/appointments/book?serviceId=' + ${service.id}}" class="btn btn-primary">Đặt lịch ngay</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rating Summary -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light">
+                        <h3 class="h5 mb-0">Tổng quan đánh giá</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <div class="display-4 fw-bold text-primary" th:text="${#numbers.formatDecimal(averageRating != null ? averageRating : 0, 1, 1)}">4.5</div>
+                            <div class="mb-2">
+                                <!-- Average Rating Stars -->
+                                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                    <i th:class="${i <= averageRating ? 'fas fa-star text-warning' : (i <= averageRating + 0.5 ? 'fas fa-star-half-alt text-warning' : 'far fa-star text-warning')}"></i>
+                                </th:block>
+                            </div>
+                            <p class="text-muted" th:text="${reviews.size() + ' đánh giá'}">100 đánh giá</p>
+                        </div>
+
+                        <!-- Rating Distribution -->
+                        <div class="rating-distribution">
+                            <div class="d-flex align-items-center mb-1" th:each="i : ${#numbers.sequence(5, 1)}">
+                                <div class="me-2" th:text="${i + ' sao'}">5 sao</div>
+                                <div class="flex-grow-1">
+                                    <div class="rating-bar">
+                                        <div class="rating-bar-fill" th:style="${'width: ' + (ratingDistribution.containsKey(i) ? (ratingDistribution.get(i) * 100 / (reviews.size() > 0 ? reviews.size() : 1)) : 0) + '%'}"></div>
+                                    </div>
+                                </div>
+                                <div class="ms-2 text-muted" th:text="${ratingDistribution.containsKey(i) ? ratingDistribution.get(i) : 0}">50</div>
+                            </div>
+                        </div>
+
+                        <!-- Write Review Button -->
+                        <div class="d-grid mt-4">
+                            <a th:href="@{'/reviews/add/' + ${service.id}}" class="btn btn-outline-primary">
+                                <i class="fas fa-pencil-alt me-2"></i>Viết đánh giá
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews Main Content -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h3 class="h5 mb-0">Đánh giá từ khách hàng</h3>
+                        <!-- Sort Options Dropdown -->
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sắp xếp theo
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="sortDropdown">
+                                <li><a class="dropdown-item active" href="#">Mới nhất</a></li>
+                                <li><a class="dropdown-item" href="#">Đánh giá cao nhất</a></li>
+                                <li><a class="dropdown-item" href="#">Đánh giá thấp nhất</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews List -->
+                    <div class="card-body">
+                        <!-- No Reviews Message -->
+                        <div th:if="${#lists.isEmpty(reviews)}" class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="far fa-comment-dots fa-4x text-muted"></i>
+                            </div>
+                            <h4>Chưa có đánh giá nào</h4>
+                            <p class="text-muted">Hãy là người đầu tiên đánh giá dịch vụ này!</p>
+                            <a th:href="@{'/reviews/add/' + ${service.id}}" class="btn btn-primary mt-2">
+                                <i class="fas fa-pencil-alt me-2"></i>Viết đánh giá
+                            </a>
+                        </div>
+                        
+                        <!-- Reviews -->
+                        <div th:unless="${#lists.isEmpty(reviews)}">
+                            <div th:each="review, iter : ${reviews}" class="mb-4 pb-4" th:classappend="${!iter.last ? 'border-bottom' : ''}">
+                                <div class="d-flex">
+                                    <!-- User Avatar -->
+                                    <img th:src="${review.user.profileImage != null ? review.user.profileImage : '/images/default-avatar.jpg'}" 
+                                         class="review-avatar me-3" alt="User Avatar">
+                                    
+                                    <!-- Review Content -->
+                                    <div class="flex-grow-1">
+                                        <!-- User Name & Date -->
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <h5 class="mb-0" th:text="${review.user.fullName}">Tên người dùng</h5>
+                                            <small class="text-muted" th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy')}">01/01/2023</small>
+                                        </div>
+                                        
+                                        <!-- Rating Stars -->
+                                        <div class="mb-2">
+                                            <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                                <i th:class="${i <= review.rating ? 'fas fa-star text-warning' : 'far fa-star text-warning'}"></i>
+                                            </th:block>
+                                            <span th:if="${review.featured}" class="badge bg-info ms-2">
+                                                <i class="fas fa-award me-1"></i>Đánh giá nổi bật
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Review Text -->
+                                        <p th:text="${review.comment}">Nội dung đánh giá...</p>
+                                        
+                                        <!-- Helpful Buttons -->
+                                        <div class="d-flex align-items-center text-muted small">
+                                            <button class="btn btn-sm btn-outline-secondary me-2">
+                                                <i class="far fa-thumbs-up me-1"></i>Hữu ích
+                                            </button>
+                                            <span th:if="${review.user.reviewCount > 1}" class="ms-2">
+                                                <i class="fas fa-pen-fancy me-1"></i>
+                                                <span th:text="${review.user.reviewCount + ' đánh giá'}">10 đánh giá</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5>Liên hệ</h5>
+                    <address class="mb-0">
+                        <p><i class="fas fa-map-marker-alt me-2"></i> 123 Đường ABC, Quận XYZ, TP. HCM</p>
+                        <p><i class="fas fa-phone me-2"></i> (84) 123-456-789</p>
+                        <p><i class="fas fa-envelope me-2"></i> info@skincare-service.com</p>
+                    </address>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5>Giờ làm việc</h5>
+                    <p>Thứ Hai - Thứ Sáu: 9:00 - 20:00</p>
+                    <p>Thứ Bảy - Chủ Nhật: 10:00 - 18:00</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Theo dõi chúng tôi</h5>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 Skin Care Service. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
