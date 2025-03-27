@@ -17,12 +17,12 @@ Hệ thống quản lý dịch vụ chăm sóc da là nền tảng giúp quản 
 
 1. Clone repository:
 ```
-git clone https://github.com/your-username/skincare-service.git
+git clone https://github.com/Chithanh2109/project.git
 ```
 
 2. Di chuyển vào thư mục dự án:
 ```
-cd skincare-service
+cd project
 ```
 
 3. Biên dịch và đóng gói ứng dụng:
@@ -97,6 +97,14 @@ Dự án tuân theo kiến trúc MVC với các layer rõ ràng:
 - **Controller**: Xử lý yêu cầu và phản hồi HTTP
 - **Repository**: Truy cập dữ liệu
 - **Service**: Xử lý logic nghiệp vụ
+
+## Cập nhật mới
+
+- Thêm tính năng quản lý dịch vụ chăm sóc da
+- Cải thiện giao diện người dùng
+- Tối ưu hóa hiệu suất hệ thống
+- Bổ sung tính năng đánh giá dịch vụ
+- Thêm giao diện quản lý cho admin
 
 ## Liên hệ
 
