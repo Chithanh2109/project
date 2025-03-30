@@ -1,11 +1,12 @@
 package com.skincare.repository;
 
-import com.skincare.model.User;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import com.skincare.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

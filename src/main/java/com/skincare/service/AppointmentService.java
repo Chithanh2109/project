@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
-public class AppointmentService {
+public class AppointmentManagementService {
 
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
@@ -28,11 +28,11 @@ public class AppointmentService {
     private final UserService userService;
 
     @Autowired
-    public AppointmentService(AppointmentRepository appointmentRepository,
-                             UserRepository userRepository,
-                             AppointmentServiceRepository appointmentServiceRepository,
-                             ServiceService serviceService,
-                             UserService userService) {
+    public AppointmentManagementService(AppointmentRepository appointmentRepository,
+                                      UserRepository userRepository,
+                                      AppointmentServiceRepository appointmentServiceRepository,
+                                      ServiceService serviceService,
+                                      UserService userService) {
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
         this.appointmentServiceRepository = appointmentServiceRepository;
