@@ -29,16 +29,35 @@ public class HomeController {
         this.blogService = blogService;
     }
     
-    @GetMapping("/")
+    @GetMapping({"/", "/index", "/home"})
     public String home(Model model) {
+        model.addAttribute("title", "Skincare Center - Trang chủ");
         model.addAttribute("featuredServices", serviceService.getFeaturedServices());
         model.addAttribute("featuredTherapists", therapistService.getFeaturedTherapists());
         model.addAttribute("recentBlogs", blogService.getRecentBlogs(3));
         return "index";
     }
     
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+    
+    @GetMapping("/about")
+    public String about(Model model) {
+        model.addAttribute("title", "Skincare Center - Về chúng tôi");
+        return "about";
+    }
+    
+    @GetMapping("/contact")
+    public String contact(Model model) {
+        model.addAttribute("title", "Skincare Center - Liên hệ");
+        return "contact";
+    }
+    
     @GetMapping("/services")
-    public String allServices(Model model) {
+    public String services(Model model) {
+        model.addAttribute("title", "Skincare Center - Dịch vụ");
         model.addAttribute("services", serviceService.getAllActiveServices());
         model.addAttribute("categories", serviceService.getAllCategories());
         return "services";
@@ -83,16 +102,6 @@ public class HomeController {
         model.addAttribute("blog", blogService.getBlogById(id).orElse(null));
         model.addAttribute("recentBlogs", blogService.getRecentBlogs(3));
         return "blog-detail";
-    }
-    
-    @GetMapping("/about")
-    public String about() {
-        return "about";
-    }
-    
-    @GetMapping("/contact")
-    public String contact() {
-        return "contact";
     }
     
     @GetMapping("/quiz")
