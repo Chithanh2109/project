@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách dịch vụ chăm sóc da - Skin Care Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="bg-primary text-white py-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Skin Care Service</h1>
+                <nav>
+                    <ul class="nav">
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/}">Trang chủ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white active" th:href="@{/services}">Dịch vụ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/about}">Giới thiệu</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/contact}">Liên hệ</a></li>
+                        <li class="nav-item"><a class="nav-link text-white" th:href="@{/login}">Đăng nhập</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <!-- Page Title -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="text-center mb-4">Dịch vụ chăm sóc da của chúng tôi</h2>
+                <p class="text-center" th:if="${keyword}">Kết quả tìm kiếm cho: <span class="fw-bold" th:text="${keyword}"></span></p>
+                <p class="text-center" th:if="${selectedCategory}">Danh mục: <span class="fw-bold" th:text="${selectedCategory.displayName}"></span></p>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <!-- Search Form -->
+                <form th:action="@{/services/search}" method="get" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm dịch vụ..." th:value="${keyword}">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Tìm kiếm
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <!-- Category Filter -->
+                <div class="dropdown mb-3">
+                    <button class="btn btn-outline-primary dropdown-toggle w-100" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Lọc theo danh mục
+                    </button>
+                    <ul class="dropdown-menu w-100" aria-labelledby="categoryDropdown">
+                        <li><a class="dropdown-item" th:href="@{/services}">Tất cả dịch vụ</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li th:each="cat : ${categories}">
+                            <a class="dropdown-item" th:href="@{'/services/category/' + ${cat.name()}}" th:text="${cat.displayName}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results Message -->
+        <div class="row mb-4" th:if="${#lists.isEmpty(services)}">
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <p class="mb-0">Không tìm thấy dịch vụ phù hợp.</p>
+                    <p th:if="${keyword}" class="mt-2 mb-0">
+                        <a th:href="@{/services}" class="btn btn-sm btn-outline-primary">Xem tất cả dịch vụ</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services List -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <div class="col" th:each="service : ${services}">
+                <div class="card h-100 shadow-sm">
+                    <!-- Image -->
+                    <div class="service-image-container">
+                        <img th:src="${service.imageUrl != null ? service.imageUrl : '/images/default-service.jpg'}" class="card-img-top" alt="Service Image">
+                        <!-- Price Badge -->
+                        <span class="badge bg-primary position-absolute top-0 end-0 m-2" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT') + ' VND'}"></span>
+                    </div>
+                    
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${service.name}"></h5>
+                        <p class="card-text text-muted mb-2">
+                            <i class="fas fa-tag me-1"></i>
+                            <span th:text="${service.category.displayName}"></span>
+                            <span class="ms-2">
+                                <i class="fas fa-clock me-1"></i>
+                                <span th:text="${service.durationMinutes + ' phút'}"></span>
+                            </span>
+                        </p>
+                        <p class="card-text" th:text="${#strings.abbreviate(service.description, 100)}"></p>
+                        
+                        <!-- Skin Types & Concerns -->
+                        <div class="mb-2" th:if="${!#sets.isEmpty(service.suitableSkinTypes)}">
+                            <small class="text-muted">Phù hợp cho: </small>
+                            <span th:each="skinType, iterStat : ${service.suitableSkinTypes}" class="badge bg-light text-dark me-1 mb-1" th:text="${skinType.displayName}"></span>
+                        </div>
+                        
+                        <div class="mb-3" th:if="${!#sets.isEmpty(service.targetSkinConcerns)}">
+                            <small class="text-muted">Điều trị: </small>
+                            <span th:each="concern, iterStat : ${service.targetSkinConcerns}" class="badge bg-light text-dark me-1 mb-1" th:text="${concern.displayName}"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Card Footer -->
+                    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary">Xem chi tiết</a>
+                        <a href="#" class="btn btn-sm btn-primary book-service-btn" th:data-service-id="${service.id}">Đặt lịch</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5>Liên hệ</h5>
+                    <address class="mb-0">
+                        <p><i class="fas fa-map-marker-alt me-2"></i> 123 Đường ABC, Quận XYZ, TP. HCM</p>
+                        <p><i class="fas fa-phone me-2"></i> (84) 123-456-789</p>
+                        <p><i class="fas fa-envelope me-2"></i> info@skincare-service.com</p>
+                    </address>
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5>Giờ làm việc</h5>
+                    <p>Thứ Hai - Thứ Sáu: 9:00 - 20:00</p>
+                    <p>Thứ Bảy - Chủ Nhật: 10:00 - 18:00</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Theo dõi chúng tôi</h5>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 Skin Care Service. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Booking button click handlers
+            const bookButtons = document.querySelectorAll('.book-service-btn');
+            bookButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const serviceId = this.getAttribute('data-service-id');
+                    // Redirect to booking page or show modal
+                    window.location.href = '/appointments/book?serviceId=' + serviceId;
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
