@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+<head>
+    <title>Quản lý chuyên viên - Quản trị</title>
+    <style>
+        .specialist-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .specialist-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .specialist-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .specialist-info {
+            flex: 1;
+        }
+        
+        .specialist-name {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .specialist-title {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .specialist-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+        
+        .specialist-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0d6efd;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        .specialist-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .schedule-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .schedule-day {
+            text-align: center;
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+        
+        .schedule-day.active {
+            background-color: #e9ecef;
+        }
+        
+        .schedule-time {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <!-- Sidebar Navigation -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <h4 class="mb-4">Quản trị</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" th:href="@{/admin/dashboard}">
+                            <i class="fas fa-tachometer-alt me-2"></i> Tổng quan
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/appointments}">
+                            <i class="fas fa-calendar-alt me-2"></i> Lịch hẹn
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/services}">
+                            <i class="fas fa-spa me-2"></i> Dịch vụ
+                        </a>
+                        <a class="nav-link active" th:href="@{/admin/specialists}">
+                            <i class="fas fa-user-md me-2"></i> Chuyên viên
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/customers}">
+                            <i class="fas fa-users me-2"></i> Khách hàng
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/reviews}">
+                            <i class="fas fa-star me-2"></i> Đánh giá
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/reports}">
+                            <i class="fas fa-chart-bar me-2"></i> Báo cáo
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/settings}">
+                            <i class="fas fa-cog me-2"></i> Cài đặt
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9 col-lg-10 main-content">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Quản lý chuyên viên</h2>
+                        <div>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSpecialistModal">
+                                <i class="fas fa-plus me-2"></i>Thêm chuyên viên mới
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Specialists List -->
+                    <div class="specialists-list">
+                        <div th:each="specialist : ${specialists}" class="specialist-card">
+                            <div class="specialist-header">
+                                <img th:src="${specialist.avatarUrl}" class="specialist-avatar" alt="Avatar">
+                                <div class="specialist-info">
+                                    <div class="specialist-name" th:text="${specialist.fullName}">Tên chuyên viên</div>
+                                    <div class="specialist-title" th:text="${specialist.title}">Chức danh</div>
+                                    <div class="specialist-status" 
+                                         th:classappend="${specialist.active ? 'status-active' : 'status-inactive'}"
+                                         th:text="${specialist.active ? 'Đang hoạt động' : 'Đã tạm dừng'}">
+                                        Trạng thái
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="specialist-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value" th:text="${specialist.totalAppointments}">0</div>
+                                    <div class="stat-label">Lịch hẹn</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" th:text="${#numbers.formatDecimal(specialist.averageRating, 1, 1)}">0.0</div>
+                                    <div class="stat-label">Đánh giá TB</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" th:text="${specialist.totalCustomers}">0</div>
+                                    <div class="stat-label">Khách hàng</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" th:text="${specialist.totalRevenue} + ' ₫'">0 ₫</div>
+                                    <div class="stat-label">Doanh thu</div>
+                                </div>
+                            </div>
+                            
+                            <div class="schedule-section">
+                                <h6 class="mb-3">Lịch làm việc</h6>
+                                <div class="schedule-grid">
+                                    <div th:each="day : ${specialist.schedule}" 
+                                         class="schedule-day"
+                                         th:classappend="${day.active ? 'active' : ''}"
+                                         th:text="${day.name}">
+                                        Thứ 2
+                                    </div>
+                                </div>
+                                <div class="schedule-time mt-2">
+                                    <i class="fas fa-clock me-1"></i>
+                                    <span th:text="${specialist.workingHours}">8:00 - 17:00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="specialist-actions">
+                                <button class="btn btn-outline-primary btn-sm"
+                                        th:onclick="'editSpecialist(' + ${specialist.id} + ')'">
+                                    <i class="fas fa-edit me-2"></i>Chỉnh sửa
+                                </button>
+                                <button class="btn btn-outline-warning btn-sm"
+                                        th:onclick="'toggleSpecialistStatus(' + ${specialist.id} + ')'">
+                                    <i class="fas fa-power-off me-2"></i>
+                                    <span th:text="${specialist.active ? 'Tạm dừng' : 'Kích hoạt'}">
+                                        Tạm dừng
+                                    </span>
+                                </button>
+                                <button class="btn btn-outline-info btn-sm"
+                                        th:onclick="'viewSpecialistSchedule(' + ${specialist.id} + ')'">
+                                    <i class="fas fa-calendar-alt me-2"></i>Lịch làm việc
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm"
+                                        th:onclick="'deleteSpecialist(' + ${specialist.id} + ')'">
+                                    <i class="fas fa-trash me-2"></i>Xóa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Specialist Modal -->
+        <div id="addSpecialistModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thêm chuyên viên mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form th:action="@{/admin/specialists/create}" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" name="fullName" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" name="phone" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Chức danh</label>
+                                <input type="text" name="title" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Mô tả</label>
+                                <textarea name="description" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ảnh đại diện</label>
+                                <input type="file" name="avatar" class="form-control" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Lịch làm việc</label>
+                                <div class="schedule-grid">
+                                    <div th:each="day : ${['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'Chủ nhật']}"
+                                         class="schedule-day">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   th:name="'schedule[' + ${dayStat.index} + '].active'"
+                                                   th:value="true">
+                                            <label class="form-check-label" th:text="${day}">Thứ 2</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Giờ làm việc</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="time" name="workingHours.start" class="form-control" required>
+                                    </div>
+                                    <div class="col">
+                                        <input type="time" name="workingHours.end" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Thêm chuyên viên</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script th:inline="javascript">
+            function editSpecialist(id) {
+                // Implement edit logic
+            }
+
+            function toggleSpecialistStatus(id) {
+                if (confirm('Bạn có chắc chắn muốn thay đổi trạng thái chuyên viên này?')) {
+                    fetch(`/admin/specialists/${id}/toggle-status`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+
+            function viewSpecialistSchedule(id) {
+                // Implement schedule view logic
+            }
+
+            function deleteSpecialist(id) {
+                if (confirm('Bạn có chắc chắn muốn xóa chuyên viên này?')) {
+                    fetch(`/admin/specialists/${id}/delete`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+        </script>
+    </th:block>
+</body>
+</html> 

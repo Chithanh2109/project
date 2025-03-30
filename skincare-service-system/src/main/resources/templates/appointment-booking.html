@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Đặt lịch - Trung tâm Chăm sóc Da</title>
+    <!-- Include flatpickr for date/time picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container py-5">
+            <div class="row">
+                <!-- Booking Form -->
+                <div class="col-lg-8">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-5">
+                            <h2 class="mb-4">Đặt lịch dịch vụ</h2>
+                            
+                            <form id="bookingForm" th:action="@{/appointments/book}" method="post">
+                                <!-- Service Selection -->
+                                <div class="mb-4">
+                                    <h5 class="mb-3">1. Chọn dịch vụ</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3" th:each="service : ${services}">
+                                            <div class="service-card card h-100">
+                                                <div class="card-body">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input service-checkbox" 
+                                                               type="checkbox" 
+                                                               th:value="${service.id}" 
+                                                               th:id="'service' + ${service.id}"
+                                                               name="selectedServices">
+                                                        <label class="form-check-label" 
+                                                               th:for="'service' + ${service.id}">
+                                                            <h6 class="mb-2" th:text="${service.name}">Tên dịch vụ</h6>
+                                                            <p class="small mb-2" th:text="${service.description}">Mô tả dịch vụ</p>
+                                                            <span class="text-primary" 
+                                                                  th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">
+                                                                Giá
+                                                            </span>
+                                                            <span class="text-muted small ms-2" 
+                                                                  th:text="'(' + ${service.duration} + ' phút)'">
+                                                                Thời gian
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Specialist Selection -->
+                                <div class="mb-4">
+                                    <h5 class="mb-3">2. Chọn chuyên viên (tùy chọn)</h5>
+                                    <select class="form-select" name="specialistId">
+                                        <option value="">Để trung tâm chỉ định chuyên viên</option>
+                                        <option th:each="specialist : ${specialists}"
+                                                th:value="${specialist.id}"
+                                                th:text="${specialist.name + ' - ' + specialist.specialty}">
+                                            Tên chuyên viên - Chuyên môn
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Date and Time Selection -->
+                                <div class="mb-4">
+                                    <h5 class="mb-3">3. Chọn ngày và giờ</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Ngày</label>
+                                            <input type="text" class="form-control" id="appointmentDate" 
+                                                   name="appointmentDate" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Giờ</label>
+                                            <input type="text" class="form-control" id="appointmentTime" 
+                                                   name="appointmentTime" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Customer Information -->
+                                <div class="mb-4">
+                                    <h5 class="mb-3">4. Thông tin khách hàng</h5>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Họ và tên</label>
+                                            <input type="text" class="form-control" name="customerName" 
+                                                   th:value="${user != null ? user.fullName : ''}" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Số điện thoại</label>
+                                            <input type="tel" class="form-control" name="phoneNumber" 
+                                                   th:value="${user != null ? user.phoneNumber : ''}" required>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" name="email" 
+                                                   th:value="${user != null ? user.email : ''}" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Ghi chú</label>
+                                            <textarea class="form-control" name="notes" rows="3" 
+                                                      placeholder="Vui lòng cho chúng tôi biết nếu bạn có yêu cầu đặc biệt"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Terms and Conditions -->
+                                <div class="mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                                        <label class="form-check-label" for="termsCheck">
+                                            Tôi đồng ý với <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">điều khoản và điều kiện</a>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                                        Xác nhận đặt lịch
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Summary -->
+                <div class="col-lg-4">
+                    <div class="card shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Tổng quan đặt lịch</h5>
+                            <div id="bookingSummary">
+                                <div class="selected-services mb-3">
+                                    <h6>Dịch vụ đã chọn</h6>
+                                    <ul class="list-unstyled" id="selectedServicesList">
+                                        <li class="text-muted">Chưa chọn dịch vụ</li>
+                                    </ul>
+                                </div>
+                                <div class="selected-time mb-3">
+                                    <h6>Thời gian</h6>
+                                    <p id="selectedDateTime" class="text-muted">Chưa chọn thời gian</p>
+                                </div>
+                                <div class="selected-specialist mb-3">
+                                    <h6>Chuyên viên</h6>
+                                    <p id="selectedSpecialist" class="text-muted">Chưa chọn chuyên viên</p>
+                                </div>
+                                <hr>
+                                <div class="total-section">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Tổng thời gian:</span>
+                                        <span id="totalDuration">0 phút</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-bold">Tổng tiền:</span>
+                                        <span id="totalPrice" class="fw-bold text-primary">0 VNĐ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terms and Conditions Modal -->
+        <div class="modal fade" id="termsModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Điều khoản và điều kiện</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>1. Đặt lịch và hủy lịch</h6>
+                        <ul>
+                            <li>Quý khách vui lòng đến đúng giờ đã đặt</li>
+                            <li>Nếu cần hủy hoặc đổi lịch, vui lòng thông báo trước ít nhất 24 giờ</li>
+                            <li>Trong trường hợp đến trễ, thời gian phục vụ có thể bị rút ngắn</li>
+                        </ul>
+                        
+                        <h6>2. Thanh toán</h6>
+                        <ul>
+                            <li>Giá dịch vụ đã bao gồm VAT</li>
+                            <li>Thanh toán có thể thực hiện bằng tiền mặt hoặc chuyển khoản</li>
+                            <li>Đối với một số dịch vụ có thể yêu cầu đặt cọc trước</li>
+                        </ul>
+                        
+                        <h6>3. Chính sách hoàn tiền</h6>
+                        <ul>
+                            <li>Hoàn tiền 100% nếu hủy lịch trước 24 giờ</li>
+                            <li>Không hoàn tiền nếu hủy lịch trong vòng 24 giờ trước giờ hẹn</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional JavaScript -->
+    <th:block layout:fragment="additionalJs">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vn.js"></script>
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize date picker
+                flatpickr("#appointmentDate", {
+                    locale: "vn",
+                    minDate: "today",
+                    dateFormat: "d/m/Y",
+                    disable: /*[[${disabledDates}]]*/ []
+                });
+
+                // Initialize time picker
+                flatpickr("#appointmentTime", {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    minTime: "09:00",
+                    maxTime: "18:00",
+                    minuteIncrement: 30
+                });
+
+                // Service selection handling
+                const services = /*[[${services}]]*/ [],
+                    serviceCheckboxes = document.querySelectorAll('.service-checkbox'),
+                    selectedServicesList = document.getElementById('selectedServicesList'),
+                    totalDuration = document.getElementById('totalDuration'),
+                    totalPrice = document.getElementById('totalPrice');
+
+                function updateBookingSummary() {
+                    let selectedServices = [];
+                    let totalDurationValue = 0;
+                    let totalPriceValue = 0;
+
+                    serviceCheckboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            const service = services.find(s => s.id === parseInt(checkbox.value));
+                            if (service) {
+                                selectedServices.push(service);
+                                totalDurationValue += service.duration;
+                                totalPriceValue += service.price;
+                            }
+                        }
+                    });
+
+                    // Update selected services list
+                    if (selectedServices.length > 0) {
+                        selectedServicesList.innerHTML = selectedServices.map(service => `
+                            <li class="mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>${service.name}</span>
+                                    <span class="text-primary">${new Intl.NumberFormat('vi-VN').format(service.price)} VNĐ</span>
+                                </div>
+                                <small class="text-muted">${service.duration} phút</small>
+                            </li>
+                        `).join('');
+                    } else {
+                        selectedServicesList.innerHTML = '<li class="text-muted">Chưa chọn dịch vụ</li>';
+                    }
+
+                    // Update totals
+                    totalDuration.textContent = `${totalDurationValue} phút`;
+                    totalPrice.textContent = `${new Intl.NumberFormat('vi-VN').format(totalPriceValue)} VNĐ`;
+                }
+
+                serviceCheckboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', updateBookingSummary);
+                });
+
+                // Specialist selection handling
+                const specialistSelect = document.querySelector('select[name="specialistId"]');
+                const selectedSpecialist = document.getElementById('selectedSpecialist');
+
+                specialistSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    selectedSpecialist.textContent = selectedOption.value ? selectedOption.text : 'Chưa chọn chuyên viên';
+                });
+
+                // Date and time selection handling
+                const appointmentDate = document.getElementById('appointmentDate');
+                const appointmentTime = document.getElementById('appointmentTime');
+                const selectedDateTime = document.getElementById('selectedDateTime');
+
+                function updateDateTime() {
+                    if (appointmentDate.value && appointmentTime.value) {
+                        selectedDateTime.textContent = `${appointmentDate.value} ${appointmentTime.value}`;
+                    } else {
+                        selectedDateTime.textContent = 'Chưa chọn thời gian';
+                    }
+                }
+
+                appointmentDate.addEventListener('change', updateDateTime);
+                appointmentTime.addEventListener('change', updateDateTime);
+
+                // Form validation
+                const bookingForm = document.getElementById('bookingForm');
+                bookingForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Check if at least one service is selected
+                    const selectedServices = document.querySelectorAll('.service-checkbox:checked');
+                    if (selectedServices.length === 0) {
+                        alert('Vui lòng chọn ít nhất một dịch vụ');
+                        return;
+                    }
+
+                    // Additional validation can be added here
+
+                    // If all validation passes, submit the form
+                    this.submit();
+                });
+            });
+        </script>
+    </th:block>
+</body>
+</html> 

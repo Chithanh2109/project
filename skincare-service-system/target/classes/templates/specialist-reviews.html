@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title>Đánh giá của khách hàng - Trung tâm Chăm sóc Da</title>
+    <style>
+        .rating-summary {
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .rating-distribution {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+        .rating-bar {
+            flex-grow: 1;
+            height: 0.5rem;
+            background-color: #e9ecef;
+            border-radius: 0.25rem;
+            margin: 0 1rem;
+            overflow: hidden;
+        }
+        .rating-bar-fill {
+            height: 100%;
+            background-color: #ffc107;
+            transition: width 0.3s ease;
+        }
+        .review-card {
+            border-left: 4px solid #ffc107;
+            margin-bottom: 1.5rem;
+        }
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .review-date {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        .review-rating {
+            color: #ffc107;
+        }
+        .review-response {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0d6efd;
+            margin-top: 1rem;
+            padding: 1rem;
+        }
+        .response-form {
+            margin-top: 1rem;
+            display: none;
+        }
+        .response-form.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container py-5">
+            <h2 class="mb-4">Đánh giá từ khách hàng</h2>
+            
+            <!-- Rating Summary -->
+            <div class="rating-summary">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <h3 class="display-4" th:text="${#numbers.formatDecimal(statistics.averageRating, 1, 1)}">4.5</h3>
+                        <div class="review-rating">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <i class="fas fa-star" th:classappend="${i <= statistics.averageRating} ? '' : 'far'"></i>
+                            </span>
+                        </div>
+                        <p class="text-muted mt-2">
+                            <span th:text="${statistics.totalReviews}">100</span> đánh giá
+                        </p>
+                    </div>
+                    <div class="col-md-8">
+                        <div th:each="dist : ${statistics.ratingDistribution}" class="rating-distribution">
+                            <span th:text="${dist.rating + ' sao'}">5 sao</span>
+                            <div class="rating-bar">
+                                <div class="rating-bar-fill" th:style="'width: ' + ${dist.percentage} + '%'"></div>
+                            </div>
+                            <span th:text="${dist.count}">50</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reviews List -->
+            <div class="reviews-list">
+                <div th:each="review : ${reviews}" class="card review-card">
+                    <div class="card-body">
+                        <div class="review-header">
+                            <h5 class="card-title" th:text="${review.customerName}">Khách hàng</h5>
+                            <span class="review-date" 
+                                  th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy')}">
+                                01/01/2024
+                            </span>
+                        </div>
+                        
+                        <div class="review-rating mb-2">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <i class="fas fa-star" th:classappend="${i <= review.rating} ? '' : 'far'"></i>
+                            </span>
+                        </div>
+                        
+                        <p class="card-text" th:text="${review.comment}">Nhận xét của khách hàng</p>
+                        
+                        <!-- Specialist Response -->
+                        <div th:if="${review.specialistResponse}" class="review-response">
+                            <strong>Phản hồi:</strong>
+                            <p th:text="${review.specialistResponse}">Phản hồi của chuyên viên</p>
+                        </div>
+                        
+                        <!-- Response Form -->
+                        <div th:unless="${review.specialistResponse}">
+                            <button class="btn btn-outline-primary btn-sm toggle-response-form"
+                                    th:data-review-id="${review.id}">
+                                Phản hồi
+                            </button>
+                            <div th:id="'response-form-' + ${review.id}" class="response-form">
+                                <form th:action="@{/reviews/{id}/respond(id=${review.id})}" 
+                                      method="POST" class="response-form-content">
+                                    <div class="form-group">
+                                        <textarea class="form-control" name="response" rows="3" 
+                                                  placeholder="Nhập phản hồi của bạn..." required></textarea>
+                                    </div>
+                                    <div class="mt-2">
+                                        <button type="submit" class="btn btn-primary btn-sm">Gửi phản hồi</button>
+                                        <button type="button" class="btn btn-secondary btn-sm ms-2 cancel-response">
+                                            Hủy
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <nav th:if="${reviews.totalPages > 1}" aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${reviews.first} ? 'disabled'">
+                        <a class="page-link" th:href="@{/reviews/specialist(page=${reviews.number - 1})}">
+                            Trước
+                        </a>
+                    </li>
+                    
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, reviews.totalPages - 1)}"
+                        th:classappend="${i == reviews.number} ? 'active'">
+                        <a class="page-link" th:href="@{/reviews/specialist(page=${i})}" th:text="${i + 1}">1</a>
+                    </li>
+                    
+                    <li class="page-item" th:classappend="${reviews.last} ? 'disabled'">
+                        <a class="page-link" th:href="@{/reviews/specialist(page=${reviews.number + 1})}">
+                            Tiếp
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script>
+            document.querySelectorAll('.toggle-response-form').forEach(button => {
+                button.addEventListener('click', function() {
+                    const reviewId = this.getAttribute('data-review-id');
+                    const form = document.getElementById('response-form-' + reviewId);
+                    form.classList.toggle('active');
+                });
+            });
+
+            document.querySelectorAll('.cancel-response').forEach(button => {
+                button.addEventListener('click', function() {
+                    const form = this.closest('.response-form');
+                    form.classList.remove('active');
+                });
+            });
+        </script>
+    </th:block>
+</body>
+</html> 

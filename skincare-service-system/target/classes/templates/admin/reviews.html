@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+<head>
+    <title>Quản lý đánh giá - Quản trị</title>
+    <style>
+        .review-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .review-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .review-info {
+            flex: 1;
+        }
+        
+        .review-customer {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .review-service {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-rating {
+            color: #ffc107;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-content {
+            margin: 1rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+        }
+        
+        .review-date {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        .review-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .filter-item {
+            margin-bottom: 1rem;
+        }
+        
+        .filter-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #0d6efd;
+        }
+        
+        .stats-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        .rating-bar {
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        
+        .rating-fill {
+            height: 100%;
+            background-color: #ffc107;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <!-- Sidebar Navigation -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <h4 class="mb-4">Quản trị</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" th:href="@{/admin/dashboard}">
+                            <i class="fas fa-tachometer-alt me-2"></i> Tổng quan
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/appointments}">
+                            <i class="fas fa-calendar-alt me-2"></i> Lịch hẹn
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/services}">
+                            <i class="fas fa-spa me-2"></i> Dịch vụ
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/specialists}">
+                            <i class="fas fa-user-md me-2"></i> Chuyên viên
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/customers}">
+                            <i class="fas fa-users me-2"></i> Khách hàng
+                        </a>
+                        <a class="nav-link active" th:href="@{/admin/reviews}">
+                            <i class="fas fa-star me-2"></i> Đánh giá
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/reports}">
+                            <i class="fas fa-chart-bar me-2"></i> Báo cáo
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/settings}">
+                            <i class="fas fa-cog me-2"></i> Cài đặt
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9 col-lg-10 main-content">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Quản lý đánh giá</h2>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stats-value" th:text="${statistics.totalReviews}">0</div>
+                                <div class="stats-label">Tổng số đánh giá</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stats-value" th:text="${#numbers.formatDecimal(statistics.averageRating, 1, 1)}">0.0</div>
+                                <div class="stats-label">Đánh giá trung bình</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stats-value" th:text="${statistics.respondedReviews}">0</div>
+                                <div class="stats-label">Đã phản hồi</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stats-card">
+                                <div class="stats-value" th:text="${statistics.pendingReviews}">0</div>
+                                <div class="stats-label">Chờ phản hồi</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rating Distribution -->
+                    <div class="stats-card mb-4">
+                        <h5 class="mb-3">Phân bố đánh giá</h5>
+                        <div th:each="rating : ${statistics.ratingDistribution}" class="mb-2">
+                            <div class="d-flex justify-content-between">
+                                <span th:text="${rating.key + ' sao'}">5 sao</span>
+                                <span th:text="${rating.value}">0</span>
+                            </div>
+                            <div class="rating-bar">
+                                <div class="rating-fill" th:style="'width: ' + ${rating.value * 100 / statistics.totalReviews} + '%'"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filter-section">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="filter-item">
+                                    <label class="form-label">Trạng thái</label>
+                                    <select class="form-select" id="statusFilter">
+                                        <option value="">Tất cả</option>
+                                        <option value="pending">Chờ phản hồi</option>
+                                        <option value="responded">Đã phản hồi</option>
+                                        <option value="flagged">Đã báo cáo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="filter-item">
+                                    <label class="form-label">Đánh giá</label>
+                                    <select class="form-select" id="ratingFilter">
+                                        <option value="">Tất cả</option>
+                                        <option value="5">5 sao</option>
+                                        <option value="4">4 sao</option>
+                                        <option value="3">3 sao</option>
+                                        <option value="2">2 sao</option>
+                                        <option value="1">1 sao</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="filter-item">
+                                    <label class="form-label">Chuyên viên</label>
+                                    <select class="form-select" id="specialistFilter">
+                                        <option value="">Tất cả</option>
+                                        <option th:each="specialist : ${specialists}"
+                                                th:value="${specialist.id}"
+                                                th:text="${specialist.fullName}">
+                                            Tên chuyên viên
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="filter-item">
+                                    <label class="form-label">Dịch vụ</label>
+                                    <select class="form-select" id="serviceFilter">
+                                        <option value="">Tất cả</option>
+                                        <option th:each="service : ${services}"
+                                                th:value="${service.id}"
+                                                th:text="${service.name}">
+                                            Tên dịch vụ
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews List -->
+                    <div class="reviews-list">
+                        <div th:each="review : ${reviews}" class="review-card">
+                            <div class="review-header">
+                                <img th:src="${review.customerAvatarUrl}" class="review-avatar" alt="Avatar">
+                                <div class="review-info">
+                                    <div class="review-customer" th:text="${review.customerName}">Tên khách hàng</div>
+                                    <div class="review-service" th:text="${review.serviceName}">Tên dịch vụ</div>
+                                    <div class="review-rating">
+                                        <i th:each="i : ${#numbers.sequence(0, 4)}"
+                                           th:class="${i < review.rating ? 'fas fa-star' : 'far fa-star'}">
+                                        </i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="review-content" th:text="${review.comment}">
+                                Nội dung đánh giá
+                            </div>
+                            
+                            <div class="review-date" th:text="${review.createdAt}">
+                                Ngày đánh giá
+                            </div>
+                            
+                            <div class="review-actions">
+                                <button class="btn btn-outline-primary btn-sm"
+                                        th:onclick="'viewReviewDetails(' + ${review.id} + ')'">
+                                    <i class="fas fa-eye me-2"></i>Xem chi tiết
+                                </button>
+                                <button class="btn btn-outline-success btn-sm"
+                                        th:onclick="'respondToReview(' + ${review.id} + ')'"
+                                        th:if="${review.specialistResponse == null}">
+                                    <i class="fas fa-reply me-2"></i>Phản hồi
+                                </button>
+                                <button class="btn btn-outline-warning btn-sm"
+                                        th:onclick="'flagReview(' + ${review.id} + ')'"
+                                        th:if="${!review.flagged}">
+                                    <i class="fas fa-flag me-2"></i>Báo cáo
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm"
+                                        th:onclick="'deleteReview(' + ${review.id} + ')'">
+                                    <i class="fas fa-trash me-2"></i>Xóa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Respond to Review Modal -->
+        <div id="respondModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Phản hồi đánh giá</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form id="respondForm" method="post">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Nội dung phản hồi</label>
+                                <textarea name="response" class="form-control" rows="4" required></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Gửi phản hồi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script th:inline="javascript">
+            function viewReviewDetails(id) {
+                // Implement view details logic
+            }
+
+            function respondToReview(id) {
+                const modal = new bootstrap.Modal(document.getElementById('respondModal'));
+                const form = document.getElementById('respondForm');
+                form.action = `/admin/reviews/${id}/respond`;
+                modal.show();
+            }
+
+            function flagReview(id) {
+                if (confirm('Bạn có chắc chắn muốn báo cáo đánh giá này?')) {
+                    fetch(`/admin/reviews/${id}/flag`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+
+            function deleteReview(id) {
+                if (confirm('Bạn có chắc chắn muốn xóa đánh giá này?')) {
+                    fetch(`/admin/reviews/${id}/delete`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+
+            // Filter change handlers
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+            document.getElementById('ratingFilter').addEventListener('change', applyFilters);
+            document.getElementById('specialistFilter').addEventListener('change', applyFilters);
+            document.getElementById('serviceFilter').addEventListener('change', applyFilters);
+
+            function applyFilters() {
+                const status = document.getElementById('statusFilter').value;
+                const rating = document.getElementById('ratingFilter').value;
+                const specialist = document.getElementById('specialistFilter').value;
+                const service = document.getElementById('serviceFilter').value;
+
+                const url = new URL(window.location.href);
+                if (status) url.searchParams.set('status', status);
+                else url.searchParams.delete('status');
+                
+                if (rating) url.searchParams.set('rating', rating);
+                else url.searchParams.delete('rating');
+                
+                if (specialist) url.searchParams.set('specialist', specialist);
+                else url.searchParams.delete('specialist');
+                
+                if (service) url.searchParams.set('service', service);
+                else url.searchParams.delete('service');
+
+                window.location.href = url.toString();
+            }
+        </script>
+    </th:block>
+</body>
+</html> 

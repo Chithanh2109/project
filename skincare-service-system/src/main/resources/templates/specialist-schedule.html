@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title>Lịch làm việc - Trung tâm Chăm sóc Da</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css">
+    <style>
+        .fc-event {
+            cursor: pointer;
+        }
+        .appointment-details {
+            font-size: 0.9rem;
+        }
+        .status-select {
+            font-size: 0.875rem;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+        }
+        .fc-day-today {
+            background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+        }
+        .appointment-time {
+            font-weight: bold;
+            color: var(--bs-primary);
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">Chi tiết lịch hẹn</h5>
+                        </div>
+                        <div class="card-body" id="appointmentDetails">
+                            <div class="text-center py-4">
+                                <i class="fas fa-calendar fa-2x text-muted mb-2"></i>
+                                <p>Chọn một lịch hẹn để xem chi tiết</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template for appointment details -->
+    <template id="appointmentDetailsTemplate">
+        <div class="appointment-details">
+            <div class="mb-3">
+                <span class="appointment-time"></span>
+            </div>
+            <div class="mb-3">
+                <h6>Khách hàng:</h6>
+                <p class="customer-name mb-1"></p>
+                <p class="customer-contact mb-0"></p>
+            </div>
+            <div class="mb-3">
+                <h6>Dịch vụ:</h6>
+                <ul class="services-list list-unstyled"></ul>
+            </div>
+            <div class="mb-3">
+                <h6>Ghi chú:</h6>
+                <p class="notes text-muted"></p>
+            </div>
+            <div class="mb-3">
+                <h6>Trạng thái:</h6>
+                <select class="status-select form-select"></select>
+            </div>
+        </div>
+    </template>
+
+    <th:block layout:fragment="scripts">
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                const calendarEl = document.getElementById('calendar');
+                const appointments = /*[[${appointments}]]*/ [];
+                
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'timeGridWeek',
+                    slotMinTime: '09:00:00',
+                    slotMaxTime: '18:00:00',
+                    allDaySlot: false,
+                    locale: 'vi',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'timeGridWeek,timeGridDay'
+                    },
+                    events: appointments.map(appointment => ({
+                        id: appointment.id,
+                        title: `${appointment.customer.fullName} - ${appointment.services[0].name}`,
+                        start: appointment.appointmentDateTime,
+                        end: moment(appointment.appointmentDateTime)
+                            .add(getTotalDuration(appointment.services), 'minutes')
+                            .toDate(),
+                        backgroundColor: getStatusColor(appointment.status),
+                        extendedProps: {
+                            appointment: appointment
+                        }
+                    })),
+                    eventClick: function(info) {
+                        showAppointmentDetails(info.event.extendedProps.appointment);
+                    }
+                });
+                
+                calendar.render();
+            });
+
+            function getTotalDuration(services) {
+                return services.reduce((total, service) => total + service.duration, 0);
+            }
+
+            function getStatusColor(status) {
+                const colors = {
+                    'PENDING': '#ffc107',
+                    'CONFIRMED': '#28a745',
+                    'COMPLETED': '#007bff',
+                    'CANCELLED': '#dc3545',
+                    'NO_SHOW': '#6c757d'
+                };
+                return colors[status] || colors.PENDING;
+            }
+
+            function showAppointmentDetails(appointment) {
+                const template = document.getElementById('appointmentDetailsTemplate');
+                const detailsContainer = document.getElementById('appointmentDetails');
+                const content = template.content.cloneNode(true);
+
+                content.querySelector('.appointment-time').textContent = 
+                    moment(appointment.appointmentDateTime).format('DD/MM/YYYY HH:mm');
+                content.querySelector('.customer-name').textContent = appointment.customer.fullName;
+                content.querySelector('.customer-contact').textContent = 
+                    `${appointment.customer.email} - ${appointment.customer.phoneNumber}`;
+
+                const servicesList = content.querySelector('.services-list');
+                appointment.services.forEach(service => {
+                    const li = document.createElement('li');
+                    li.textContent = `${service.name} (${service.duration} phút)`;
+                    servicesList.appendChild(li);
+                });
+
+                content.querySelector('.notes').textContent = 
+                    appointment.notes || 'Không có ghi chú';
+
+                const statusSelect = content.querySelector('.status-select');
+                const statuses = ['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED', 'NO_SHOW'];
+                statuses.forEach(status => {
+                    const option = document.createElement('option');
+                    option.value = status;
+                    option.textContent = getStatusText(status);
+                    option.selected = status === appointment.status;
+                    statusSelect.appendChild(option);
+                });
+
+                statusSelect.addEventListener('change', function() {
+                    updateAppointmentStatus(appointment.id, this.value);
+                });
+
+                detailsContainer.innerHTML = '';
+                detailsContainer.appendChild(content);
+            }
+
+            function getStatusText(status) {
+                const texts = {
+                    'PENDING': 'Chờ xác nhận',
+                    'CONFIRMED': 'Đã xác nhận',
+                    'COMPLETED': 'Đã hoàn thành',
+                    'CANCELLED': 'Đã hủy',
+                    'NO_SHOW': 'Khách không đến'
+                };
+                return texts[status] || status;
+            }
+
+            function updateAppointmentStatus(appointmentId, status) {
+                fetch(`/appointments/${appointmentId}/status?status=${status}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Có lỗi xảy ra khi cập nhật trạng thái. Vui lòng thử lại sau.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi cập nhật trạng thái. Vui lòng thử lại sau.');
+                });
+            }
+        </script>
+    </th:block>
+</body>
+</html> 

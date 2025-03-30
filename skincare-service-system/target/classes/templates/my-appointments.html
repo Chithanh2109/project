@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title>Lịch hẹn của tôi - Trung tâm Chăm sóc Da</title>
+    <style>
+        .appointment-card {
+            transition: transform 0.2s;
+            margin-bottom: 1.5rem;
+        }
+        .appointment-card:hover {
+            transform: translateY(-5px);
+        }
+        .status-badge {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+        }
+        .status-pending { background-color: #fff3cd; color: #856404; }
+        .status-confirmed { background-color: #d4edda; color: #155724; }
+        .status-completed { background-color: #cce5ff; color: #004085; }
+        .status-cancelled { background-color: #f8d7da; color: #721c24; }
+        .status-no-show { background-color: #e2e3e5; color: #383d41; }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container py-5">
+            <div class="row mb-4">
+                <div class="col">
+                    <h2 class="mb-4">Lịch hẹn của tôi</h2>
+                    <div th:if="${success}" class="alert alert-success" role="alert" th:text="${success}"></div>
+                    <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+                </div>
+                <div class="col-auto">
+                    <a href="/appointments/book" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Đặt lịch mới
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div th:if="${#lists.isEmpty(appointments)}" class="text-center py-5">
+                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                        <p class="lead">Bạn chưa có lịch hẹn nào</p>
+                        <a href="/appointments/book" class="btn btn-primary">Đặt lịch ngay</a>
+                    </div>
+
+                    <div th:each="appointment : ${appointments}" class="card appointment-card">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-3">
+                                    <h5 class="card-title mb-2" th:text="${#temporals.format(appointment.appointmentDateTime, 'dd/MM/yyyy')}">Ngày</h5>
+                                    <p class="card-text" th:text="${#temporals.format(appointment.appointmentDateTime, 'HH:mm')}">Giờ</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="mb-2">Dịch vụ:</h6>
+                                    <ul class="list-unstyled">
+                                        <li th:each="service : ${appointment.services}" 
+                                            th:text="${service.name + ' (' + service.duration + ' phút)'}">
+                                            Tên dịch vụ
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3">
+                                    <h6 class="mb-2">Chuyên viên:</h6>
+                                    <p class="card-text" th:if="${appointment.specialist}" 
+                                       th:text="${appointment.specialist.fullName}">
+                                        Tên chuyên viên
+                                    </p>
+                                    <p class="card-text text-muted" th:unless="${appointment.specialist}">
+                                        Chưa phân công
+                                    </p>
+                                </div>
+                                <div class="col-md-2 text-md-end">
+                                    <span class="status-badge" 
+                                          th:classappend="${'status-' + #strings.toLowerCase(appointment.status)}"
+                                          th:text="${appointment.status.name()}">
+                                        PENDING
+                                    </span>
+                                    
+                                    <div class="mt-3" th:if="${appointment.status == T(com.skincare.model.AppointmentStatus).PENDING}">
+                                        <button class="btn btn-sm btn-outline-danger"
+                                                onclick="cancelAppointment(this)"
+                                                th:data-id="${appointment.id}">
+                                            Hủy lịch
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script>
+            function cancelAppointment(button) {
+                if (confirm('Bạn có chắc chắn muốn hủy lịch hẹn này không?')) {
+                    const appointmentId = button.getAttribute('data-id');
+                    fetch(`/appointments/${appointmentId}/status?status=CANCELLED`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            alert('Có lỗi xảy ra khi hủy lịch. Vui lòng thử lại sau.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Có lỗi xảy ra khi hủy lịch. Vui lòng thử lại sau.');
+                    });
+                }
+            }
+        </script>
+    </th:block>
+</body>
+</html> 

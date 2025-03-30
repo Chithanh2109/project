@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title>Đánh giá dịch vụ - Trung tâm Chăm sóc Da</title>
+    <style>
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            cursor: pointer;
+            font-size: 2rem;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+        .rating label:hover,
+        .rating label:hover ~ label,
+        .rating input:checked ~ label {
+            color: #ffc107;
+        }
+        .rating-error {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .comment-box {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .char-count {
+            font-size: 0.875rem;
+            color: #6c757d;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="card-title mb-0">Đánh giá dịch vụ</h4>
+                        </div>
+                        <div class="card-body">
+                            <div th:if="${error}" class="alert alert-danger" role="alert" th:text="${error}"></div>
+                            
+                            <form th:action="@{/reviews/appointment/{id}(id=${appointmentId})}" 
+                                  th:object="${reviewDTO}" method="POST">
+                                
+                                <div class="mb-4">
+                                    <label class="form-label">Đánh giá của bạn</label>
+                                    <div class="rating">
+                                        <input type="radio" th:field="*{rating}" id="star5" value="5">
+                                        <label for="star5" title="5 sao">★</label>
+                                        
+                                        <input type="radio" th:field="*{rating}" id="star4" value="4">
+                                        <label for="star4" title="4 sao">★</label>
+                                        
+                                        <input type="radio" th:field="*{rating}" id="star3" value="3">
+                                        <label for="star3" title="3 sao">★</label>
+                                        
+                                        <input type="radio" th:field="*{rating}" id="star2" value="2">
+                                        <label for="star2" title="2 sao">★</label>
+                                        
+                                        <input type="radio" th:field="*{rating}" id="star1" value="1">
+                                        <label for="star1" title="1 sao">★</label>
+                                    </div>
+                                    <div class="rating-error" th:if="${#fields.hasErrors('rating')}" 
+                                         th:errors="*{rating}"></div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="comment" class="form-label">Nhận xét của bạn</label>
+                                    <textarea id="comment" th:field="*{comment}" 
+                                              class="form-control comment-box"
+                                              placeholder="Chia sẻ trải nghiệm của bạn về dịch vụ..."
+                                              maxlength="1000"></textarea>
+                                    <div class="char-count">
+                                        <span id="charCount">0</span>/1000 ký tự
+                                    </div>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('comment')}" 
+                                         th:errors="*{comment}"></div>
+                                </div>
+                                
+                                <div class="text-end">
+                                    <a href="/appointments/my-appointments" class="btn btn-secondary me-2">Hủy</a>
+                                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script>
+            document.getElementById('comment').addEventListener('input', function() {
+                document.getElementById('charCount').textContent = this.value.length;
+            });
+        </script>
+    </th:block>
+</body>
+</html> 

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Trắc nghiệm Da - Trung tâm Chăm sóc Da</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-5">
+                            <h1 class="text-center mb-4">Trắc nghiệm Da</h1>
+                            <p class="lead text-center mb-5">Hãy trả lời các câu hỏi dưới đây để chúng tôi có thể đề xuất các dịch vụ phù hợp nhất với làn da của bạn</p>
+                            
+                            <form id="skinTestForm" th:action="@{/skin-test/submit}" method="post">
+                                <!-- Question 1 -->
+                                <div class="question-section mb-4">
+                                    <h5>1. Làn da của bạn cảm thấy như thế nào vào buổi sáng?</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="morning_skin" id="morning1" value="normal" required>
+                                        <label class="form-check-label" for="morning1">
+                                            Bình thường, thoải mái
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="morning_skin" id="morning2" value="oily">
+                                        <label class="form-check-label" for="morning2">
+                                            Dầu nhờn, bóng nhẫy
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="morning_skin" id="morning3" value="dry">
+                                        <label class="form-check-label" for="morning3">
+                                            Khô, căng tức
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="morning_skin" id="morning4" value="combination">
+                                        <label class="form-check-label" for="morning4">
+                                            Hỗn hợp (vừa có vùng dầu vừa có vùng khô)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Question 2 -->
+                                <div class="question-section mb-4">
+                                    <h5>2. Bạn có thường xuyên gặp các vấn đề về mụn không?</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="acne_frequency" id="acne1" value="never" required>
+                                        <label class="form-check-label" for="acne1">
+                                            Hiếm khi hoặc không bao giờ
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="acne_frequency" id="acne2" value="sometimes">
+                                        <label class="form-check-label" for="acne2">
+                                            Thỉnh thoảng (1-2 lần/tháng)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="acne_frequency" id="acne3" value="often">
+                                        <label class="form-check-label" for="acne3">
+                                            Thường xuyên (hàng tuần)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="acne_frequency" id="acne4" value="severe">
+                                        <label class="form-check-label" for="acne4">
+                                            Rất thường xuyên (gần như hàng ngày)
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Question 3 -->
+                                <div class="question-section mb-4">
+                                    <h5>3. Làn da của bạn có nhạy cảm với các sản phẩm chăm sóc da không?</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="skin_sensitivity" id="sensitivity1" value="not_sensitive" required>
+                                        <label class="form-check-label" for="sensitivity1">
+                                            Không nhạy cảm
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="skin_sensitivity" id="sensitivity2" value="slightly_sensitive">
+                                        <label class="form-check-label" for="sensitivity2">
+                                            Hơi nhạy cảm
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="skin_sensitivity" id="sensitivity3" value="very_sensitive">
+                                        <label class="form-check-label" for="sensitivity3">
+                                            Rất nhạy cảm
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Question 4 -->
+                                <div class="question-section mb-4">
+                                    <h5>4. Bạn có quan tâm đến vấn đề nào sau đây?</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="skin_concerns" id="concern1" value="aging">
+                                        <label class="form-check-label" for="concern1">
+                                            Lão hóa (nếp nhăn, chảy xệ)
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="skin_concerns" id="concern2" value="pigmentation">
+                                        <label class="form-check-label" for="concern2">
+                                            Thâm nám, tàn nhang
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="skin_concerns" id="concern3" value="pores">
+                                        <label class="form-check-label" for="concern3">
+                                            Lỗ chân lông to
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="skin_concerns" id="concern4" value="dullness">
+                                        <label class="form-check-label" for="concern4">
+                                            Da xỉn màu, thiếu sức sống
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Question 5 -->
+                                <div class="question-section mb-5">
+                                    <h5>5. Bạn đã từng trải nghiệm dịch vụ chăm sóc da chuyên nghiệp chưa?</h5>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="previous_experience" id="experience1" value="never" required>
+                                        <label class="form-check-label" for="experience1">
+                                            Chưa bao giờ
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="previous_experience" id="experience2" value="few_times">
+                                        <label class="form-check-label" for="experience2">
+                                            Vài lần
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="previous_experience" id="experience3" value="regular">
+                                        <label class="form-check-label" for="experience3">
+                                            Thường xuyên
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                                        Nhận kết quả
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional JavaScript for form validation and submission -->
+    <th:block layout:fragment="additionalJs">
+        <script th:src="@{/js/skin-test.js}"></script>
+    </th:block>
+</body>
+</html> 

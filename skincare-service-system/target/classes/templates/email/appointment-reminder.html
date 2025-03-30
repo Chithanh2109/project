@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            max-width: 150px;
+            height: auto;
+        }
+        .content {
+            background-color: #fff3cd;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #ffeeba;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .highlight {
+            color: #856404;
+            font-weight: bold;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ffc107;
+            color: #856404;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .reminder-icon {
+            font-size: 48px;
+            color: #ffc107;
+            margin-bottom: 20px;
+        }
+        .important {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img class="logo" src="cid:logo" alt="Logo">
+            <h2>Nhắc nhở lịch hẹn</h2>
+        </div>
+        
+        <div class="content">
+            <div style="text-align: center;">
+                <div class="reminder-icon">⏰</div>
+            </div>
+            
+            <p>Kính gửi <span class="highlight" th:text="${customerName}">Khách hàng</span>,</p>
+            
+            <p>Chúng tôi xin nhắc nhở bạn về lịch hẹn sắp tới tại Trung tâm Chăm sóc Da:</p>
+            
+            <div th:utext="${appointmentDetails}">
+                <!-- Appointment details will be inserted here -->
+            </div>
+            
+            <div th:if="${hasQRCode}" style="text-align: center; margin: 20px 0;">
+                <p style="margin-bottom: 10px;">Quét mã QR để thêm lịch hẹn vào lịch của bạn:</p>
+                <img src="cid:qrcode" alt="QR Code" style="max-width: 200px;">
+            </div>
+            
+            <div class="important">
+                <h4>Lưu ý quan trọng:</h4>
+                <ul>
+                    <li>Vui lòng đến trước giờ hẹn 10 phút để làm thủ tục</li>
+                    <li>Mang theo CCCD/CMND để đăng ký dịch vụ</li>
+                    <li>Nếu không thể đến đúng hẹn, vui lòng thông báo trước ít nhất 2 giờ</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center;">
+                <a class="button" href="#" th:href="@{${appointmentUrl}}">Xem chi tiết lịch hẹn</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Trung tâm Chăm sóc Da</p>
+            <p>Địa chỉ: 123 Đường ABC, Quận XYZ, TP.HCM</p>
+            <p>Điện thoại: (028) 1234 5678 | Email: info@skincare.com</p>
+            <p>© 2024 Skincare Center. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html> 

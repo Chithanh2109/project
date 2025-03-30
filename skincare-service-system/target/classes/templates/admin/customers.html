@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+<head>
+    <title>Quản lý khách hàng - Quản trị</title>
+    <style>
+        .customer-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .customer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .customer-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+        
+        .customer-info {
+            flex: 1;
+        }
+        
+        .customer-name {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .customer-email {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .customer-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+        
+        .customer-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0d6efd;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        .customer-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .search-box {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .filter-section {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .filter-item {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <!-- Sidebar Navigation -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <h4 class="mb-4">Quản trị</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" th:href="@{/admin/dashboard}">
+                            <i class="fas fa-tachometer-alt me-2"></i> Tổng quan
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/appointments}">
+                            <i class="fas fa-calendar-alt me-2"></i> Lịch hẹn
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/services}">
+                            <i class="fas fa-spa me-2"></i> Dịch vụ
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/specialists}">
+                            <i class="fas fa-user-md me-2"></i> Chuyên viên
+                        </a>
+                        <a class="nav-link active" th:href="@{/admin/customers}">
+                            <i class="fas fa-users me-2"></i> Khách hàng
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/reviews}">
+                            <i class="fas fa-star me-2"></i> Đánh giá
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/reports}">
+                            <i class="fas fa-chart-bar me-2"></i> Báo cáo
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/settings}">
+                            <i class="fas fa-cog me-2"></i> Cài đặt
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9 col-lg-10 main-content">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Quản lý khách hàng</h2>
+                        <div>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+                                <i class="fas fa-plus me-2"></i>Thêm khách hàng mới
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search and Filter -->
+                    <div class="search-box">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm khách hàng...">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div class="filter-section">
+                            <div class="filter-item">
+                                <label class="form-label">Trạng thái</label>
+                                <select class="form-select">
+                                    <option value="">Tất cả</option>
+                                    <option value="active">Đang hoạt động</option>
+                                    <option value="inactive">Đã tạm dừng</option>
+                                </select>
+                            </div>
+                            <div class="filter-item">
+                                <label class="form-label">Số lịch hẹn</label>
+                                <select class="form-select">
+                                    <option value="">Tất cả</option>
+                                    <option value="0">Chưa có lịch hẹn</option>
+                                    <option value="1-5">1-5 lịch hẹn</option>
+                                    <option value="5-10">5-10 lịch hẹn</option>
+                                    <option value="10+">Trên 10 lịch hẹn</option>
+                                </select>
+                            </div>
+                            <div class="filter-item">
+                                <label class="form-label">Đánh giá</label>
+                                <select class="form-select">
+                                    <option value="">Tất cả</option>
+                                    <option value="5">5 sao</option>
+                                    <option value="4">4 sao</option>
+                                    <option value="3">3 sao</option>
+                                    <option value="2">2 sao</option>
+                                    <option value="1">1 sao</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customers List -->
+                    <div class="customers-list">
+                        <div th:each="customer : ${customers}" class="customer-card">
+                            <div class="customer-header">
+                                <img th:src="${customer.avatarUrl}" class="customer-avatar" alt="Avatar">
+                                <div class="customer-info">
+                                    <div class="customer-name" th:text="${customer.fullName}">Tên khách hàng</div>
+                                    <div class="customer-email" th:text="${customer.email}">email@example.com</div>
+                                    <div class="customer-status" 
+                                         th:classappend="${customer.active ? 'status-active' : 'status-inactive'}"
+                                         th:text="${customer.active ? 'Đang hoạt động' : 'Đã tạm dừng'}">
+                                        Trạng thái
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="customer-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value" th:text="${customer.totalAppointments}">0</div>
+                                    <div class="stat-label">Lịch hẹn</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" th:text="${#numbers.formatDecimal(customer.averageRating, 1, 1)}">0.0</div>
+                                    <div class="stat-label">Đánh giá TB</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" th:text="${customer.totalSpent} + ' ₫'">0 ₫</div>
+                                    <div class="stat-label">Tổng chi tiêu</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" th:text="${customer.lastVisit}">-</div>
+                                    <div class="stat-label">Lần ghé thăm cuối</div>
+                                </div>
+                            </div>
+                            
+                            <div class="customer-actions">
+                                <button class="btn btn-outline-primary btn-sm"
+                                        th:onclick="'viewCustomerDetails(' + ${customer.id} + ')'">
+                                    <i class="fas fa-eye me-2"></i>Xem chi tiết
+                                </button>
+                                <button class="btn btn-outline-warning btn-sm"
+                                        th:onclick="'toggleCustomerStatus(' + ${customer.id} + ')'">
+                                    <i class="fas fa-power-off me-2"></i>
+                                    <span th:text="${customer.active ? 'Tạm dừng' : 'Kích hoạt'}">
+                                        Tạm dừng
+                                    </span>
+                                </button>
+                                <button class="btn btn-outline-info btn-sm"
+                                        th:onclick="'viewCustomerHistory(' + ${customer.id} + ')'">
+                                    <i class="fas fa-history me-2"></i>Lịch sử
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm"
+                                        th:onclick="'deleteCustomer(' + ${customer.id} + ')'">
+                                    <i class="fas fa-trash me-2"></i>Xóa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Customer Modal -->
+        <div id="addCustomerModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thêm khách hàng mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form th:action="@{/admin/customers/create}" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" name="fullName" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" name="phone" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Địa chỉ</label>
+                                <textarea name="address" class="form-control" rows="2"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ảnh đại diện</label>
+                                <input type="file" name="avatar" class="form-control" accept="image/*">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ghi chú</label>
+                                <textarea name="notes" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Thêm khách hàng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script th:inline="javascript">
+            function viewCustomerDetails(id) {
+                // Implement view details logic
+            }
+
+            function toggleCustomerStatus(id) {
+                if (confirm('Bạn có chắc chắn muốn thay đổi trạng thái khách hàng này?')) {
+                    fetch(`/admin/customers/${id}/toggle-status`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+
+            function viewCustomerHistory(id) {
+                // Implement history view logic
+            }
+
+            function deleteCustomer(id) {
+                if (confirm('Bạn có chắc chắn muốn xóa khách hàng này?')) {
+                    fetch(`/admin/customers/${id}/delete`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+        </script>
+    </th:block>
+</body>
+</html> 

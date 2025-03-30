@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            max-width: 150px;
+            height: auto;
+        }
+        .content {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .status-confirmed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status-completed {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .next-steps {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img class="logo" src="cid:logo" alt="Logo">
+            <h2>Cập nhật trạng thái lịch hẹn</h2>
+        </div>
+        
+        <div class="content">
+            <p>Kính gửi <span th:text="${customerName}">Khách hàng</span>,</p>
+            
+            <p>Trạng thái lịch hẹn của bạn đã được cập nhật:</p>
+            
+            <div style="text-align: center;">
+                <span class="status-badge" th:classappend="${'status-' + #strings.toLowerCase(status)}"
+                      th:text="${status}">STATUS</span>
+            </div>
+            
+            <div th:utext="${appointmentDetails}">
+                <!-- Appointment details will be inserted here -->
+            </div>
+            
+            <div class="next-steps">
+                <h4>Bước tiếp theo:</h4>
+                <div th:switch="${status}">
+                    <div th:case="'CONFIRMED'">
+                        <ul>
+                            <li>Vui lòng đến đúng giờ đã hẹn</li>
+                            <li>Mang theo CCCD/CMND để đăng ký dịch vụ</li>
+                            <li>Bạn sẽ nhận được email nhắc nhở trước lịch hẹn</li>
+                        </ul>
+                    </div>
+                    <div th:case="'CANCELLED'">
+                        <p>Lịch hẹn đã bị hủy. Nếu bạn muốn đặt lịch mới, vui lòng truy cập website hoặc liên hệ với chúng tôi.</p>
+                    </div>
+                    <div th:case="'COMPLETED'">
+                        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Hẹn gặp lại bạn trong những lần tới!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <a class="button" href="#" th:href="@{${appointmentUrl}}">Xem chi tiết lịch hẹn</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Trung tâm Chăm sóc Da</p>
+            <p>Địa chỉ: 123 Đường ABC, Quận XYZ, TP.HCM</p>
+            <p>Điện thoại: (028) 1234 5678 | Email: info@skincare.com</p>
+            <p>© 2024 Skincare Center. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html> 

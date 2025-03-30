@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            max-width: 150px;
+            height: auto;
+        }
+        .content {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #6c757d;
+        }
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .note {
+            font-style: italic;
+            color: #6c757d;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img class="logo" src="cid:logo" alt="Logo">
+            <h2>Xác nhận đặt lịch</h2>
+        </div>
+        
+        <div class="content">
+            <p>Kính gửi <span class="highlight" th:text="${customerName}">Khách hàng</span>,</p>
+            
+            <p>Cảm ơn bạn đã đặt lịch tại Trung tâm Chăm sóc Da. Chúng tôi xin xác nhận thông tin lịch hẹn của bạn như sau:</p>
+            
+            <div th:utext="${appointmentDetails}">
+                <!-- Appointment details will be inserted here -->
+            </div>
+            
+            <div th:if="${hasQRCode}" style="text-align: center; margin: 20px 0;">
+                <p style="margin-bottom: 10px;">Quét mã QR để thêm lịch hẹn vào lịch của bạn:</p>
+                <img src="cid:qrcode" alt="QR Code" style="max-width: 200px;">
+            </div>
+            
+            <p class="note">* Vui lòng đến đúng giờ để được phục vụ tốt nhất. Nếu bạn cần thay đổi lịch hẹn, vui lòng liên hệ với chúng tôi trước ít nhất 24 giờ.</p>
+            
+            <div style="text-align: center;">
+                <a class="button" href="#" th:href="@{${appointmentUrl}}">Xem chi tiết lịch hẹn</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Trung tâm Chăm sóc Da</p>
+            <p>Địa chỉ: 123 Đường ABC, Quận XYZ, TP.HCM</p>
+            <p>Điện thoại: (028) 1234 5678 | Email: info@skincare.com</p>
+            <p>© 2024 Skincare Center. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html> 

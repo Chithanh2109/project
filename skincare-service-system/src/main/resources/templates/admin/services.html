@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+<head>
+    <title>Quản lý dịch vụ - Quản trị</title>
+    <style>
+        .service-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            transition: transform 0.2s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .service-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #0d6efd;
+        }
+        
+        .service-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+        
+        .service-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        .info-value {
+            font-weight: 500;
+        }
+        
+        .service-description {
+            color: #212529;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .service-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .modal-body textarea {
+            min-height: 120px;
+        }
+        
+        .price-input {
+            position: relative;
+        }
+        
+        .price-input::before {
+            content: "₫";
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .price-input input {
+            padding-left: 2rem;
+        }
+        
+        .nav-link {
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background-color: #f8f9fa;
+            color: #0d6efd;
+        }
+        
+        .nav-link.active {
+            background-color: #e9ecef;
+            color: #0d6efd;
+        }
+        
+        .sidebar {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-right: 1px solid #dee2e6;
+        }
+        
+        .main-content {
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <!-- Sidebar Navigation -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <h4 class="mb-4">Quản trị</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" th:href="@{/admin/dashboard}">
+                            <i class="fas fa-tachometer-alt me-2"></i> Tổng quan
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/appointments}">
+                            <i class="fas fa-calendar-alt me-2"></i> Lịch hẹn
+                        </a>
+                        <a class="nav-link active" th:href="@{/admin/services}">
+                            <i class="fas fa-spa me-2"></i> Dịch vụ
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/specialists}">
+                            <i class="fas fa-user-md me-2"></i> Chuyên viên
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/customers}">
+                            <i class="fas fa-users me-2"></i> Khách hàng
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/reviews}">
+                            <i class="fas fa-star me-2"></i> Đánh giá
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/reports}">
+                            <i class="fas fa-chart-bar me-2"></i> Báo cáo
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/settings}">
+                            <i class="fas fa-cog me-2"></i> Cài đặt
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9 col-lg-10 main-content">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Quản lý dịch vụ</h2>
+                        <div>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addServiceModal">
+                                <i class="fas fa-plus me-2"></i>Thêm dịch vụ mới
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Services List -->
+                    <div class="services-list">
+                        <div th:each="service : ${services}" class="service-card">
+                            <div class="service-header">
+                                <div class="service-title" th:text="${service.name}">Tên dịch vụ</div>
+                                <div class="service-status" 
+                                     th:classappend="${service.active ? 'status-active' : 'status-inactive'}"
+                                     th:text="${service.active ? 'Đang hoạt động' : 'Đã tạm dừng'}">
+                                    Trạng thái
+                                </div>
+                            </div>
+                            
+                            <div class="service-info">
+                                <div class="info-item">
+                                    <span class="info-label">Giá:</span>
+                                    <span class="info-value" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'">
+                                        0 ₫
+                                    </span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Thời gian:</span>
+                                    <span class="info-value" th:text="${service.duration + ' phút'}">0 phút</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Đánh giá:</span>
+                                    <span class="info-value">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <span th:text="${#numbers.formatDecimal(service.averageRating, 1, 1)}">0.0</span>
+                                        <small class="text-muted" th:text="'(' + ${service.totalReviews} + ' đánh giá)'">
+                                            (0 đánh giá)
+                                        </small>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="service-description" th:text="${service.description}">
+                                Mô tả dịch vụ
+                            </div>
+                            
+                            <div class="service-actions">
+                                <button class="btn btn-outline-primary btn-sm"
+                                        data-bs-toggle="modal"
+                                        th:data-bs-target="'#editServiceModal-' + ${service.id}">
+                                    <i class="fas fa-edit"></i> Chỉnh sửa
+                                </button>
+                                <button class="btn btn-outline-warning btn-sm"
+                                        th:onclick="'toggleServiceStatus(' + ${service.id} + ')'">
+                                    <i class="fas fa-power-off"></i> 
+                                    <span th:text="${service.active ? 'Tạm dừng' : 'Kích hoạt'}">
+                                        Tạm dừng
+                                    </span>
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        th:data-bs-target="'#deleteServiceModal-' + ${service.id}">
+                                    <i class="fas fa-trash"></i> Xóa
+                                </button>
+                            </div>
+
+                            <!-- Edit Service Modal -->
+                            <div th:id="'editServiceModal-' + ${service.id}" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Chỉnh sửa dịch vụ</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <form th:action="@{/admin/services/{id}(id=${service.id})}" method="post">
+                                            <input type="hidden" name="_method" value="PUT">
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tên dịch vụ</label>
+                                                    <input type="text" name="name" class="form-control" 
+                                                           th:value="${service.name}" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Mô tả</label>
+                                                    <textarea name="description" class="form-control" 
+                                                              th:text="${service.description}" required></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Giá</label>
+                                                    <div class="price-input">
+                                                        <input type="number" name="price" class="form-control" 
+                                                               th:value="${service.price}" required>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Thời gian (phút)</label>
+                                                    <input type="number" name="duration" class="form-control" 
+                                                           th:value="${service.duration}" required>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Hủy
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Delete Service Modal -->
+                            <div th:id="'deleteServiceModal-' + ${service.id}" class="modal fade">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Xác nhận xóa</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Bạn có chắc chắn muốn xóa dịch vụ này không?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Hủy
+                                            </button>
+                                            <form th:action="@{/admin/services/{id}(id=${service.id})}" 
+                                                  method="post" style="display: inline;">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <button type="submit" class="btn btn-danger">Xóa</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Service Modal -->
+        <div id="addServiceModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thêm dịch vụ mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form th:action="@{/admin/services}" method="post">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Tên dịch vụ</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Mô tả</label>
+                                <textarea name="description" class="form-control" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Giá</label>
+                                <div class="price-input">
+                                    <input type="number" name="price" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Thời gian (phút)</label>
+                                <input type="number" name="duration" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Hủy
+                            </button>
+                            <button type="submit" class="btn btn-primary">Thêm dịch vụ</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script th:inline="javascript">
+            function toggleServiceStatus(serviceId) {
+                fetch(`/admin/services/${serviceId}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        </script>
+    </th:block>
+</body>
+</html> 

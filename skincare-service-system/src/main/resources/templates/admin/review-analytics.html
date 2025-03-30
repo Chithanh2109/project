@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+<head>
+    <title>Thống kê đánh giá - Quản trị</title>
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
+    <style>
+        .stats-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .stats-title {
+            color: #6c757d;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-trend {
+            font-size: 0.875rem;
+        }
+        
+        .trend-up {
+            color: #198754;
+        }
+        
+        .trend-down {
+            color: #dc3545;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+        
+        .specialist-table {
+            width: 100%;
+        }
+        
+        .specialist-table th {
+            background-color: #f8f9fa;
+            font-weight: 500;
+        }
+        
+        .specialist-table td, .specialist-table th {
+            padding: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .rating-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        
+        .rating-high {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .rating-medium {
+            background-color: #fff3cd;
+            color: #664d03;
+        }
+        
+        .rating-low {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container-fluid py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Thống kê đánh giá</h2>
+                <div class="d-flex gap-2">
+                    <select id="timeRange" class="form-select">
+                        <option value="7">7 ngày qua</option>
+                        <option value="30">30 ngày qua</option>
+                        <option value="90">90 ngày qua</option>
+                        <option value="365">365 ngày qua</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="exportReport()">
+                        <i class="fas fa-download"></i> Xuất báo cáo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tổng quan -->
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-title">Tổng số đánh giá</div>
+                        <div class="stats-value" th:text="${analytics.totalReviews}">0</div>
+                        <div class="stats-trend" th:classappend="${analytics.reviewsGrowth >= 0 ? 'trend-up' : 'trend-down'}">
+                            <i th:class="${analytics.reviewsGrowth >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down'}"></i>
+                            <span th:text="${#numbers.formatDecimal(Math.abs(analytics.reviewsGrowth), 1, 1)}">0.0</span>%
+                            so với kỳ trước
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-title">Đánh giá trung bình</div>
+                        <div class="stats-value">
+                            <span th:text="${#numbers.formatDecimal(analytics.averageRating, 1, 1)}">0.0</span>
+                            <small class="text-muted">/5</small>
+                        </div>
+                        <div class="stats-trend" th:classappend="${analytics.ratingGrowth >= 0 ? 'trend-up' : 'trend-down'}">
+                            <i th:class="${analytics.ratingGrowth >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down'}"></i>
+                            <span th:text="${#numbers.formatDecimal(Math.abs(analytics.ratingGrowth), 1, 1)}">0.0</span>%
+                            so với kỳ trước
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-title">Tỷ lệ phản hồi</div>
+                        <div class="stats-value" th:text="${#numbers.formatDecimal(analytics.responseRate, 1, 1)} + '%'">0.0%</div>
+                        <div class="stats-trend" th:classappend="${analytics.responseRateGrowth >= 0 ? 'trend-up' : 'trend-down'}">
+                            <i th:class="${analytics.responseRateGrowth >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down'}"></i>
+                            <span th:text="${#numbers.formatDecimal(Math.abs(analytics.responseRateGrowth), 1, 1)}">0.0</span>%
+                            so với kỳ trước
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stats-card">
+                        <div class="stats-title">Thời gian phản hồi TB</div>
+                        <div class="stats-value" th:text="${#numbers.formatDecimal(analytics.avgResponseTime, 1, 1)} + 'h'">0.0h</div>
+                        <div class="stats-trend" th:classappend="${analytics.responseTimeGrowth <= 0 ? 'trend-up' : 'trend-down'}">
+                            <i th:class="${analytics.responseTimeGrowth <= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down'}"></i>
+                            <span th:text="${#numbers.formatDecimal(Math.abs(analytics.responseTimeGrowth), 1, 1)}">0.0</span>%
+                            so với kỳ trước
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Biểu đồ -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <div class="chart-title">Xu hướng đánh giá</div>
+                        <canvas id="ratingTrendChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-container">
+                        <div class="chart-title">Phân bố đánh giá</div>
+                        <canvas id="ratingDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hiệu suất chuyên viên -->
+            <div class="chart-container">
+                <div class="chart-title">Hiệu suất chuyên viên</div>
+                <div class="table-responsive">
+                    <table class="specialist-table">
+                        <thead>
+                            <tr>
+                                <th>Chuyên viên</th>
+                                <th>Đánh giá TB</th>
+                                <th>Số đánh giá</th>
+                                <th>Tỷ lệ phản hồi</th>
+                                <th>Thời gian phản hồi TB</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="specialist : ${analytics.specialistPerformance}">
+                                <td th:text="${specialist.specialistName}">Tên chuyên viên</td>
+                                <td>
+                                    <span class="rating-badge"
+                                          th:classappend="${specialist.averageRating >= 4.0 ? 'rating-high' : 
+                                                          specialist.averageRating >= 3.0 ? 'rating-medium' : 'rating-low'}"
+                                          th:text="${#numbers.formatDecimal(specialist.averageRating, 1, 1)} + ' ★'">
+                                        0.0 ★
+                                    </span>
+                                </td>
+                                <td th:text="${specialist.totalReviews}">0</td>
+                                <td th:text="${#numbers.formatDecimal(specialist.responseRate, 1, 1)} + '%'">0.0%</td>
+                                <td th:text="${#numbers.formatDecimal(specialist.avgResponseTime, 1, 1)} + 'h'">0.0h</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Đánh giá theo dịch vụ -->
+            <div class="chart-container">
+                <div class="chart-title">Đánh giá theo dịch vụ</div>
+                <div class="table-responsive">
+                    <table class="specialist-table">
+                        <thead>
+                            <tr>
+                                <th>Dịch vụ</th>
+                                <th>Đánh giá TB</th>
+                                <th>Số đánh giá</th>
+                                <th>Phân bố đánh giá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="service : ${analytics.serviceRatings}">
+                                <td th:text="${service.serviceName}">Tên dịch vụ</td>
+                                <td>
+                                    <span class="rating-badge"
+                                          th:classappend="${service.averageRating >= 4.0 ? 'rating-high' : 
+                                                          service.averageRating >= 3.0 ? 'rating-medium' : 'rating-low'}"
+                                          th:text="${#numbers.formatDecimal(service.averageRating, 1, 1)} + ' ★'">
+                                        0.0 ★
+                                    </span>
+                                </td>
+                                <td th:text="${service.totalReviews}">0</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div th:each="entry : ${service.ratingDistribution}"
+                                             class="progress-bar"
+                                             th:classappend="${'bg-' + (entry.key >= 4 ? 'success' : 
+                                                                       entry.key >= 3 ? 'warning' : 'danger')}"
+                                             th:style="'width: ' + ${(entry.value * 100.0 / service.totalReviews)} + '%'"
+                                             th:title="${entry.key + ' sao: ' + entry.value + ' đánh giá'}">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+        <script th:inline="javascript">
+            // Dữ liệu từ server
+            const ratingTrend = /*[[${analytics.ratingTrend}]]*/ [];
+            const ratingDistribution = /*[[${analytics.ratingDistribution}]]*/ {};
+
+            // Biểu đồ xu hướng đánh giá
+            const ratingTrendChart = new Chart(
+                document.getElementById('ratingTrendChart'),
+                {
+                    type: 'line',
+                    data: {
+                        labels: ratingTrend.map(point => point.date),
+                        datasets: [
+                            {
+                                label: 'Đánh giá trung bình',
+                                data: ratingTrend.map(point => point.averageRating),
+                                borderColor: '#0d6efd',
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Số đánh giá',
+                                data: ratingTrend.map(point => point.totalReviews),
+                                borderColor: '#6c757d',
+                                tension: 0.4,
+                                yAxisID: 'y1'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        scales: {
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                min: 0,
+                                max: 5,
+                                title: {
+                                    display: true,
+                                    text: 'Đánh giá trung bình'
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                min: 0,
+                                title: {
+                                    display: true,
+                                    text: 'Số đánh giá'
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            }
+                        }
+                    }
+                }
+            );
+
+            // Biểu đồ phân bố đánh giá
+            const ratingDistributionChart = new Chart(
+                document.getElementById('ratingDistributionChart'),
+                {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['5 sao', '4 sao', '3 sao', '2 sao', '1 sao'],
+                        datasets: [{
+                            data: [
+                                ratingDistribution[5] || 0,
+                                ratingDistribution[4] || 0,
+                                ratingDistribution[3] || 0,
+                                ratingDistribution[2] || 0,
+                                ratingDistribution[1] || 0
+                            ],
+                            backgroundColor: [
+                                '#198754',
+                                '#28a745',
+                                '#ffc107',
+                                '#dc3545',
+                                '#842029'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                }
+            );
+
+            // Cập nhật dữ liệu khi thay đổi khoảng thời gian
+            document.getElementById('timeRange').addEventListener('change', function() {
+                const days = this.value;
+                fetch(`/admin/reviews/analytics?days=${days}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        updateCharts(data);
+                        updateStats(data);
+                    });
+            });
+
+            // Xuất báo cáo
+            function exportReport() {
+                const days = document.getElementById('timeRange').value;
+                window.location.href = `/admin/reviews/analytics/export?days=${days}`;
+            }
+
+            // Cập nhật biểu đồ
+            function updateCharts(data) {
+                // Cập nhật xu hướng đánh giá
+                ratingTrendChart.data.labels = data.ratingTrend.map(point => point.date);
+                ratingTrendChart.data.datasets[0].data = data.ratingTrend.map(point => point.averageRating);
+                ratingTrendChart.data.datasets[1].data = data.ratingTrend.map(point => point.totalReviews);
+                ratingTrendChart.update();
+
+                // Cập nhật phân bố đánh giá
+                ratingDistributionChart.data.datasets[0].data = [
+                    data.ratingDistribution[5] || 0,
+                    data.ratingDistribution[4] || 0,
+                    data.ratingDistribution[3] || 0,
+                    data.ratingDistribution[2] || 0,
+                    data.ratingDistribution[1] || 0
+                ];
+                ratingDistributionChart.update();
+            }
+
+            // Cập nhật thống kê
+            function updateStats(data) {
+                // Cập nhật các thẻ thống kê
+                document.querySelector('[data-stat="totalReviews"]').textContent = data.totalReviews;
+                document.querySelector('[data-stat="averageRating"]').textContent = 
+                    data.averageRating.toFixed(1);
+                document.querySelector('[data-stat="responseRate"]').textContent = 
+                    data.responseRate.toFixed(1) + '%';
+                document.querySelector('[data-stat="avgResponseTime"]').textContent = 
+                    data.avgResponseTime.toFixed(1) + 'h';
+
+                // Cập nhật bảng hiệu suất chuyên viên
+                updateSpecialistTable(data.specialistPerformance);
+
+                // Cập nhật bảng đánh giá dịch vụ
+                updateServiceTable(data.serviceRatings);
+            }
+        </script>
+    </th:block>
+</body>
+</html> 

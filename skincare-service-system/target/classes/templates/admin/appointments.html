@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/admin}">
+<head>
+    <title>Quản lý lịch hẹn - Quản trị</title>
+    <style>
+        .appointment-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .appointment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .appointment-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+        
+        .status-completed {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-cancelled {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+        
+        .appointment-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-label {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        .info-value {
+            font-weight: 500;
+        }
+        
+        .appointment-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        
+        .calendar-view {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+    </style>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container-fluid py-4">
+            <div class="row">
+                <!-- Sidebar Navigation -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <h4 class="mb-4">Quản trị</h4>
+                    <nav class="nav flex-column">
+                        <a class="nav-link" th:href="@{/admin/dashboard}">
+                            <i class="fas fa-tachometer-alt me-2"></i> Tổng quan
+                        </a>
+                        <a class="nav-link active" th:href="@{/admin/appointments}">
+                            <i class="fas fa-calendar-alt me-2"></i> Lịch hẹn
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/services}">
+                            <i class="fas fa-spa me-2"></i> Dịch vụ
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/specialists}">
+                            <i class="fas fa-user-md me-2"></i> Chuyên viên
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/customers}">
+                            <i class="fas fa-users me-2"></i> Khách hàng
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/reviews}">
+                            <i class="fas fa-star me-2"></i> Đánh giá
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/reports}">
+                            <i class="fas fa-chart-bar me-2"></i> Báo cáo
+                        </a>
+                        <a class="nav-link" th:href="@{/admin/settings}">
+                            <i class="fas fa-cog me-2"></i> Cài đặt
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9 col-lg-10 main-content">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Quản lý lịch hẹn</h2>
+                        <div>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addAppointmentModal">
+                                <i class="fas fa-plus me-2"></i>Thêm lịch hẹn mới
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="filter-section">
+                        <form th:action="@{/admin/appointments}" method="get" class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Trạng thái</label>
+                                <select name="status" class="form-select">
+                                    <option value="">Tất cả</option>
+                                    <option value="PENDING">Chờ xác nhận</option>
+                                    <option value="CONFIRMED">Đã xác nhận</option>
+                                    <option value="COMPLETED">Hoàn thành</option>
+                                    <option value="CANCELLED">Đã hủy</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Chuyên viên</label>
+                                <select name="specialistId" class="form-select">
+                                    <option value="">Tất cả</option>
+                                    <option th:each="specialist : ${specialists}"
+                                            th:value="${specialist.id}"
+                                            th:text="${specialist.fullName}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Từ ngày</label>
+                                <input type="date" name="startDate" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Đến ngày</label>
+                                <input type="date" name="endDate" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>Tìm kiếm
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Calendar View -->
+                    <div class="calendar-view">
+                        <div id="calendar"></div>
+                    </div>
+
+                    <!-- Appointments List -->
+                    <div class="appointments-list">
+                        <div th:each="appointment : ${appointments}" class="appointment-card">
+                            <div class="appointment-header">
+                                <div>
+                                    <h5 class="mb-0" th:text="${appointment.customer.fullName}">Tên khách hàng</h5>
+                                    <small class="text-muted" th:text="${appointment.appointmentDateTime}">Thời gian</small>
+                                </div>
+                                <div class="appointment-status" 
+                                     th:classappend="${appointment.status == 'PENDING' ? 'status-pending' : 
+                                                    appointment.status == 'CONFIRMED' ? 'status-confirmed' :
+                                                    appointment.status == 'COMPLETED' ? 'status-completed' : 'status-cancelled'}"
+                                     th:text="${appointment.status == 'PENDING' ? 'Chờ xác nhận' :
+                                              appointment.status == 'CONFIRMED' ? 'Đã xác nhận' :
+                                              appointment.status == 'COMPLETED' ? 'Hoàn thành' : 'Đã hủy'}">
+                                    Trạng thái
+                                </div>
+                            </div>
+                            
+                            <div class="appointment-info">
+                                <div class="info-item">
+                                    <span class="info-label">Chuyên viên:</span>
+                                    <span class="info-value" th:text="${appointment.specialist.fullName}">Tên chuyên viên</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Dịch vụ:</span>
+                                    <span class="info-value" th:text="${appointment.services}">Danh sách dịch vụ</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Tổng tiền:</span>
+                                    <span class="info-value" th:text="${#numbers.formatDecimal(appointment.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</span>
+                                </div>
+                            </div>
+                            
+                            <div class="appointment-actions">
+                                <button class="btn btn-outline-primary btn-sm"
+                                        th:onclick="'viewAppointmentDetails(' + ${appointment.id} + ')'">
+                                    <i class="fas fa-eye me-2"></i>Chi tiết
+                                </button>
+                                <button class="btn btn-outline-success btn-sm"
+                                        th:if="${appointment.status == 'PENDING'}"
+                                        th:onclick="'confirmAppointment(' + ${appointment.id} + ')'">
+                                    <i class="fas fa-check me-2"></i>Xác nhận
+                                </button>
+                                <button class="btn btn-outline-warning btn-sm"
+                                        th:if="${appointment.status == 'CONFIRMED'}"
+                                        th:onclick="'completeAppointment(' + ${appointment.id} + ')'">
+                                    <i class="fas fa-check-double me-2"></i>Hoàn thành
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm"
+                                        th:if="${appointment.status != 'CANCELLED' && appointment.status != 'COMPLETED'}"
+                                        th:onclick="'cancelAppointment(' + ${appointment.id} + ')'">
+                                    <i class="fas fa-times me-2"></i>Hủy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Appointment Modal -->
+        <div id="addAppointmentModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Thêm lịch hẹn mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <form th:action="@{/admin/appointments/create}" method="post">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Khách hàng</label>
+                                <select name="customerId" class="form-select" required>
+                                    <option value="">Chọn khách hàng</option>
+                                    <option th:each="customer : ${customers}"
+                                            th:value="${customer.id}"
+                                            th:text="${customer.fullName}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Chuyên viên</label>
+                                <select name="specialistId" class="form-select" required>
+                                    <option value="">Chọn chuyên viên</option>
+                                    <option th:each="specialist : ${specialists}"
+                                            th:value="${specialist.id}"
+                                            th:text="${specialist.fullName}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Dịch vụ</label>
+                                <select name="serviceIds" class="form-select" multiple required>
+                                    <option th:each="service : ${services}"
+                                            th:value="${service.id}"
+                                            th:text="${service.name}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ngày hẹn</label>
+                                <input type="date" name="date" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Giờ hẹn</label>
+                                <input type="time" name="time" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Ghi chú</label>
+                                <textarea name="notes" class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Thêm lịch hẹn</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+                var calendarEl = document.getElementById('calendar');
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    locale: 'vi',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    events: /*[[${appointments}]]*/ [],
+                    eventClick: function(info) {
+                        viewAppointmentDetails(info.event.id);
+                    }
+                });
+                calendar.render();
+            });
+
+            function viewAppointmentDetails(id) {
+                // Implement view details logic
+            }
+
+            function confirmAppointment(id) {
+                if (confirm('Bạn có chắc chắn muốn xác nhận lịch hẹn này?')) {
+                    fetch(`/admin/appointments/${id}/confirm`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+
+            function completeAppointment(id) {
+                if (confirm('Bạn có chắc chắn muốn đánh dấu lịch hẹn này là hoàn thành?')) {
+                    fetch(`/admin/appointments/${id}/complete`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+
+            function cancelAppointment(id) {
+                if (confirm('Bạn có chắc chắn muốn hủy lịch hẹn này?')) {
+                    fetch(`/admin/appointments/${id}/cancel`, {
+                        method: 'POST'
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.reload();
+                        }
+                    });
+                }
+            }
+        </script>
+    </th:block>
+</body>
+</html> 

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>Kết quả Trắc nghiệm Da - Trung tâm Chăm sóc Da</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-5">
+                            <h1 class="text-center mb-4">Kết quả Trắc nghiệm Da</h1>
+                            
+                            <!-- Skin Analysis Summary -->
+                            <div class="analysis-summary mb-5">
+                                <h4 class="mb-3">Phân tích tổng quan</h4>
+                                <div class="p-4 bg-light rounded">
+                                    <div class="mb-3">
+                                        <h5>Loại da của bạn:</h5>
+                                        <p class="lead" th:text="${results.skinType}">Loại da</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <h5>Độ nhạy cảm:</h5>
+                                        <p class="lead" th:text="${results.sensitivity}">Độ nhạy cảm</p>
+                                    </div>
+                                    <div>
+                                        <h5>Các vấn đề chính:</h5>
+                                        <ul class="lead">
+                                            <li th:each="concern : ${results.mainConcerns}" th:text="${concern}">Vấn đề</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recommended Services -->
+                            <div class="recommended-services mb-5">
+                                <h4 class="mb-3">Dịch vụ đề xuất</h4>
+                                <div class="row">
+                                    <div class="col-md-6 mb-4" th:each="service : ${results.recommendedServices}">
+                                        <div class="card h-100">
+                                            <img th:src="${service.imageUrl}" class="card-img-top" th:alt="${service.name}">
+                                            <div class="card-body">
+                                                <h5 class="card-title" th:text="${service.name}">Tên dịch vụ</h5>
+                                                <p class="card-text" th:text="${service.description}">Mô tả dịch vụ</p>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">Giá</span>
+                                                    <a th:href="@{/services/{id}(id=${service.id})}" class="btn btn-outline-primary">Chi tiết</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Skin Care Tips -->
+                            <div class="skincare-tips mb-5">
+                                <h4 class="mb-3">Lời khuyên chăm sóc da</h4>
+                                <div class="tips-list">
+                                    <div class="tip-item mb-3 p-3 bg-light rounded" th:each="tip : ${results.skincareTips}">
+                                        <div class="d-flex">
+                                            <div class="tip-icon me-3">
+                                                <i class="fas fa-lightbulb text-warning"></i>
+                                            </div>
+                                            <div class="tip-content">
+                                                <h6 th:text="${tip.title}">Tiêu đề lời khuyên</h6>
+                                                <p class="mb-0" th:text="${tip.content}">Nội dung lời khuyên</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Call to Action -->
+                            <div class="cta-section text-center">
+                                <h4 class="mb-3">Bắt đầu hành trình chăm sóc da của bạn</h4>
+                                <p class="mb-4">Đặt lịch ngay hôm nay để được tư vấn chi tiết từ chuyên gia của chúng tôi</p>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <a href="/appointments/book" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-calendar-alt me-2"></i>Đặt lịch ngay
+                                    </a>
+                                    <a href="/specialists" class="btn btn-outline-primary btn-lg">
+                                        <i class="fas fa-user-md me-2"></i>Gặp chuyên gia
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Share Results -->
+                            <div class="share-section text-center mt-5">
+                                <p class="mb-3">Chia sẻ kết quả với bạn bè</p>
+                                <div class="social-share">
+                                    <a href="#" class="btn btn-outline-primary me-2" onclick="shareOnFacebook()">
+                                        <i class="fab fa-facebook-f"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-outline-info me-2" onclick="shareOnTwitter()">
+                                        <i class="fab fa-twitter"></i>
+                                    </a>
+                                    <a href="#" class="btn btn-outline-success" onclick="shareOnWhatsApp()">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional JavaScript for social sharing -->
+    <th:block layout:fragment="additionalJs">
+        <script th:inline="javascript">
+            function shareOnFacebook() {
+                const url = window.location.href;
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, 
+                    'facebook-share', 'width=580,height=296');
+                return false;
+            }
+
+            function shareOnTwitter() {
+                const url = window.location.href;
+                const text = "Xem kết quả trắc nghiệm da của tôi tại Trung tâm Chăm sóc Da!";
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,
+                    'twitter-share', 'width=580,height=296');
+                return false;
+            }
+
+            function shareOnWhatsApp() {
+                const url = window.location.href;
+                const text = "Xem kết quả trắc nghiệm da của tôi tại Trung tâm Chăm sóc Da!";
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + url)}`,
+                    'whatsapp-share', 'width=580,height=296');
+                return false;
+            }
+        </script>
+    </th:block>
+</body>
+</html> 
