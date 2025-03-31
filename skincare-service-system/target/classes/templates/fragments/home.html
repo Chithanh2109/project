@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trung Tâm Chăm Sóc Da</title>
+    
+    <!-- Import Common Styles -->
+    <th:block th:replace="fragments/styles :: styles"></th:block>
+    
+    <!-- Trang chủ Styles -->
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #95a5a6;
+            --accent-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --text-color: #333;
+            --light-text: #fff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: var(--text-color);
+            background-color: #fff;
+            line-height: 1.6;
+            letter-spacing: 0.3px;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+        }
+        
+        section {
+            position: relative;
+            padding: 5rem 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            padding: 0 15px;
+        }
+        
+        .navbar {
+            background-color: transparent !important;
+            transition: all 0.3s ease;
+            padding: 1.2rem 1rem;
+        }
+        
+        .navbar.scrolled {
+            background-color: #fff !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.8rem 1rem;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link {
+            color: var(--primary-color) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+        
+        .hero-banner {
+            background-color: var(--light-bg);
+            padding: 10rem 0 8rem;
+            position: relative;
+            margin-bottom: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            color: var(--secondary-color);
+            font-weight: 300;
+            line-height: 1.6;
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            border: none;
+            padding: 0.8rem 2rem;
+            font-weight: 500;
+            border-radius: 0;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-outline-custom {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.8rem 2rem;
+            font-weight: 500;
+            border-radius: 0;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        .btn-outline-custom:hover {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            position: relative;
+            color: var(--primary-color);
+            line-height: 1.3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .section-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            color: var(--secondary-color);
+        }
+        
+        .categories-section {
+            padding: 5rem 0;
+            text-align: center;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .category-card {
+            text-align: center;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .category-image {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .category-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .category-card:hover .category-image img {
+            transform: scale(1.05);
+        }
+        
+        .btn-outline {
+            display: inline-block;
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 0.6rem 1.5rem;
+            font-weight: 500;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-top: 1rem;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+        }
+        
+        .category-title {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .bestseller-section {
+            background-color: var(--light-bg);
+            padding: 5rem 0;
+        }
+        
+        .product-card {
+            background-color: #fff;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            border: 1px solid #eee;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        
+        .product-img {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .product-img img {
+            max-width: 100%;
+            height: 180px;
+            object-fit: contain;
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            min-height: 2.7rem;
+        }
+        
+        .product-subtitle {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            min-height: 2.7rem;
+        }
+        
+        .product-price {
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .blog-section {
+            background-color: #fff;
+            padding: 5rem 0;
+        }
+        
+        .blog-card {
+            background-color: #fff;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            height: 100%;
+            border: 1px solid #eee;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        
+        .blog-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .blog-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .blog-card:hover .blog-img img {
+            transform: scale(1.05);
+        }
+        
+        .blog-content {
+            padding: 1.5rem;
+        }
+        
+        .blog-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            min-height: 3rem;
+        }
+        
+        .blog-excerpt {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+            min-height: 4rem;
+        }
+        
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+        
+        .blog-tag {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer {
+            padding: 5rem 0 2rem;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+        }
+        
+        .footer-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--light-text);
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--light-text);
+            padding-left: 5px;
+        }
+        
+        .copyright {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .promo-banner {
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+            margin-bottom: 0;
+            padding: 0;
+        }
+
+        .promo-banner img {
+            width: 100%;
+            height: auto;
+        }
+
+        .promo-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            z-index: 1;
+        }
+
+        .promo-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .promo-subtitle {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .cta-button-row {
+            display: flex;
+            justify-content: center;
+            column-gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+            .cta-button-row {
+                flex-direction: column;
+                row-gap: 1rem;
+            }
+            .btn-outline-custom {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div th:replace="fragments/header :: simple-navbar"></div>
+
+    <!-- Hero Banner Section -->
+    <section class="hero-banner">
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="hero-title">Tìm Kiếm Giải Pháp Chăm Sóc Da Chuyên Sâu</h1>
+                    <p class="hero-subtitle">Trải nghiệm các liệu pháp và sản phẩm chăm sóc da cao cấp được phát triển bởi chuyên gia</p>
+                    <div class="cta-button-row">
+                        <a href="/booking" class="btn btn-primary-custom">ĐẶT LỊCH TƯ VẤN</a>
+                        <a href="/services" class="btn btn-outline-custom">KHÁM PHÁ DỊCH VỤ</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
+                         alt="Chăm sóc da chuyên sâu" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Promo Banner Section -->
+    <section class="promo-banner">
+        <img src="https://images.unsplash.com/photo-1659038804456-d8758f47109b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80" alt="Ưu đãi đặc biệt">
+        <div class="promo-content">
+            <h2 class="promo-title">Đặc Trị Với Mặt Nạ Dưa Hấu</h2>
+            <p class="promo-subtitle">Trải nghiệm liệu pháp làm sáng da và cấp ẩm tự nhiên từ dưa hấu</p>
+            <a href="/promotion" class="btn btn-primary-custom">ĐẶT LỊCH NGAY</a>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section">
+        <h2 class="section-title">DỊCH VỤ NỔI BẬT</h2>
+        <p class="section-subtitle">Khám phá các dịch vụ chăm sóc da chuyên nghiệp của chúng tôi</p>
+        <div class="category-grid">
+            <!-- Category 1 -->
+            <div class="category-card">
+                <div class="category-image">
+                    <img src="https://i.pinimg.com/originals/c7/38/69/c738699ec10dc3d58fd01f3c0347de8c.jpg" alt="Peel Da Chuyên Sâu">
+                </div>
+                <h3 class="category-title">Peel Da Chuyên Sâu</h3>
+                <a href="/services" class="btn-outline">Xem thêm</a>
+            </div>
+            
+            <!-- Category 2 -->
+            <div class="category-card">
+                <div class="category-image">
+                    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Điều Trị Mụn">
+                </div>
+                <h3 class="category-title">Điều Trị Mụn</h3>
+                <a href="/services" class="btn-outline">Xem thêm</a>
+            </div>
+            
+            <!-- Category 3 -->
+            <div class="category-card">
+                <div class="category-image">
+                    <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Điều Trị Nám">
+                </div>
+                <h3 class="category-title">Điều Trị Nám</h3>
+                <a href="/services" class="btn-outline">Xem thêm</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bestseller Section -->
+    <section class="bestseller-section">
+        <div class="container">
+            <h2 class="section-title text-center">Giải pháp bán chạy nhất</h2>
+        <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1611930022073-84f43283f596?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Sữa rửa mặt">
+                        </div>
+                        <h3 class="product-title">Special Cleansing Gel</h3>
+                        <p class="product-subtitle">Sữa rửa mặt tạo bọt không chứa xà phòng làm sạch sâu</p>
+                        <div class="product-price">1.450.000đ</div>
+                        <a href="/product-detail" class="btn btn-outline-custom w-100">Thêm vào giỏ hàng</a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-6">
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1611967164521-abae8fba4668?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Serum Vitamin C">
+                        </div>
+                        <h3 class="product-title">Biolumin-C Serum</h3>
+                        <p class="product-subtitle">Serum vitamin C làm sáng da và chống oxy hóa mạnh mẽ</p>
+                        <div class="product-price">2.750.000đ</div>
+                        <a href="/product-detail" class="btn btn-outline-custom w-100">Thêm vào giỏ hàng</a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-6">
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1610113774493-b160494786ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Mặt nạ thải độc">
+            </div>
+                        <h3 class="product-title">Charcoal Rescue Masque</h3>
+                        <p class="product-subtitle">Mặt nạ thải độc than hoạt tính phục hồi làn da xỉn màu</p>
+                        <div class="product-price">1.850.000đ</div>
+                        <a href="/product-detail" class="btn btn-outline-custom w-100">Thêm vào giỏ hàng</a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-6">
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="https://images.unsplash.com/photo-1593157936769-23fe03696bae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Kem chống nắng">
+            </div>
+                        <h3 class="product-title">Dynamic Skin Recovery SPF50</h3>
+                        <p class="product-subtitle">Kem dưỡng ẩm chống nắng và chống lão hóa</p>
+                        <div class="product-price">2.120.000đ</div>
+                        <a href="/product-detail" class="btn btn-outline-custom w-100">Thêm vào giỏ hàng</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="/products" class="btn btn-primary-custom">Xem tất cả</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section class="blog-section">
+        <div class="container">
+            <h2 class="section-title text-center">Cẩm nang nâng tầm sức khỏe làn da</h2>
+            <p class="section-subtitle text-center">Đắm chìm trong những thông tin hữu ích, lời khuyên thiết thực và cảm hứng chăm sóc da qua blog của chúng tôi.</p>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="blog-card">
+                        <div class="blog-img">
+                            <img src="https://images.unsplash.com/photo-1513165533842-511d7f3ddd50?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Da khô">
+                        </div>
+                        <div class="blog-content">
+                            <h3 class="blog-title">Làm thế nào để đối phó với tăng sắc tố và thâm nám?</h3>
+                            <p class="blog-excerpt">Bạn đã bao giờ soi gương và nhận thấy những vết thâm nơi từng có mụn không? Đó chính là dấu hiệu của tình trạng tăng sắc tố da...</p>
+                            <a href="/blog-detail" class="btn btn-link p-0">Đọc tiếp <i class="fas fa-arrow-right ml-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="blog-card">
+                        <div class="blog-img">
+                            <img src="https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Kem chống nắng">
+                        </div>
+                        <div class="blog-content">
+                            <h3 class="blog-title">Tất cả về collagen: Cách bảo vệ và tăng cường làn da</h3>
+                            <p class="blog-excerpt">Collagen là protein quan trọng nhất đối với làn da, giúp duy trì độ đàn hồi và ngăn ngừa các dấu hiệu lão hóa...</p>
+                            <a href="/blog-detail" class="btn btn-link p-0">Đọc tiếp <i class="fas fa-arrow-right ml-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="blog-card">
+                        <div class="blog-img">
+                            <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Routine chăm sóc da">
+                        </div>
+                        <div class="blog-content">
+                            <h3 class="blog-title">5 bước để xây dựng quy trình chăm sóc da hoàn hảo</h3>
+                            <p class="blog-excerpt">Một quy trình chăm sóc da đúng cách không chỉ giúp làn da của bạn khỏe mạnh mà còn ngăn ngừa các vấn đề da phổ biến...</p>
+                            <a href="/blog-detail" class="btn btn-link p-0">Đọc tiếp <i class="fas fa-arrow-right ml-2"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="/blog" class="btn btn-primary-custom">Xem tất cả</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div th:replace="fragments/footer :: footer"></div>
+    
+    <!-- Import Scripts -->
+    <th:block th:replace="fragments/scripts :: scripts"></th:block>
+    
+    <script>
+        // Navbar scroll effect
+        $(window).scroll(function() {
+            if ($(this).scrollTop() > 50) {
+                $('.navbar').addClass('scrolled');
+            } else {
+                $('.navbar').removeClass('scrolled');
+            }
+        });
+    </script>
+</body>
+</html> 
