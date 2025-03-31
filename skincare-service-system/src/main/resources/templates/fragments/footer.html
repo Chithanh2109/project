@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Trung Tâm Chăm Sóc Da - [Tên trang]</title>
+</head>
+<body>
+    <!-- Footer Fragment -->
+    <footer th:fragment="footer" class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Trung Tâm Chăm Sóc Da</h5>
+                    <p>Dịch vụ chăm sóc da chuyên nghiệp, giúp bạn luôn tự tin và rạng rỡ</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Liên Hệ</h5>
+                    <p>123 Đường Đẹp, Quận 1<br>
+                    Thành Phố Hồ Chí Minh<br>
+                    Điện Thoại: 0123 456 789<br>
+                    Email: lienhe@trungtatchamsocspa.com</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Giờ Làm Việc</h5>
+                    <p>Thứ 2 - Thứ 6: 9:00 - 20:00<br>
+                    Thứ 7: 10:00 - 17:00<br>
+                    Chủ Nhật: Nghỉ</p>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <p>&copy; 2024 Trung Tâm Chăm Sóc Da. Bản quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts Fragment -->
+    <th:block th:fragment="scripts">
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </th:block>
+</body>
+</body>
