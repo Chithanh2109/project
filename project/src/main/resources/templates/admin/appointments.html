@@ -1,0 +1,56 @@
+                                                        <button class="btn btn-sm btn-success" th:if="${appointment.status == T(com.skincare.model.Appointment.AppointmentStatus).PENDING}" 
+                                                                th:onclick="'checkIn(' + ${appointment.id} + ')'" title="Check-in khách hàng" aria-label="Check-in khách hàng">
+                                                            <i class="bi bi-check-circle"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-danger" th:if="${appointment.status == T(com.skincare.model.Appointment.AppointmentStatus).PENDING || appointment.status == T(com.skincare.model.Appointment.AppointmentStatus).CONFIRMED}" 
+                                                                th:onclick="'cancelAppointment(' + ${appointment.id} + ')'" title="Hủy lịch hẹn" aria-label="Hủy lịch hẹn">
+                                                            <i class="bi bi-x-circle"></i>
+                                                        </button> 
+    <script>
+        // Initialize DataTable
+        $(document).ready(function() {
+            $('#appointmentsTable').DataTable({
+                "order": [[2, "desc"]], // Sort by date column
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.12.1/i18n/vi.json"
+                }
+            });
+            
+            // Filter table based on tab
+            $('#appointmentTabs button').on('click', function (e) {
+                var status = $(this).text().trim();
+                var table = $('#appointmentsTable').DataTable();
+                
+                if (status === 'Tất cả') {
+                    table.search('').columns().search('').draw();
+                } else if (status === 'Đang chờ') {
+                    table.column(5).search('PENDING').draw();
+                } else if (status === 'Hôm nay') {
+                    var today = new Date().toLocaleDateString('vi-VN');
+                    table.column(2).search(today).draw();
+                } else if (status === 'Đã hoàn thành') {
+                    table.column(5).search('COMPLETED').draw();
+                } else if (status === 'Đã hủy') {
+                    table.column(5).search('CANCELLED').draw();
+                }
+            });
+        });
+        
+        // Check-in function
+        function checkIn(id) {
+            var form = document.getElementById('checkInForm');
+            form.action = form.action.replace('/0/', '/' + id + '/');
+            var modal = new bootstrap.Modal(document.getElementById('checkInModal'));
+            modal.show();
+        }
+        
+        // Cancel appointment function
+        function cancelAppointment(id) {
+            var form = document.getElementById('cancelForm');
+            form.action = form.action.replace('/0/', '/' + id + '/');
+            var modal = new bootstrap.Modal(document.getElementById('cancelModal'));
+            modal.show();
+        }
+    </script>
+</body>
+</html> 
