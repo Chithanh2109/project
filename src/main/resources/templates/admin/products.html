@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm - BeautyCare</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        Miễn phí vận chuyển cho đơn hàng từ 500.000đ
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                BeautyCare
+            </div>
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">Trang chủ</a>
+                <a href="/products" class="nav-link">Sản phẩm</a>
+                <a href="/treatments" class="nav-link">Điều trị</a>
+                <a href="/about" class="nav-link">Về chúng tôi</a>
+                <a href="/contact" class="nav-link">Liên hệ</a>
+                <a href="/login" class="nav-link">Đăng nhập</a>
+                <a href="/cart" class="nav-link">Giỏ hàng</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Product Filters -->
+    <section class="filters">
+        <div class="filter-container">
+            <div class="filter-group">
+                <h3>Danh mục</h3>
+                <ul class="filter-list">
+                    <li><a href="/category/cleansers">Sản phẩm làm sạch</a></li>
+                    <li><a href="/category/toners">Toner</a></li>
+                    <li><a href="/category/serums">Serum</a></li>
+                    <li><a href="/category/moisturizers">Kem dưỡng ẩm</a></li>
+                    <li><a href="/category/sunscreen">Kem chống nắng</a></li>
+                    <li><a href="/category/masks">Mặt nạ</a></li>
+                </ul>
+            </div>
+            <div class="filter-group">
+                <h3>Loại da</h3>
+                <ul class="filter-list">
+                    <li><a href="/skin-type/dry">Da khô</a></li>
+                    <li><a href="/skin-type/oily">Da dầu</a></li>
+                    <li><a href="/skin-type/combination">Da hỗn hợp</a></li>
+                    <li><a href="/skin-type/sensitive">Da nhạy cảm</a></li>
+                </ul>
+            </div>
+            <div class="filter-group">
+                <h3>Vấn đề da</h3>
+                <ul class="filter-list">
+                    <li><a href="/concern/acne">Mụn</a></li>
+                    <li><a href="/concern/aging">Lão hóa</a></li>
+                    <li><a href="/concern/pigmentation">Thâm nám</a></li>
+                    <li><a href="/concern/dryness">Khô da</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section class="product-grid">
+        <div class="product-card" th:each="product : ${products}">
+            <img th:src="${product.image}" alt="${product.name}" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title" th:text="${product.name}">Tên sản phẩm</h3>
+                <p class="product-description" th:text="${product.description}">Mô tả sản phẩm</p>
+                <p class="product-price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + 'đ'">
+                    Giá sản phẩm
+                </p>
+                <div class="product-actions">
+                    <a th:href="@{'/products/' + ${product.id}}" class="btn">Chi tiết</a>
+                    <button class="btn add-to-cart" th:data-product-id="${product.id}">Thêm vào giỏ</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <div class="pagination-container">
+            <a th:if="${currentPage > 1}" th:href="@{/products(page=${currentPage - 1})}" class="page-link">&laquo; Trước</a>
+            <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/products(page=${pageNum})}" 
+                   th:text="${pageNum}"
+                   th:class="${pageNum == currentPage ? 'page-link active' : 'page-link'}">
+                </a>
+            </span>
+            <a th:if="${currentPage < totalPages}" th:href="@{/products(page=${currentPage + 1})}" class="page-link">Sau &raquo;</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Về BeautyCare</h3>
+                <ul class="footer-links">
+                    <li><a href="/about">Giới thiệu</a></li>
+                    <li><a href="/contact">Liên hệ</a></li>
+                    <li><a href="/careers">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ khách hàng</h3>
+                <ul class="footer-links">
+                    <li><a href="/shipping">Vận chuyển</a></li>
+                    <li><a href="/returns">Đổi trả</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Tài khoản</h3>
+                <ul class="footer-links">
+                    <li><a href="/login">Đăng nhập</a></li>
+                    <li><a href="/register">Đăng ký</a></li>
+                    <li><a href="/orders">Đơn hàng</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Thêm vào giỏ hàng
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                fetch('/api/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        productId: productId,
+                        quantity: 1
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Đã thêm sản phẩm vào giỏ hàng!');
+                    } else {
+                        alert('Có lỗi xảy ra, vui lòng thử lại!');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
