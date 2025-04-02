@@ -1,6 +1,9 @@
 package com.skincare.service;
 
-import com.skincare.model.*;
+import com.skincare.dto.AppointmentDTO;
+import com.skincare.model.Appointment;
+import com.skincare.model.AppointmentStatus;
+import com.skincare.model.User;
 import com.skincare.repository.AppointmentRepository;
 import com.skincare.repository.UserRepository;
 import com.skincare.exception.ResourceNotFoundException;
@@ -9,10 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +25,119 @@ public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
     private final EmailService emailService;
+
+    public List<AppointmentDTO> getAllAppointments() {
+        return appointmentRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<AppointmentDTO> getAppointmentsByStatus(AppointmentStatus status) {
+        return appointmentRepository.findByStatus(status).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<AppointmentDTO> getAppointmentsBySpecialist(Long specialistId) {
+        return appointmentRepository.findBySpecialistId(specialistId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<AppointmentDTO> getAppointmentsByDateRange(LocalDate startDate, LocalDate endDate) {
+        return appointmentRepository.findByDateBetween(startDate, endDate).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public AppointmentDTO getAppointmentById(Long id) {
+        return appointmentRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElse(null);
+    }
+
+    @Transactional
+    public AppointmentDTO createAppointment(AppointmentDTO appointmentDTO) {
+        // Validate specialist availability
+        User specialist = userRepository.findById(appointmentDTO.getSpecialistId())
+                .orElseThrow(() -> new RuntimeException("Specialist not found"));
+
+        if (appointmentRepository.isSpecialistBusy(
+                specialist,
+                appointmentDTO.getDate(),
+                appointmentDTO.getTime(),
+                appointmentDTO.getTime().plusMinutes(60))) { // Assuming 60 minutes duration
+            throw new RuntimeException("Specialist is busy at this time");
+        }
+
+        Appointment appointment = new Appointment();
+        updateAppointmentFromDTO(appointment, appointmentDTO);
+        return convertToDTO(appointmentRepository.save(appointment));
+    }
+
+    @Transactional
+    public AppointmentDTO updateAppointmentStatus(Long id, AppointmentStatus status) {
+        Appointment appointment = appointmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+        appointment.setStatus(status);
+        return convertToDTO(appointmentRepository.save(appointment));
+    }
+
+    @Transactional
+    public AppointmentDTO assignSpecialist(Long appointmentId, Long specialistId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+        User specialist = userRepository.findById(specialistId)
+                .orElseThrow(() -> new RuntimeException("Specialist not found"));
+
+        // Validate specialist availability
+        if (appointmentRepository.isSpecialistBusy(
+                specialist,
+                appointment.getDate(),
+                appointment.getTime(),
+                appointment.getTime().plusMinutes(60))) {
+            throw new RuntimeException("Specialist is busy at this time");
+        }
+
+        appointment.setSpecialist(specialist);
+        return convertToDTO(appointmentRepository.save(appointment));
+    }
+
+    @Transactional
+    public void deleteAppointment(Long id) {
+        appointmentRepository.deleteById(id);
+    }
+
+    private AppointmentDTO convertToDTO(Appointment appointment) {
+        AppointmentDTO dto = new AppointmentDTO();
+        dto.setId(appointment.getId());
+        dto.setCustomerId(appointment.getCustomer().getId());
+        dto.setCustomerName(appointment.getCustomer().getFullName());
+        dto.setSpecialistId(appointment.getSpecialist() != null ? appointment.getSpecialist().getId() : null);
+        dto.setSpecialistName(appointment.getSpecialist() != null ? appointment.getSpecialist().getFullName() : null);
+        dto.setServiceId(appointment.getService().getId());
+        dto.setServiceName(appointment.getService().getName());
+        dto.setDate(appointment.getDate());
+        dto.setTime(appointment.getTime());
+        dto.setStatus(appointment.getStatus());
+        dto.setNotes(appointment.getNotes());
+        return dto;
+    }
+
+    private void updateAppointmentFromDTO(Appointment appointment, AppointmentDTO dto) {
+        User customer = userRepository.findById(dto.getCustomerId())
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+        User specialist = dto.getSpecialistId() != null ? 
+                userRepository.findById(dto.getSpecialistId())
+                        .orElseThrow(() -> new RuntimeException("Specialist not found")) : null;
+        
+        appointment.setCustomer(customer);
+        appointment.setSpecialist(specialist);
+        appointment.setDate(dto.getDate());
+        appointment.setTime(dto.getTime());
+        appointment.setStatus(dto.getStatus());
+        appointment.setNotes(dto.getNotes());
+    }
 
     @Transactional
     public Appointment createAppointment(AppointmentDTO appointmentDTO, Long customerId) {
@@ -119,14 +236,5 @@ public class AppointmentService {
         User specialist = userRepository.findById(specialistId)
             .orElseThrow(() -> new ResourceNotFoundException("Specialist not found"));
         return appointmentRepository.findBySpecialistOrderByAppointmentDateTimeDesc(specialist);
-    }
-
-    @Transactional
-    public Appointment updateAppointmentStatus(Long appointmentId, AppointmentStatus status) {
-        Appointment appointment = appointmentRepository.findById(appointmentId)
-            .orElseThrow(() -> new ResourceNotFoundException("Appointment not found"));
-        
-        appointment.setStatus(status);
-        return appointmentRepository.save(appointment);
     }
 } 

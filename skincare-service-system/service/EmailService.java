@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import com.skincare.model.Appointment;
+import com.skincare.model.AppointmentStatus;
+import java.time.format.DateTimeFormatter;
 
 import java.util.Map;
 
@@ -62,87 +64,88 @@ public class EmailService {
     }
 
     public void sendAppointmentConfirmation(Appointment appointment) {
-        String subject = "Xác nhận đặt lịch - Trung tâm Chăm sóc Da";
-        String appointmentDetails = buildAppointmentDetails(appointment);
-        byte[] qrCode = qrCodeService.generateAppointmentQRCode(appointment);
-        
-        Map<String, Object> variables = Map.of(
-            "customerName", appointment.getCustomer().getFullName(),
-            "appointmentDetails", appointmentDetails,
-            "appointmentUrl", "/appointments/" + appointment.getId()
-        );
-        
-        // Gửi email
-        sendTemplateEmail(
-            appointment.getCustomer().getEmail(),
-            subject,
-            "email/appointment-confirmation",
-            variables,
-            qrCode
-        );
-        
-        // Gửi SMS
-        smsService.sendAppointmentConfirmation(
-            appointment.getCustomer().getPhoneNumber(),
-            appointment.getCustomer().getFullName(),
-            appointment.getAppointmentDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-        );
+        try {
+            Context context = new Context();
+            context.setVariable("appointment", appointment);
+            context.setVariable("formatter", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+
+            String content = templateEngine.process("email/appointment-confirmation", context);
+            sendEmail(appointment.getCustomer().getEmail(), 
+                    "Xác nhận lịch hẹn - Trung tâm Chăm sóc Da", 
+                    content,
+                    qrCodeService.generateAppointmentQRCode(appointment)
+            );
+            
+            // Gửi SMS
+            smsService.sendAppointmentConfirmation(
+                appointment.getCustomer().getPhoneNumber(),
+                appointment.getCustomer().getFullName(),
+                appointment.getAppointmentDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+            );
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendAppointmentReminder(Appointment appointment) {
-        String subject = "Nhắc nhở lịch hẹn - Trung tâm Chăm sóc Da";
-        String appointmentDetails = buildAppointmentDetails(appointment);
-        byte[] qrCode = qrCodeService.generateAppointmentQRCode(appointment);
-        
-        Map<String, Object> variables = Map.of(
-            "customerName", appointment.getCustomer().getFullName(),
-            "appointmentDetails", appointmentDetails,
-            "appointmentUrl", "/appointments/" + appointment.getId()
-        );
-        
-        // Gửi email
-        sendTemplateEmail(
-            appointment.getCustomer().getEmail(),
-            subject,
-            "email/appointment-reminder",
-            variables,
-            qrCode
-        );
-        
-        // Gửi SMS
-        smsService.sendAppointmentReminder(
-            appointment.getCustomer().getPhoneNumber(),
-            appointment.getCustomer().getFullName(),
-            appointment.getAppointmentDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-        );
+        try {
+            Context context = new Context();
+            context.setVariable("appointment", appointment);
+            context.setVariable("formatter", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+
+            String content = templateEngine.process("email/appointment-reminder", context);
+            sendEmail(appointment.getCustomer().getEmail(), 
+                    "Nhắc nhở lịch hẹn - Trung tâm Chăm sóc Da", 
+                    content,
+                    qrCodeService.generateAppointmentQRCode(appointment)
+            );
+            
+            // Gửi SMS
+            smsService.sendAppointmentReminder(
+                appointment.getCustomer().getPhoneNumber(),
+                appointment.getCustomer().getFullName(),
+                appointment.getAppointmentDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+            );
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendAppointmentStatusUpdate(Appointment appointment) {
-        String subject = "Cập nhật trạng thái lịch hẹn - Trung tâm Chăm sóc Da";
-        String appointmentDetails = buildAppointmentDetails(appointment);
-        
-        Map<String, Object> variables = Map.of(
-            "customerName", appointment.getCustomer().getFullName(),
-            "status", appointment.getStatus().toString(),
-            "appointmentDetails", appointmentDetails,
-            "appointmentUrl", "/appointments/" + appointment.getId()
-        );
-        
-        // Gửi email
-        sendTemplateEmail(
-            appointment.getCustomer().getEmail(),
-            subject,
-            "email/appointment-status-update",
-            variables,
-            null
-        );
-        
-        // Gửi SMS
-        smsService.sendStatusUpdate(
-            appointment.getCustomer().getPhoneNumber(),
-            appointment.getCustomer().getFullName(),
-            appointment.getStatus().toString()
-        );
+        try {
+            Context context = new Context();
+            context.setVariable("appointment", appointment);
+            context.setVariable("formatter", DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+
+            String subject = "";
+            String template = "";
+            switch (appointment.getStatus()) {
+                case CONFIRMED:
+                    subject = "Lịch hẹn đã được xác nhận";
+                    template = "email/appointment-confirmed";
+                    break;
+                case COMPLETED:
+                    subject = "Lịch hẹn đã hoàn thành";
+                    template = "email/appointment-completed";
+                    break;
+                case CANCELLED:
+                    subject = "Lịch hẹn đã bị hủy";
+                    template = "email/appointment-cancelled";
+                    break;
+            }
+
+            String content = templateEngine.process(template, context);
+            sendEmail(appointment.getCustomer().getEmail(), subject, content, null);
+            
+            // Gửi SMS
+            smsService.sendStatusUpdate(
+                appointment.getCustomer().getPhoneNumber(),
+                appointment.getCustomer().getFullName(),
+                appointment.getStatus().toString()
+            );
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
     }
 
     private String buildAppointmentDetails(Appointment appointment) {
