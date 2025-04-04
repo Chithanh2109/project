@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "appointments")
-public class Appointment {
+@Table(name = "ratings")
+public class Rating {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,25 +27,22 @@ public class Appointment {
     private User specialist;
 
     @ManyToOne
-    @JoinColumn(name = "service_id", nullable = false)
+    @JoinColumn(name = "service_id")
     private SkinCareService service;
 
+    @ManyToOne
+    @JoinColumn(name = "appointment_id")
+    private Appointment appointment;
+
     @Column(nullable = false)
-    private LocalDateTime appointmentDateTime;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AppointmentStatus status = AppointmentStatus.PENDING;
-
-    @Column
-    private LocalDateTime checkinTime;
-
-    @Column
-    private LocalDateTime checkoutTime;
+    private Integer ratingValue; // 1-5 stars
 
     @Column(length = 1000)
-    private String notes;
+    private String comment;
+
+    @Column(nullable = false)
+    private LocalDateTime ratingDate = LocalDateTime.now();
 
     @Column
-    private String treatmentResults;
+    private Boolean isPublic = true;
 } 
