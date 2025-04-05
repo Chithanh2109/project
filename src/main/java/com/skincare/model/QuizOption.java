@@ -26,7 +26,8 @@ public class QuizOption {
     @Column(nullable = false)
     private String optionText;
     
-    private Integer orderIndex;
+    // Trọng số của lựa chọn này khi đánh giá các vấn đề về da
+    private Integer weight = 1;
     
     @ManyToMany
     @JoinTable(
@@ -34,5 +35,5 @@ public class QuizOption {
         joinColumns = @JoinColumn(name = "option_id"),
         inverseJoinColumns = @JoinColumn(name = "skin_concern_id")
     )
-    private Set<SkinConcern> relatedConcerns = new HashSet<>();
+    private Set<SkinConcern> skinConcerns = new HashSet<>();
 } 

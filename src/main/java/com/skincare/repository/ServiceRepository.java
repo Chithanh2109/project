@@ -23,4 +23,10 @@ public interface ServiceRepository extends JpaRepository<Service, Long> {
     List<Service> findByNameContainingIgnoreCaseAndStatusOrderByNameAsc(String keyword, String status);
 
     List<Service> findByNameContainingIgnoreCaseAndActiveTrue(String keyword);
+
+    List<Service> findByActiveTrue();
+
+    List<Service> findByCategoryId(Long categoryId);
+
+    List<Service> findBySkinConcernsIdIn(List<Long> concernIds);
 } 

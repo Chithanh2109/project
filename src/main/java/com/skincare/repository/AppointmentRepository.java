@@ -1,7 +1,7 @@
 package com.skincare.repository;
 
 import com.skincare.model.Appointment;
-import com.skincare.model.Appointment.AppointmentStatus;
+import com.skincare.model.AppointmentStatus;
 import com.skincare.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,11 +20,33 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     
     List<Appointment> findByStatusOrderByAppointmentDateAsc(AppointmentStatus status);
     
-    List<Appointment> findByAppointmentDateAfterAndStatusNotOrderByAppointmentDateAsc(
-            LocalDateTime date, AppointmentStatus status);
+    List<Appointment> findByAppointmentDateAfterAndStatusNotInOrderByAppointmentDateAsc(
+            LocalDateTime date, List<AppointmentStatus> statuses);
     
     List<Appointment> findByAppointmentDateBetweenOrderByAppointmentDateAsc(
-            LocalDateTime startDate, LocalDateTime endDate);
+            LocalDateTime start, LocalDateTime end);
+    
+    List<Appointment> findByCustomerAndStatusNotInAndAppointmentDateBetween(
+            User customer, List<AppointmentStatus> statuses, LocalDateTime start, LocalDateTime end);
+    
+    List<Appointment> findByTherapistAndStatusNotInAndAppointmentDateBetween(
+            User therapist, List<AppointmentStatus> statuses, LocalDateTime start, LocalDateTime end);
+    
+    long countByStatusAndAppointmentDateBetween(
+            AppointmentStatus status, LocalDateTime start, LocalDateTime end);
+    
+    List<Appointment> findByStatusInAndAppointmentDateBetweenOrderByAppointmentDateAsc(
+            List<AppointmentStatus> statuses, LocalDateTime start, LocalDateTime end);
+    
+    @Query("SELECT a FROM Appointment a WHERE a.appointmentDate <= CURRENT_TIMESTAMP ORDER BY a.appointmentDate DESC")
+    List<Appointment> findRecentAppointments(int limit);
+    
+    @Query("SELECT COUNT(a) > 0 FROM Appointment a " +
+           "WHERE ((a.customer = :customer AND a.status NOT IN :excludedStatuses) OR " +
+           "(a.therapist = :therapist AND a.status NOT IN :excludedStatuses)) AND " +
+           "a.appointmentDate BETWEEN :start AND :end AND a.id <> :excludeId")
+    boolean existsConflictingAppointment(User customer, User therapist, List<AppointmentStatus> excludedStatuses,
+                                         LocalDateTime start, LocalDateTime end, Long excludeId);
     
     @Query("SELECT COUNT(a) > 0 FROM Appointment a " +
            "WHERE a.customer.id = :customerId " +
