@@ -6,7 +6,7 @@
     <title>Dashboard - Quản lý spa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/Chart.min.css">
     <link rel="stylesheet" th:href="@{/css/admin.css}">
     <style>
         .card-counter {
@@ -339,15 +339,15 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script th:inline="javascript">
-        // Data from server
+        // Dữ liệu từ server
         const appointmentDates = /*[[${appointmentDates}]]*/ [];
         const appointmentCounts = /*[[${appointmentCounts}]]*/ [];
         const statusLabels = /*[[${statusLabels}]]*/ [];
         const statusCounts = /*[[${statusCounts}]]*/ [];
         
-        // Appointment by day chart
+        // Biểu đồ lịch hẹn theo ngày
         const appointmentsCtx = document.getElementById('appointmentsChart').getContext('2d');
         const appointmentsChart = new Chart(appointmentsCtx, {
             type: 'line',
@@ -370,7 +370,9 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        precision: 0
+                        ticks: {
+                            precision: 0
+                        }
                     }
                 },
                 plugins: {
@@ -382,7 +384,7 @@
             }
         });
         
-        // Appointment status chart
+        // Biểu đồ trạng thái lịch hẹn
         const statusCtx = document.getElementById('appointmentStatusChart').getContext('2d');
         const statusChart = new Chart(statusCtx, {
             type: 'doughnut',
@@ -391,14 +393,14 @@
                 datasets: [{
                     data: statusCounts,
                     backgroundColor: [
-                        'rgba(255, 193, 7, 0.8)',  // Pending
-                        'rgba(13, 110, 253, 0.8)', // Confirmed
-                        'rgba(13, 202, 240, 0.8)', // Checked In
-                        'rgba(13, 110, 253, 0.8)', // In Progress
-                        'rgba(25, 135, 84, 0.8)',  // Completed
-                        'rgba(25, 135, 84, 0.8)',  // Checked Out
-                        'rgba(220, 53, 69, 0.8)',  // Cancelled
-                        'rgba(108, 117, 125, 0.8)' // No Show
+                        'rgba(255, 193, 7, 0.8)',  // Chờ xác nhận
+                        'rgba(13, 110, 253, 0.8)', // Đã xác nhận
+                        'rgba(13, 202, 240, 0.8)', // Đã đến
+                        'rgba(13, 110, 253, 0.8)', // Đang thực hiện
+                        'rgba(25, 135, 84, 0.8)',  // Hoàn thành
+                        'rgba(25, 135, 84, 0.8)',  // Đã thanh toán
+                        'rgba(220, 53, 69, 0.8)',  // Đã hủy
+                        'rgba(108, 117, 125, 0.8)' // Vắng mặt
                     ],
                     borderColor: '#fff',
                     borderWidth: 2
@@ -416,8 +418,7 @@
         });
         
         function changeTimeRange(range) {
-            // This would normally make an AJAX call to update the dashboard with new data
-            // For now we'll just update the dropdown text
+            // Cập nhật text của dropdown
             document.getElementById('timeRangeDropdown').innerText = 
                 range === 'today' ? 'Hôm nay' :
                 range === 'yesterday' ? 'Hôm qua' :
@@ -426,18 +427,80 @@
                 range === 'thisMonth' ? 'Tháng này' :
                 range === 'lastMonth' ? 'Tháng trước' : 'Tùy chỉnh';
             
-            if (range === 'custom') {
-                // Show date range picker
-                console.log('Show date range picker');
-            } else {
-                // Reload data with new range
-                console.log('Changed time range to:', range);
+            // Xác định ngày bắt đầu và kết thúc
+            let start, end;
+            const today = new Date();
+            end = today.toISOString().split('T')[0]; // Định dạng YYYY-MM-DD
+            
+            if (range === 'today') {
+                start = end;
+            } else if (range === 'yesterday') {
+                const yesterday = new Date(today);
+                yesterday.setDate(today.getDate() - 1);
+                start = yesterday.toISOString().split('T')[0];
+                end = start;
+            } else if (range === 'thisWeek') {
+                const firstDay = new Date(today);
+                const day = today.getDay();
+                const diff = today.getDate() - day + (day === 0 ? -6 : 1); // Điều chỉnh cho Chủ nhật
+                firstDay.setDate(diff);
+                start = firstDay.toISOString().split('T')[0];
+            } else if (range === 'lastWeek') {
+                const lastWeekEnd = new Date(today);
+                lastWeekEnd.setDate(today.getDate() - today.getDay() - (today.getDay() === 0 ? 0 : 7));
+                const lastWeekStart = new Date(lastWeekEnd);
+                lastWeekStart.setDate(lastWeekEnd.getDate() - 6);
+                start = lastWeekStart.toISOString().split('T')[0];
+                end = lastWeekEnd.toISOString().split('T')[0];
+            } else if (range === 'thisMonth') {
+                start = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-01';
+            } else if (range === 'lastMonth') {
+                const lastMonth = new Date(today);
+                lastMonth.setMonth(today.getMonth() - 1);
+                start = lastMonth.getFullYear() + '-' + (lastMonth.getMonth() + 1).toString().padStart(2, '0') + '-01';
+                end = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-01';
+                // Trừ một ngày để lấy ngày cuối cùng của tháng trước
+                const endDate = new Date(end);
+                endDate.setDate(endDate.getDate() - 1);
+                end = endDate.toISOString().split('T')[0];
+            } else if (range === 'custom') {
+                // Hiển thị date range picker hoặc modal để lựa chọn tùy chỉnh
+                console.log('Hiển thị bộ chọn khoảng thời gian');
+                return;
             }
+            
+            // Tải lại trang dashboard với khoảng thời gian mới
+            window.location.href = '/admin/dashboard?start=' + start + '&end=' + end;
         }
         
         function exportReport() {
-            // This would generate a report for download
-            alert('Chức năng xuất báo cáo sẽ được triển khai trong phiên bản tiếp theo.');
+            // Tạo form để mở cửa sổ mới với báo cáo
+            const form = document.createElement('form');
+            form.method = 'GET';
+            form.action = '/admin/reports/export';
+            form.target = '_blank';
+            
+            // Thêm tham số khoảng thời gian hiện tại
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('start')) {
+                const startInput = document.createElement('input');
+                startInput.type = 'hidden';
+                startInput.name = 'start';
+                startInput.value = urlParams.get('start');
+                form.appendChild(startInput);
+            }
+            
+            if (urlParams.has('end')) {
+                const endInput = document.createElement('input');
+                endInput.type = 'hidden';
+                endInput.name = 'end';
+                endInput.value = urlParams.get('end');
+                form.appendChild(endInput);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
         }
     </script>
 </body>
