@@ -5,7 +5,7 @@ import com.skincare.model.Service;
 import com.skincare.model.User;
 import com.skincare.model.UserType;
 import com.skincare.model.AppointmentStatus;
-import com.skincare.service.AppointmentService;
+import com.skincare.service.AppointmentManagementService;
 import com.skincare.service.ServiceService;
 import com.skincare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +23,17 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
-@PreAuthorize("hasRole('MANAGER')")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
-    private final AppointmentService appointmentService;
+    private final AppointmentManagementService appointmentService;
     private final ServiceService serviceService;
     private final UserService userService;
 
     @Autowired
-    public AdminController(AppointmentService appointmentService, ServiceService serviceService, UserService userService) {
+    public AdminController(AppointmentManagementService appointmentService,
+                          ServiceService serviceService,
+                          UserService userService) {
         this.appointmentService = appointmentService;
         this.serviceService = serviceService;
         this.userService = userService;
