@@ -1,18 +1,28 @@
 package com.skincare.service;
 
-import com.skincare.model.User;
-import com.skincare.repository.UserRepository;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import com.skincare.model.Role;
+import com.skincare.model.RoleType;
+import com.skincare.model.User;
+import com.skincare.model.UserType;
+import com.skincare.repository.UserRepository;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -23,7 +33,7 @@ public class UserService {
         return userRepository.findAll();
     }
     
-    public List<User> getUsersByType(User.UserType userType) {
+    public List<User> getUsersByType(UserType userType) {
         return userRepository.findByUserType(userType);
     }
     
@@ -41,6 +51,9 @@ public class UserService {
     
     @Transactional
     public User saveUser(User user) {
+        if (user.getId() == null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userRepository.save(user);
     }
     
@@ -50,14 +63,53 @@ public class UserService {
     }
     
     public boolean isStaffOrManager(User user) {
-        return user != null && (user.getUserType() == User.UserType.STAFF || user.getUserType() == User.UserType.MANAGER);
+        return user != null && (user.getUserType() == UserType.ADMIN || user.getUserType() == UserType.THERAPIST);
     }
     
     public boolean isManager(User user) {
-        return user != null && user.getUserType() == User.UserType.MANAGER;
+        return user != null && user.getUserType() == UserType.ADMIN;
     }
     
     public boolean isTherapist(User user) {
-        return user != null && user.getUserType() == User.UserType.SKIN_THERAPIST;
+        return user != null && user.getUserType() == UserType.THERAPIST;
     }
+
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public User registerUser(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+        
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Set<Role> userRoles = new HashSet<>();
+        Role userRole = new Role();
+        userRole.setId(1L);
+        userRole.setName(RoleType.ROLE_CUSTOMER);
+        userRoles.add(userRole);
+        user.setRoles(userRoles);
+        return userRepository.save(user);
+    }
+
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public List<User> searchUsers(String keyword) {
+        return userRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(keyword, keyword);
+    }
+
 } 

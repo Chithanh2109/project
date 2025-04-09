@@ -3,6 +3,7 @@ package com.skincare.repository;
 import com.skincare.model.Appointment;
 import com.skincare.model.AppointmentService;
 import com.skincare.model.Service;
+import com.skincare.model.ServiceStatus;
 import com.skincare.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,13 +20,13 @@ public interface AppointmentServiceRepository extends JpaRepository<AppointmentS
     
     List<AppointmentService> findByService(Service service);
     
-    List<AppointmentService> findByAppointmentAndStatus(Appointment appointment, AppointmentService.ServiceStatus status);
+    List<AppointmentService> findByAppointmentAndStatus(Appointment appointment, ServiceStatus status);
     
     List<AppointmentService> findByPerformedBy(User therapist);
     
     List<AppointmentService> findByPerformedByAndStatusAndStartTimeBetween(
         User therapist, 
-        AppointmentService.ServiceStatus status, 
+        ServiceStatus status, 
         LocalDateTime startDate, 
         LocalDateTime endDate);
 

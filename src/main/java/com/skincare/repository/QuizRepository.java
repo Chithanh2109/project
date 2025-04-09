@@ -1,10 +1,11 @@
 package com.skincare.repository;
 
-import com.skincare.model.Quiz;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.skincare.model.Quiz;
 
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz, Long> {

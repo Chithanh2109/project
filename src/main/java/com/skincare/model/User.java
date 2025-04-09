@@ -1,38 +1,53 @@
-package com.skincenter.model;
+package com.skincare.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+/**
+ * Entity class đại diện cho người dùng trong hệ thống
+ */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String firstName;
-
-    @Column(nullable = false)
-    private String lastName;
-
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(unique = true, nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Column(unique = true)
+    private String email;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
+
+    private String address;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -43,19 +58,32 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private UserStatus status = UserStatus.ACTIVE;
+    @Column(name = "user_type")
+    private UserType userType;
 
-    // Additional fields for specialists
-    @Column
-    private String specialistBio;
+    @Column(name = "is_active")
+    private Boolean isActive = true;
 
-    @Column
-    private String specialistExpertise;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
-    @Column
-    private Integer yearsOfExperience;
-    
-    @OneToMany(mappedBy = "specialist")
-    private Set<Appointment> appointments = new HashSet<>();
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<Appointment> customerAppointments = new HashSet<>();
+
+    @OneToMany(mappedBy = "therapist")
+    private Set<Appointment> therapistAppointments = new HashSet<>();
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 } 

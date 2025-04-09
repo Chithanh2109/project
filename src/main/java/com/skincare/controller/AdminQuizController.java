@@ -1,15 +1,24 @@
 package com.skincare.controller;
 
-import com.skincare.model.*;
-import com.skincare.service.QuizService;
-import com.skincare.service.ServiceService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import com.skincare.model.Quiz;
+import com.skincare.model.QuizOption;
+import com.skincare.model.QuizQuestion;
+import com.skincare.model.SkinConcern;
+import com.skincare.service.QuizService;
+import com.skincare.service.ServiceService;
 
 @Controller
 @RequestMapping("/admin/quiz")
@@ -109,19 +118,26 @@ public class AdminQuizController {
         return "redirect:/admin/quiz/" + quizId + "/questions/" + questionId;
     }
     
-    @PostMapping("/{id}/toggle-active")
-    public String toggleActive(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    @GetMapping("/{id}/status")
+    public String toggleQuizStatus(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
-            Quiz quiz = quizService.getQuizById(id).orElseThrow();
-            quiz.setActive(!quiz.isActive());
+            Quiz quiz = quizService.getQuizById(id)
+                    .orElseThrow(() -> new RuntimeException("Quiz không tồn tại"));
+            
+            boolean currentStatus = quiz.getActive();
+            quiz.setActive(!currentStatus);
+            
             quizService.updateQuiz(quiz);
             
-            String status = quiz.isActive() ? "kích hoạt" : "vô hiệu hóa";
-            redirectAttributes.addFlashAttribute("successMessage", "Đã " + status + " bài trắc nghiệm thành công!");
+            String statusMessage = !currentStatus ? "Kích hoạt" : "Vô hiệu hóa";
+            redirectAttributes.addFlashAttribute("successMessage", 
+                    "Đã " + statusMessage + " bài trắc nghiệm thành công");
+            
+            return "redirect:/admin/quizzes";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi thay đổi trạng thái: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/admin/quizzes";
         }
-        return "redirect:/admin/quiz";
     }
     
     @GetMapping("/reports")

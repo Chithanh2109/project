@@ -1,4 +1,4 @@
-package com.skincenter.model;
+package com.skincare.model;
 
 public enum ServiceCategory {
     FACIAL_TREATMENT,

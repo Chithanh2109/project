@@ -1,18 +1,37 @@
 package com.skincare.service;
 
-import com.skincare.dto.ResultsByDay;
-import com.skincare.dto.ServiceStat;
-import com.skincare.dto.SkinConcernStat;
-import com.skincare.model.*;
-import com.skincare.repository.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import com.skincare.dto.ResultsByDay;
+import com.skincare.dto.ServiceStat;
+import com.skincare.dto.SkinConcernStat;
+import com.skincare.model.Quiz;
+import com.skincare.model.QuizOption;
+import com.skincare.model.QuizQuestion;
+import com.skincare.model.QuizResult;
+import com.skincare.model.SkinConcern;
+import com.skincare.model.User;
+import com.skincare.repository.QuizOptionRepository;
+import com.skincare.repository.QuizQuestionRepository;
+import com.skincare.repository.QuizRepository;
+import com.skincare.repository.QuizResultRepository;
+import com.skincare.repository.ServiceRepository;
+import com.skincare.repository.SkinConcernRepository;
 
 @Service
 public class QuizServiceImpl implements QuizService {
@@ -105,20 +124,22 @@ public class QuizServiceImpl implements QuizService {
                 .collect(Collectors.toSet());
         
         // Tìm các dịch vụ phù hợp
-        Set<Service> recommendedServices = findRecommendedServices(identifiedConcerns);
+        Set<com.skincare.model.Service> recommendedServices = findRecommendedServices(identifiedConcerns);
         
         // Tạo bản tóm tắt kết quả
         StringBuilder summary = new StringBuilder();
         summary.append("Dựa trên các câu trả lời của bạn, chúng tôi đã xác định các vấn đề về da sau:\n");
         
         for (SkinConcern concern : identifiedConcerns) {
-            summary.append("- ").append(concern.getName()).append(": ").append(concern.getDescription()).append("\n");
+            // Sử dụng name() của enum thay vì getName()
+            summary.append("- ").append(concern.name()).append(": ").append(concern.getDescription()).append("\n");
         }
         
         summary.append("\nChúng tôi đề xuất các dịch vụ sau để giải quyết các vấn đề trên:\n");
         
-        for (Service service : recommendedServices) {
-            summary.append("- ").append(service.getName()).append(": ").append(service.getShortDescription()).append("\n");
+        for (com.skincare.model.Service service : recommendedServices) {
+            // Sử dụng description thay vì getShortDescription()
+            summary.append("- ").append(service.getName()).append(": ").append(service.getDescription()).append("\n");
         }
         
         // Lưu kết quả
@@ -173,16 +194,21 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public Set<Service> findRecommendedServices(Set<SkinConcern> concerns) {
+    public Set<com.skincare.model.Service> findRecommendedServices(Set<SkinConcern> concerns) {
         if (concerns.isEmpty()) {
             return new HashSet<>();
         }
         
-        List<Long> concernIds = concerns.stream()
-                .map(SkinConcern::getId)
-                .collect(Collectors.toList());
+        // Sửa đổi phương thức để không sử dụng getId() vì SkinConcern là enum
+        // Lấy tất cả services và lọc theo concerns
+        List<com.skincare.model.Service> allServices = serviceRepository.findAll();
         
-        return new HashSet<>(serviceRepository.findBySkinConcernsIdIn(concernIds));
+        return allServices.stream()
+            .filter(service -> 
+                service.getSkinConcerns() != null && 
+                service.getSkinConcerns().stream()
+                    .anyMatch(concerns::contains))
+            .collect(Collectors.toSet());
     }
 
     @Override
@@ -237,11 +263,11 @@ public class QuizServiceImpl implements QuizService {
                 .map(entry -> {
                     double percentage = (entry.getValue() * 100.0) / totalResults;
                     return new SkinConcernStat(
-                            entry.getKey().getName(), 
+                            entry.getKey().name(), // Sử dụng name() thay vì getName()
                             entry.getValue(), 
                             Math.round(percentage * 10) / 10.0);
                 })
-                .sorted(Comparator.comparing(SkinConcernStat::getCount).reversed())
+                .sorted((stat1, stat2) -> Long.compare(stat2.getCount(), stat1.getCount()))
                 .collect(Collectors.toList());
     }
     
@@ -256,10 +282,10 @@ public class QuizServiceImpl implements QuizService {
         }
         
         // Đếm số lần mỗi dịch vụ được đề xuất
-        Map<Service, Long> serviceCounts = new HashMap<>();
+        Map<com.skincare.model.Service, Long> serviceCounts = new HashMap<>();
         
         for (QuizResult result : allResults) {
-            for (Service service : result.getRecommendedServices()) {
+            for (com.skincare.model.Service service : result.getRecommendedServices()) {
                 serviceCounts.put(service, serviceCounts.getOrDefault(service, 0L) + 1);
             }
         }
@@ -267,13 +293,16 @@ public class QuizServiceImpl implements QuizService {
         // Chuyển đổi thành danh sách thống kê
         return serviceCounts.entrySet().stream()
                 .map(entry -> {
-                    double percentage = (entry.getValue() * 100.0) / totalResults;
+                    Long count = entry.getValue();
+                    int bookingCount = count.intValue();
                     return new ServiceStat(
+                            entry.getKey().getId(),
                             entry.getKey().getName(), 
-                            entry.getValue(), 
-                            Math.round(percentage * 10) / 10.0);
+                            bookingCount,
+                            BigDecimal.ZERO // Không có thông tin doanh thu
+                    );
                 })
-                .sorted(Comparator.comparing(ServiceStat::getCount).reversed())
+                .sorted((stat1, stat2) -> Integer.compare(stat2.getBookingCount(), stat1.getBookingCount()))
                 .collect(Collectors.toList());
     }
 } 

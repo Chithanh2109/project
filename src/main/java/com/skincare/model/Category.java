@@ -1,14 +1,25 @@
 package com.skincare.model;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Entity class đại diện cho danh mục dịch vụ
+ */
 @Entity
 @Table(name = "categories")
 @Data
@@ -20,25 +31,22 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "name", nullable = false, unique = true, length = 50)
+    @Column(nullable = false)
     private String name;
     
-    @Column(name = "description", length = 500)
+    @Column(length = 1000)
     private String description;
     
     @Column(nullable = false)
-    private boolean active = true;
+    private String status = "ACTIVE"; // ACTIVE, INACTIVE
     
-    @Column(name = "display_order")
-    private Integer displayOrder;
+    @OneToMany(mappedBy = "category")
+    private Set<Service> services = new HashSet<>();
     
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private List<Service> services = new ArrayList<>();
-    
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
     
     @PrePersist
@@ -77,28 +85,20 @@ public class Category {
         this.description = description;
     }
 
-    public List<Service> getServices() {
+    public Set<Service> getServices() {
         return services;
     }
 
-    public void setServices(List<Service> services) {
+    public void setServices(Set<Service> services) {
         this.services = services;
     }
     
-    public boolean isActive() {
-        return active;
+    public String getStatus() {
+        return status;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public Integer getDisplayOrder() {
-        return displayOrder;
-    }
-
-    public void setDisplayOrder(Integer displayOrder) {
-        this.displayOrder = displayOrder;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -1,12 +1,16 @@
 package com.skincare.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.skincare.model.Category;
 import com.skincare.model.Service;
+import com.skincare.model.ServiceStatus;
 
 @Repository
 public interface ServiceRepository extends JpaRepository<Service, Long> {
@@ -15,18 +19,28 @@ public interface ServiceRepository extends JpaRepository<Service, Long> {
     
     List<Service> findByStatusAndFeaturedTrueOrderByNameAsc(String status);
     
-    List<Service> findByCategoryIdAndStatusOrderByNameAsc(Long categoryId, String status);
+    List<Service> findByCategoryIdOrderByNameAsc(Long categoryId);
     
-    @Query("SELECT s FROM Service s WHERE s.category.id = ?1 AND s.id != ?2 AND s.status = 'ACTIVE'")
-    List<Service> findRelatedServices(Long categoryId, Long currentServiceId);
+    List<Service> findByStatusAndCategoryIdOrderByNameAsc(String status, Long categoryId);
     
-    List<Service> findByNameContainingIgnoreCaseAndStatusOrderByNameAsc(String keyword, String status);
+    List<Service> findByNameContainingIgnoreCase(String keyword);
+    
+    List<Service> findByDescriptionContainingIgnoreCase(String keyword);
+    
+    List<Service> findByPriceBetweenOrderByPriceAsc(BigDecimal minPrice, BigDecimal maxPrice);
+    
+    List<Service> findByDurationBetweenOrderByDurationAsc(Integer minDuration, Integer maxDuration);
+    
+    Optional<Service> findByName(String name);
 
-    List<Service> findByNameContainingIgnoreCaseAndActiveTrue(String keyword);
+    List<Service> findByStatus(ServiceStatus status);
+    List<Service> findByCategory_Id(Long categoryId);
+    List<Service> findByFeaturedTrue();
+    List<Service> findByCategoryAndIdNot(Category category, Long id);
 
-    List<Service> findByActiveTrue();
+    @Query("SELECT c FROM Category c")
+    List<Category> findAllCategories();
 
-    List<Service> findByCategoryId(Long categoryId);
-
-    List<Service> findBySkinConcernsIdIn(List<Long> concernIds);
+    @Query("SELECT c FROM Category c WHERE c.active = true")
+    List<Category> findActiveCategories();
 } 

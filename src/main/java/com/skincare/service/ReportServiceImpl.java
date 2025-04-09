@@ -1,25 +1,32 @@
 package com.skincare.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.skincare.dto.DashboardStats;
 import com.skincare.dto.ServiceStat;
 import com.skincare.dto.TherapistStat;
 import com.skincare.model.Appointment;
 import com.skincare.model.AppointmentService;
 import com.skincare.model.AppointmentStatus;
+import com.skincare.model.ServiceStatus;
 import com.skincare.model.User;
 import com.skincare.repository.AppointmentRepository;
 import com.skincare.repository.AppointmentServiceRepository;
 import com.skincare.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -206,14 +213,14 @@ public class ReportServiceImpl implements ReportService {
         LocalDateTime endDateTime = end.atTime(LocalTime.MAX);
         
         // Lấy tất cả dịch vụ đã hoàn thành trong khoảng thời gian
-        List<AppointmentService> completedServices = appointmentServiceRepository.findByAppointmentDateBetween(
+        List<AppointmentService> completedServicesList = appointmentServiceRepository.findByAppointmentDateBetween(
                 startDateTime, endDateTime)
                 .stream()
-                .filter(as -> as.getStatus() == AppointmentService.ServiceStatus.COMPLETED)
+                .filter(as -> as.getStatus() == ServiceStatus.COMPLETED)
                 .collect(Collectors.toList());
         
         // Nhóm dịch vụ theo chuyên viên 
-        Map<User, List<AppointmentService>> therapistGroups = completedServices.stream()
+        Map<User, List<AppointmentService>> therapistGroups = completedServicesList.stream()
                 .filter(as -> as.getPerformedBy() != null)
                 .collect(Collectors.groupingBy(AppointmentService::getPerformedBy));
         
@@ -318,7 +325,7 @@ public class ReportServiceImpl implements ReportService {
         List<AppointmentService> completedServices = appointmentServiceRepository.findByAppointmentDateBetween(
                 startDateTime, endDateTime)
                 .stream()
-                .filter(as -> as.getStatus() == AppointmentService.ServiceStatus.COMPLETED &&
+                .filter(as -> as.getStatus() == ServiceStatus.COMPLETED &&
                          (as.getAppointment().getStatus() == AppointmentStatus.COMPLETED || 
                           as.getAppointment().getStatus() == AppointmentStatus.CHECKED_OUT))
                 .collect(Collectors.toList());

@@ -83,4 +83,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
         
         return existsTherapistScheduleConflict(therapistId, startTime, endTime, appointmentId);
     }
+    
+    List<Appointment> findByTherapistAndAppointmentDateBetweenAndStatusNotIn(
+            User therapist, LocalDateTime start, LocalDateTime end, List<AppointmentStatus> statuses);
 } 

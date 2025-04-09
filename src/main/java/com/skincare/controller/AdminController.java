@@ -3,6 +3,8 @@ package com.skincare.controller;
 import com.skincare.model.Appointment;
 import com.skincare.model.Service;
 import com.skincare.model.User;
+import com.skincare.model.UserType;
+import com.skincare.model.AppointmentStatus;
 import com.skincare.service.AppointmentService;
 import com.skincare.service.ServiceService;
 import com.skincare.service.UserService;
@@ -41,9 +43,9 @@ public class AdminController {
         List<Appointment> upcomingAppointments = appointmentService.getUpcomingAppointments();
         
         // Thống kê dữ liệu cho dashboard
-        long pendingCount = appointmentService.getAppointmentsByStatus(Appointment.AppointmentStatus.PENDING).size();
+        long pendingCount = appointmentService.getAppointmentsByStatus(AppointmentStatus.PENDING).size();
         long todayCount = appointmentService.getAppointmentsByDate(LocalDate.now()).size();
-        long totalCustomers = userService.getUsersByType(User.UserType.CUSTOMER).size();
+        long totalCustomers = userService.getUsersByType(UserType.CUSTOMER).size();
         
         model.addAttribute("pendingCount", pendingCount);
         model.addAttribute("todayCount", todayCount);
@@ -65,7 +67,7 @@ public class AdminController {
         Appointment appointment = appointmentService.getAppointmentById(id)
                 .orElseThrow(() -> new RuntimeException("Lịch hẹn không tồn tại"));
         
-        List<User> therapists = userService.getUsersByType(User.UserType.SKIN_THERAPIST);
+        List<User> therapists = userService.getUsersByType(UserType.THERAPIST);
         
         model.addAttribute("appointment", appointment);
         model.addAttribute("therapists", therapists);
@@ -159,13 +161,13 @@ public class AdminController {
 
     @GetMapping("/therapists")
     public String therapists(Model model) {
-        model.addAttribute("therapists", userService.getUsersByType(User.UserType.SKIN_THERAPIST));
+        model.addAttribute("therapists", userService.getUsersByType(UserType.THERAPIST));
         return "admin/therapists";
     }
 
     @GetMapping("/customers")
     public String customers(Model model) {
-        List<User> customers = userService.getUsersByType(User.UserType.CUSTOMER);
+        List<User> customers = userService.getUsersByType(UserType.CUSTOMER);
         model.addAttribute("customers", customers);
         return "admin/customers";
     }

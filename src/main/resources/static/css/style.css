@@ -11,8 +11,9 @@
 }
 
 body {
-    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    color: var(--text-dark);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
     background-color: #f8f9fc;
 }
 
@@ -37,29 +38,45 @@ header .nav-link.active {
 
 /* Hero section */
 .hero-section {
-    background-image: linear-gradient(rgba(78, 115, 223, 0.7), rgba(78, 115, 223, 0.7)), url('/images/hero-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    color: white;
-    padding: 6rem 0;
-    position: relative;
+    background-color: #f8f9fa;
+    padding: 4rem 0;
+    margin-bottom: 2rem;
+}
+
+.hero-section h1 {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.hero-section .lead {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
 }
 
 /* Card styles */
 .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     border-radius: 0.5rem;
     overflow: hidden;
 }
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
 }
 
 .card-img-top {
     height: 200px;
     object-fit: cover;
+}
+
+.card-title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    color: #666;
 }
 
 /* Service cards */
@@ -106,6 +123,12 @@ header .nav-link.active {
 /* Footer styles */
 footer {
     background-color: #1a1c23;
+    margin-top: 4rem;
+}
+
+footer h5 {
+    font-weight: bold;
+    margin-bottom: 1rem;
 }
 
 footer a {
@@ -165,8 +188,8 @@ footer a:hover {
 }
 
 .form-control:focus {
-    border-color: #bac8f3;
-    box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+    box-shadow: none;
+    border-color: #0d6efd;
 }
 
 /* Admin dashboard */
@@ -259,7 +282,7 @@ footer a:hover {
     }
     
     .hero-section {
-        padding: 3rem 0;
+        padding: 2rem 0;
     }
     
     .hero-section h1 {
@@ -268,6 +291,14 @@ footer a:hover {
     
     .service-card {
         margin-bottom: 2rem;
+    }
+    
+    .card-img-top {
+        height: 150px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
     }
 }
 
@@ -357,4 +388,54 @@ footer a:hover {
 
 .appointment-cancelled {
     border-left-color: var(--danger-color);
+}
+
+/* Pagination */
+.pagination .page-link {
+    color: #0d6efd;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* Price */
+.price {
+    font-size: 1.25rem;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+/* Category and Brand Filters */
+.form-select {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+.form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: none;
+}
+
+/* Search Box */
+.input-group .form-control {
+    border-right: none;
+}
+
+.input-group .btn {
+    border-left: none;
+    background-color: #fff;
+    color: #0d6efd;
+}
+
+.input-group .btn:hover {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+/* Responsive Images */
+.img-fluid {
+    max-width: 100%;
+    height: auto;
 }

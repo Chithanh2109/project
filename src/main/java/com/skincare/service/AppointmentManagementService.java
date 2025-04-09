@@ -1,20 +1,26 @@
 package com.skincare.service;
 
-import com.skincare.model.*;
-import com.skincare.repository.AppointmentRepository;
-import com.skincare.repository.AppointmentServiceRepository;
-import com.skincare.repository.ServiceRepository;
-import com.skincare.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.skincare.model.Appointment;
+import com.skincare.model.AppointmentStatus;
+import com.skincare.model.ServiceStatus;
+import com.skincare.model.User;
+import com.skincare.model.UserType;
+import com.skincare.repository.AppointmentRepository;
+import com.skincare.repository.AppointmentServiceRepository;
+import com.skincare.repository.ServiceRepository;
+import com.skincare.repository.UserRepository;
 
 @Service
 public class AppointmentManagementService {
@@ -93,11 +99,11 @@ public class AppointmentManagementService {
             com.skincare.model.Service service = serviceRepository.findById(serviceId)
                     .orElseThrow(() -> new RuntimeException("Dịch vụ không tồn tại: " + serviceId));
             
-            AppointmentService appointmentService = new AppointmentService();
+            com.skincare.model.AppointmentService appointmentService = new com.skincare.model.AppointmentService();
             appointmentService.setAppointment(savedAppointment);
             appointmentService.setService(service);
             appointmentService.setPrice(service.getPrice());
-            appointmentService.setStatus(AppointmentService.ServiceStatus.PENDING);
+            appointmentService.setStatus(ServiceStatus.PENDING);
             
             appointmentServiceRepository.save(appointmentService);
         }
@@ -124,7 +130,7 @@ public class AppointmentManagementService {
                 .orElseThrow(() -> new RuntimeException("Lịch hẹn không tồn tại: " + appointmentId));
         
         // Xóa các dịch vụ hiện tại
-        List<AppointmentService> existingServices = appointmentServiceRepository.findByAppointmentId(appointmentId);
+        List<com.skincare.model.AppointmentService> existingServices = appointmentServiceRepository.findByAppointmentId(appointmentId);
         appointmentServiceRepository.deleteAll(existingServices);
         
         // Thêm các dịch vụ mới
@@ -132,11 +138,11 @@ public class AppointmentManagementService {
             com.skincare.model.Service service = serviceRepository.findById(serviceId)
                     .orElseThrow(() -> new RuntimeException("Dịch vụ không tồn tại: " + serviceId));
             
-            AppointmentService appointmentService = new AppointmentService();
+            com.skincare.model.AppointmentService appointmentService = new com.skincare.model.AppointmentService();
             appointmentService.setAppointment(appointment);
             appointmentService.setService(service);
             appointmentService.setPrice(service.getPrice());
-            appointmentService.setStatus(AppointmentService.ServiceStatus.PENDING);
+            appointmentService.setStatus(ServiceStatus.PENDING);
             
             appointmentServiceRepository.save(appointmentService);
         }
@@ -188,9 +194,9 @@ public class AppointmentManagementService {
         appointmentRepository.save(appointment);
         
         // Cập nhật trạng thái các dịch vụ
-        List<AppointmentService> services = appointmentServiceRepository.findByAppointmentId(id);
-        for (AppointmentService service : services) {
-            service.setStatus(AppointmentService.ServiceStatus.CANCELLED);
+        List<com.skincare.model.AppointmentService> services = appointmentServiceRepository.findByAppointmentId(id);
+        for (com.skincare.model.AppointmentService service : services) {
+            service.setStatus(ServiceStatus.CANCELLED);
             appointmentServiceRepository.save(service);
         }
     }
@@ -236,8 +242,7 @@ public class AppointmentManagementService {
                 .orElseThrow(() -> new RuntimeException("Chuyên viên không tồn tại: " + therapistId));
         
         // Kiểm tra xem người dùng có phải là chuyên viên không
-        boolean isTherapist = therapist.getRoles().stream()
-                .anyMatch(role -> role.getName().equals("ROLE_THERAPIST"));
+        boolean isTherapist = therapist.getUserType() == UserType.THERAPIST;
         
         if (!isTherapist) {
             throw new RuntimeException("Người dùng được chỉ định không phải là chuyên viên");
@@ -259,11 +264,11 @@ public class AppointmentManagementService {
         }
         
         // Tìm dịch vụ cần thực hiện
-        AppointmentService appointmentService = appointmentServiceRepository
+        com.skincare.model.AppointmentService appointmentService = appointmentServiceRepository
                 .findByAppointmentIdAndServiceId(appointmentId, serviceId)
                 .orElseThrow(() -> new RuntimeException("Dịch vụ không thuộc lịch hẹn này"));
         
-        if (appointmentService.getStatus() != AppointmentService.ServiceStatus.PENDING) {
+        if (appointmentService.getStatus() != ServiceStatus.PENDING) {
             throw new RuntimeException("Dịch vụ đã được thực hiện hoặc đã hủy");
         }
         
@@ -272,7 +277,7 @@ public class AppointmentManagementService {
                 .orElseThrow(() -> new RuntimeException("Chuyên viên không tồn tại: " + therapistId));
         
         appointmentService.setPerformedBy(therapist);
-        appointmentService.setStatus(AppointmentService.ServiceStatus.IN_PROGRESS);
+        appointmentService.setStatus(ServiceStatus.IN_PROGRESS);
         appointmentService.setStartTime(LocalDateTime.now());
         
         appointmentServiceRepository.save(appointmentService);
@@ -288,15 +293,15 @@ public class AppointmentManagementService {
                 .orElseThrow(() -> new RuntimeException("Lịch hẹn không tồn tại: " + appointmentId));
         
         // Tìm dịch vụ cần cập nhật
-        AppointmentService appointmentService = appointmentServiceRepository
+        com.skincare.model.AppointmentService appointmentService = appointmentServiceRepository
                 .findByAppointmentIdAndServiceId(appointmentId, serviceId)
                 .orElseThrow(() -> new RuntimeException("Dịch vụ không thuộc lịch hẹn này"));
         
-        if (appointmentService.getStatus() != AppointmentService.ServiceStatus.IN_PROGRESS) {
+        if (appointmentService.getStatus() != ServiceStatus.IN_PROGRESS) {
             throw new RuntimeException("Dịch vụ chưa được bắt đầu hoặc đã hoàn thành");
         }
         
-        appointmentService.setStatus(AppointmentService.ServiceStatus.COMPLETED);
+        appointmentService.setStatus(ServiceStatus.COMPLETED);
         appointmentService.setEndTime(LocalDateTime.now());
         appointmentService.setTreatmentResults(treatmentResults);
         
@@ -304,11 +309,11 @@ public class AppointmentManagementService {
         
         // Kiểm tra xem tất cả dịch vụ đã hoàn thành chưa
         boolean allServicesCompleted = true;
-        List<AppointmentService> services = appointmentServiceRepository.findByAppointmentId(appointmentId);
+        List<com.skincare.model.AppointmentService> services = appointmentServiceRepository.findByAppointmentId(appointmentId);
         
-        for (AppointmentService service : services) {
-            if (service.getStatus() == AppointmentService.ServiceStatus.PENDING || 
-                service.getStatus() == AppointmentService.ServiceStatus.IN_PROGRESS) {
+        for (com.skincare.model.AppointmentService service : services) {
+            if (service.getStatus() == ServiceStatus.PENDING || 
+                service.getStatus() == ServiceStatus.IN_PROGRESS) {
                 allServicesCompleted = false;
                 break;
             }
@@ -352,7 +357,7 @@ public class AppointmentManagementService {
                 .orElseThrow(() -> new RuntimeException("Dịch vụ không tồn tại: " + serviceId));
         
         // Kiểm tra xem dịch vụ đã tồn tại trong lịch hẹn chưa
-        Optional<AppointmentService> existingService = appointmentServiceRepository
+        Optional<com.skincare.model.AppointmentService> existingService = appointmentServiceRepository
                 .findByAppointmentIdAndServiceId(appointmentId, serviceId);
         
         if (existingService.isPresent()) {
@@ -360,11 +365,11 @@ public class AppointmentManagementService {
         }
         
         // Thêm dịch vụ mới
-        AppointmentService appointmentService = new AppointmentService();
+        com.skincare.model.AppointmentService appointmentService = new com.skincare.model.AppointmentService();
         appointmentService.setAppointment(appointment);
         appointmentService.setService(service);
         appointmentService.setPrice(service.getPrice());
-        appointmentService.setStatus(AppointmentService.ServiceStatus.PENDING);
+        appointmentService.setStatus(ServiceStatus.PENDING);
         
         appointmentServiceRepository.save(appointmentService);
         
@@ -384,13 +389,13 @@ public class AppointmentManagementService {
         }
         
         // Tìm dịch vụ cần xóa
-        AppointmentService appointmentService = appointmentServiceRepository
+        com.skincare.model.AppointmentService appointmentService = appointmentServiceRepository
                 .findByAppointmentIdAndServiceId(appointmentId, serviceId)
                 .orElseThrow(() -> new RuntimeException("Dịch vụ không thuộc lịch hẹn này"));
         
         // Kiểm tra trạng thái dịch vụ
-        if (appointmentService.getStatus() == AppointmentService.ServiceStatus.IN_PROGRESS || 
-            appointmentService.getStatus() == AppointmentService.ServiceStatus.COMPLETED) {
+        if (appointmentService.getStatus() == ServiceStatus.IN_PROGRESS || 
+            appointmentService.getStatus() == ServiceStatus.COMPLETED) {
             throw new RuntimeException("Không thể xóa dịch vụ đang thực hiện hoặc đã hoàn thành");
         }
         
@@ -402,13 +407,11 @@ public class AppointmentManagementService {
     }
     
     private int calculateTotalDuration(List<Long> serviceIds) {
-        int totalDuration = 0;
-        for (Long serviceId : serviceIds) {
-            com.skincare.model.Service service = serviceRepository.findById(serviceId)
-                    .orElseThrow(() -> new RuntimeException("Dịch vụ không tồn tại: " + serviceId));
-            totalDuration += service.getDurationMinutes();
-        }
-        return totalDuration;
+        return serviceIds.stream()
+            .map(id -> serviceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Dịch vụ không tồn tại: " + id)))
+            .mapToInt(service -> service.getDuration())
+            .sum();
     }
     
     /**
@@ -418,77 +421,35 @@ public class AppointmentManagementService {
      * 2. Cùng khách hàng và thời gian bị chồng chéo
      */
     private boolean isAppointmentTimeConflict(Appointment appointment) {
-        LocalDateTime appointmentStart = appointment.getAppointmentDate();
+        LocalDateTime startTime = appointment.getAppointmentDate();
+        // Mặc định mỗi lịch hẹn kéo dài 1 giờ
+        LocalDateTime endTime = startTime.plusHours(1);
         
-        // Tính thời gian kết thúc dựa trên tổng thời gian của các dịch vụ
-        // Tạm thời dùng thời gian mặc định là 1 giờ nếu chưa có thông tin dịch vụ
-        LocalDateTime appointmentEnd = appointmentStart.plusHours(1);
-        
-        List<Appointment> existingAppointments;
-        
-        // Kiểm tra trùng lịch của khách hàng
-        if (appointment.getCustomer() != null) {
-            existingAppointments = appointmentRepository.findByCustomerAndStatusNotInAndAppointmentDateBetween(
-                    appointment.getCustomer(), 
-                    Arrays.asList(AppointmentStatus.CANCELLED, AppointmentStatus.NO_SHOW),
-                    appointmentStart.minusHours(1),
-                    appointmentEnd.plusHours(1));
+        List<Appointment> conflictingAppointments = appointmentRepository
+            .findByTherapistAndAppointmentDateBetweenAndStatusNotIn(
+                appointment.getTherapist(),
+                startTime,
+                endTime,
+                Arrays.asList(AppointmentStatus.CANCELLED, AppointmentStatus.NO_SHOW)
+            );
             
-            if (!existingAppointments.isEmpty()) {
-                for (Appointment existing : existingAppointments) {
-                    if (existing.getId() != null && appointment.getId() != null && existing.getId().equals(appointment.getId())) {
-                        continue; // Bỏ qua lịch đặt hiện tại khi cập nhật
-                    }
-                    
-                    LocalDateTime existingStart = existing.getAppointmentDate();
-                    LocalDateTime existingEnd = existingStart.plusHours(1); // Giả sử mỗi lịch kéo dài 1 giờ
-                    
-                    if (appointmentStart.isBefore(existingEnd) && existingStart.isBefore(appointmentEnd)) {
-                        return true; // Phát hiện trùng lịch
-                    }
-                }
-            }
-        }
-        
-        // Kiểm tra trùng lịch của chuyên viên
-        if (appointment.getTherapist() != null) {
-            existingAppointments = appointmentRepository.findByTherapistAndStatusNotInAndAppointmentDateBetween(
-                    appointment.getTherapist(), 
-                    Arrays.asList(AppointmentStatus.CANCELLED, AppointmentStatus.NO_SHOW),
-                    appointmentStart.minusHours(1),
-                    appointmentEnd.plusHours(1));
-            
-            if (!existingAppointments.isEmpty()) {
-                for (Appointment existing : existingAppointments) {
-                    if (existing.getId() != null && appointment.getId() != null && existing.getId().equals(appointment.getId())) {
-                        continue; // Bỏ qua lịch đặt hiện tại khi cập nhật
-                    }
-                    
-                    LocalDateTime existingStart = existing.getAppointmentDate();
-                    LocalDateTime existingEnd = existingStart.plusHours(1); // Giả sử mỗi lịch kéo dài 1 giờ
-                    
-                    if (appointmentStart.isBefore(existingEnd) && existingStart.isBefore(appointmentEnd)) {
-                        return true; // Phát hiện trùng lịch
-                    }
-                }
-            }
-        }
-        
-        return false;
+        return !conflictingAppointments.isEmpty() && 
+               (appointment.getId() == null || 
+                conflictingAppointments.stream()
+                    .anyMatch(a -> !a.getId().equals(appointment.getId())));
     }
 
     @Transactional
     public void calculateTotalAmount(Long appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new RuntimeException("Lịch hẹn không tồn tại: " + appointmentId));
-        
-        List<AppointmentService> services = appointmentServiceRepository.findByAppointmentId(appointmentId);
-        
-        BigDecimal totalAmount = services.stream()
-                .map(AppointmentService::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
-        appointment.setTotalAmount(totalAmount);
+            .orElseThrow(() -> new RuntimeException("Lịch hẹn không tồn tại: " + appointmentId));
+            
+        BigDecimal total = appointmentServiceRepository.findByAppointmentId(appointmentId)
+            .stream()
+            .map(as -> as.getPrice())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+            
+        appointment.setTotalAmount(total);
         appointmentRepository.save(appointment);
     }
     
@@ -497,5 +458,18 @@ public class AppointmentManagementService {
      */
     public List<Appointment> getRecentAppointments(int limit) {
         return appointmentRepository.findRecentAppointments(limit);
+    }
+
+    private void checkPermission(User user, UserType... allowedTypes) {
+        if (user == null || user.getUserType() == null) {
+            throw new RuntimeException("Người dùng không có quyền thực hiện thao tác này");
+        }
+        
+        boolean hasPermission = Arrays.stream(allowedTypes)
+            .anyMatch(type -> type == user.getUserType());
+            
+        if (!hasPermission) {
+            throw new RuntimeException("Người dùng không có quyền thực hiện thao tác này");
+        }
     }
 } 

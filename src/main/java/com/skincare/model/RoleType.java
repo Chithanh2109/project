@@ -1,8 +1,8 @@
-package com.skincenter.model;
+package com.skincare.model;
 
 public enum RoleType {
-    ROLE_CUSTOMER,
-    ROLE_STAFF,
-    ROLE_SPECIALIST,
-    ROLE_ADMIN
+    ROLE_ADMIN,          // Quản trị viên
+    ROLE_STAFF,          // Nhân viên
+    ROLE_THERAPIST,      // Nhân viên trị liệu
+    ROLE_CUSTOMER        // Khách hàng
 } 

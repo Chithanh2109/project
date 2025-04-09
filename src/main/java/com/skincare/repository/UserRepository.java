@@ -5,9 +5,11 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.skincare.model.User;
+import com.skincare.model.UserType;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -16,7 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     Optional<User> findByEmail(String email);
     
-    List<User> findByUserType(User.UserType userType);
+    @Query("SELECT u FROM User u WHERE u.userType = :userType")
+    List<User> findByUserType(@Param("userType") UserType userType);
     
     List<User> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName);
     

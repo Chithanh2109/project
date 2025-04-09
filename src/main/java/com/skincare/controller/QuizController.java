@@ -1,19 +1,26 @@
 package com.skincare.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.skincare.model.Quiz;
+import com.skincare.model.QuizQuestion;
 import com.skincare.model.QuizResult;
 import com.skincare.model.User;
 import com.skincare.service.QuizService;
 import com.skincare.service.ServiceService;
 import com.skincare.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Map;
 
 @Controller
 @RequestMapping("/quiz")
@@ -41,31 +48,47 @@ public class QuizController {
         return "quiz/start";
     }
     
-    @GetMapping("/{quizId}")
-    public String showQuizQuestions(@PathVariable Long quizId, Model model) {
-        Quiz quiz = quizService.getQuizById(quizId).orElse(null);
-        if (quiz == null || !quiz.isActive()) {
-            return "redirect:/quiz";
+    @GetMapping("/{id}")
+    public String showQuiz(@PathVariable Long id, Model model, Authentication authentication) {
+        try {
+            Quiz quiz = quizService.getQuizById(id)
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy bài trắc nghiệm"));
+            
+            if (!quiz.getActive()) {
+                return "redirect:/quizzes";
+            }
+            
+            List<QuizQuestion> questions = quizService.getQuestionsForQuiz(id);
+            
+            model.addAttribute("quiz", quiz);
+            model.addAttribute("questions", questions);
+            
+            return "quiz/take-quiz";
+        } catch (Exception e) {
+            return "redirect:/quizzes";
         }
-        
-        model.addAttribute("quiz", quiz);
-        return "quiz/questions";
     }
     
-    @PostMapping("/{quizId}/submit")
-    public String submitQuiz(@PathVariable Long quizId, 
-                            @RequestParam Map<String, String> answers,
-                            Authentication authentication,
-                            RedirectAttributes redirectAttributes) {
-        
-        User currentUser = null;
-        if (authentication != null) {
-            currentUser = userService.findByUsername(authentication.getName());
+    @PostMapping("/{id}/submit")
+    public String submitQuiz(@PathVariable Long id, 
+                             @RequestParam Map<String, String> formData,
+                             Model model,
+                             RedirectAttributes redirectAttributes,
+                             Authentication authentication) {
+        try {
+            User user = null;
+            if (authentication != null) {
+                user = userService.findByUsername(authentication.getName())
+                        .orElse(null);
+            }
+            
+            QuizResult result = quizService.processQuizResults(id, formData, user);
+            
+            return "redirect:/quiz/results/" + result.getId();
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/quiz/" + id;
         }
-        
-        QuizResult result = quizService.processQuizResults(quizId, answers, currentUser);
-        redirectAttributes.addFlashAttribute("quizResultId", result.getId());
-        return "redirect:/quiz/results/" + result.getId();
     }
     
     @GetMapping("/results/{resultId}")
