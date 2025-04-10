@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} ?: 'Skincare Service'">Skincare Service</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- JavaScript -->
+    <script th:src="@{/js/main.js}" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <a href="/" class="logo">Skincare Service</a>
+            <ul class="nav-links">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/services">Dịch vụ</a></li>
+                <li><a href="/products">Sản phẩm</a></li>
+                <li><a href="/about">Giới thiệu</a></li>
+                <li><a href="/contact">Liên hệ</a></li>
+                <li><a href="/quiz">Kiểm tra da</a></li>
+                <li th:if="${#authentication.principal == null}">
+                    <a href="/login">Đăng nhập</a>
+                </li>
+                <li th:if="${#authentication.principal != null}">
+                    <a href="/logout">Đăng xuất</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div th:if="${#messages.msgOrNull('success')}" class="alert alert-success">
+            <span th:text="${#messages.msgOrNull('success')}"></span>
+        </div>
+        <div th:if="${#messages.msgOrNull('error')}" class="alert alert-danger">
+            <span th:text="${#messages.msgOrNull('error')}"></span>
+        </div>
+        
+        <div class="container">
+            <div th:replace="${content}"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Liên hệ</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận XYZ, TP.HCM</p>
+                    <p><i class="fas fa-phone"></i> (84) 123-456-789</p>
+                    <p><i class="fas fa-envelope"></i> info@skincareservice.com</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Giờ làm việc</h3>
+                    <p>Thứ 2 - Thứ 6: 9:00 - 20:00</p>
+                    <p>Thứ 7: 9:00 - 18:00</p>
+                    <p>Chủ nhật: 9:00 - 17:00</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Theo dõi chúng tôi</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Skincare Service. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html> 

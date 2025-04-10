@@ -1,146 +1,93 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::content})">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkinCare Center - Chăm sóc da chuyên nghiệp</title>
+    <title>Trang chủ - Skincare Service</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <header class="bg-primary text-white py-4">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-4">
-                    <h1 class="mb-0">SkinCare Center</h1>
-                </div>
-                <div class="col-md-8">
-                    <nav class="d-flex justify-content-end">
-                        <ul class="nav">
-                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/}">Trang chủ</a></li>
-                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/services}">Dịch vụ</a></li>
-                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/about}">Giới thiệu</a></li>
-                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/contact}">Liên hệ</a></li>
-                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/login}">Đăng nhập</a></li>
-                        </ul>
-                    </nav>
+    <div th:fragment="content">
+        <header class="bg-primary text-white py-4">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-4">
+                        <h1 class="mb-0">SkinCare Center</h1>
+                    </div>
+                    <div class="col-md-8">
+                        <nav class="d-flex justify-content-end">
+                            <ul class="nav">
+                                <li class="nav-item"><a class="nav-link text-white" th:href="@{/}">Trang chủ</a></li>
+                                <li class="nav-item"><a class="nav-link text-white" th:href="@{/services}">Dịch vụ</a></li>
+                                <li class="nav-item"><a class="nav-link text-white" th:href="@{/about}">Giới thiệu</a></li>
+                                <li class="nav-item"><a class="nav-link text-white" th:href="@{/contact}">Liên hệ</a></li>
+                                <li class="nav-item"><a class="nav-link text-white" th:href="@{/login}">Đăng nhập</a></li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <section class="hero bg-light py-5">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <h2 class="display-4">Chăm sóc da chuyên nghiệp</h2>
-                    <p class="lead">Trung tâm chăm sóc da hàng đầu với đội ngũ chuyên viên trị liệu da giàu kinh nghiệm.</p>
-                    <div class="d-flex gap-3 mt-4">
-                        <a th:href="@{/services}" class="btn btn-primary btn-lg">Xem dịch vụ</a>
-                        <a th:href="@{/contact}" class="btn btn-outline-primary btn-lg">Liên hệ</a>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <img src="/images/hero-image.jpg" alt="Skincare Center" class="img-fluid rounded shadow">
-                </div>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Chăm sóc da chuyên nghiệp</h1>
+                <p>Khám phá các dịch vụ chăm sóc da cao cấp của chúng tôi</p>
+                <a href="/services" class="btn btn-primary">Xem dịch vụ</a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-5">Dịch vụ nổi bật</h2>
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        <img src="/images/service1.jpg" class="card-img-top" alt="Service Image">
-                        <div class="card-body">
-                            <h5 class="card-title">Trị liệu da mặt cao cấp</h5>
-                            <p class="card-text">Phương pháp trị liệu chuyên sâu giúp làm sạch, dưỡng ẩm và cải thiện tình trạng da mặt.</p>
-                            <p class="fw-bold">800.000 VNĐ</p>
-                            <div class="d-flex justify-content-between">
-                                <a th:href="@{/services}" class="btn btn-outline-primary">Chi tiết</a>
-                                <a th:href="@{/contact}" class="btn btn-primary">Đặt lịch</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        <img src="/images/service2.jpg" class="card-img-top" alt="Service Image">
-                        <div class="card-body">
-                            <h5 class="card-title">Điều trị mụn chuyên sâu</h5>
-                            <p class="card-text">Phương pháp điều trị mụn hiệu quả, giúp loại bỏ mụn và ngăn ngừa sẹo thâm.</p>
-                            <p class="fw-bold">650.000 VNĐ</p>
-                            <div class="d-flex justify-content-between">
-                                <a th:href="@{/services}" class="btn btn-outline-primary">Chi tiết</a>
-                                <a th:href="@{/contact}" class="btn btn-primary">Đặt lịch</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 shadow-sm">
-                        <img src="/images/service3.jpg" class="card-img-top" alt="Service Image">
-                        <div class="card-body">
-                            <h5 class="card-title">Trẻ hóa da không phẫu thuật</h5>
-                            <p class="card-text">Liệu pháp trẻ hóa da tiên tiến không xâm lấn, giúp làm săn chắc và trẻ hóa làn da.</p>
-                            <p class="fw-bold">1.200.000 VNĐ</p>
-                            <div class="d-flex justify-content-between">
-                                <a th:href="@{/services}" class="btn btn-outline-primary">Chi tiết</a>
-                                <a th:href="@{/contact}" class="btn btn-primary">Đặt lịch</a>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Services Section -->
+        <section class="services-section">
+            <h2>Dịch vụ nổi bật</h2>
+            <div class="services-grid">
+                <div class="service-card" th:each="service : ${featuredServices}">
+                    <img th:src="@{${service.imageUrl}}" alt="Service Image">
+                    <h3 th:text="${service.name}">Tên dịch vụ</h3>
+                    <p th:text="${service.description}">Mô tả dịch vụ</p>
+                    <a th:href="@{/services/{id}(id=${service.id})}" class="btn btn-outline-primary">Chi tiết</a>
                 </div>
             </div>
-            <div class="text-center mt-4">
-                <a th:href="@{/services}" class="btn btn-outline-primary">Xem tất cả dịch vụ</a>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="bg-light py-5">
-        <div class="container">
-            <h2 class="text-center mb-5">Quy trình trải nghiệm dịch vụ</h2>
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px">
-                                <h3>1</h3>
+        <!-- About Section -->
+        <section class="about-section">
+            <div class="about-content">
+                <h2>Về chúng tôi</h2>
+                <p>Skincare Service là địa chỉ chăm sóc da uy tín với đội ngũ chuyên gia giàu kinh nghiệm và công nghệ hiện đại.</p>
+                <a href="/about" class="btn btn-primary">Tìm hiểu thêm</a>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <h2>Khách hàng nói gì</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card" th:each="testimonial : ${testimonials}">
+                    <div class="testimonial-content">
+                        <p th:text="${testimonial.content}">Nội dung đánh giá</p>
+                        <div class="testimonial-author">
+                            <img th:src="@{${testimonial.customerImage}}" alt="Customer Image">
+                            <div>
+                                <h4 th:text="${testimonial.customerName}">Tên khách hàng</h4>
+                                <p th:text="${testimonial.customerTitle}">Chức danh</p>
                             </div>
-                            <h4>Đánh giá da</h4>
-                            <p>Làm trắc nghiệm đánh giá tình trạng da hoặc được tư vấn trực tiếp bởi chuyên viên.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px">
-                                <h3>2</h3>
-                            </div>
-                            <h4>Đặt lịch điều trị</h4>
-                            <p>Chọn dịch vụ phù hợp, đặt lịch hẹn và chỉ định chuyên viên trị liệu.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px">
-                                <h3>3</h3>
-                            </div>
-                            <h4>Điều trị & Theo dõi</h4>
-                            <p>Được điều trị bởi chuyên viên chuyên nghiệp và theo dõi tiến trình điều trị.</p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <h2>Sẵn sàng trải nghiệm?</h2>
+            <p>Đặt lịch hẹn ngay hôm nay để nhận ưu đãi đặc biệt</p>
+            <a href="/appointments/new" class="btn btn-primary">Đặt lịch ngay</a>
+        </section>
+    </div>
 
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container">

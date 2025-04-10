@@ -90,9 +90,9 @@ public class AdminController {
     }
 
     @PostMapping("/appointments/{id}/check-out")
-    public String checkOutAppointment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String checkOutAppointment(@PathVariable Long id, @RequestParam String paymentMethod, RedirectAttributes redirectAttributes) {
         try {
-            appointmentService.checkOutAppointment(id);
+            appointmentService.checkOutAppointment(id, paymentMethod);
             redirectAttributes.addFlashAttribute("success", "Check-out thành công");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -115,15 +115,15 @@ public class AdminController {
     }
 
     @PostMapping("/appointments/{id}/cancel")
-    public String cancelAppointment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String cancelAppointment(@PathVariable Long id, @RequestParam String reason, RedirectAttributes redirectAttributes) {
         try {
-            appointmentService.cancelAppointment(id);
+            appointmentService.cancelAppointment(id, reason, false);
             redirectAttributes.addFlashAttribute("success", "Hủy lịch hẹn thành công");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
         
-        return "redirect:/admin/appointments";
+        return "redirect:/admin/appointments/" + id;
     }
 
     @GetMapping("/services")

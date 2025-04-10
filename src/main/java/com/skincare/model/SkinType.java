@@ -1,19 +1,27 @@
 package com.skincare.model;
 
-public enum SkinType {
-    NORMAL("Da thường"),           // Normal skin
-    DRY("Da khô"),                // Dry skin
-    OILY("Da dầu"),               // Oily skin
-    COMBINATION("Da hỗn hợp"),     // Combination skin
-    SENSITIVE("Da nhạy cảm");      // Sensitive skin
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    private final String description;
-
-    SkinType(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
+@Entity
+@Table(name = "skin_types")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class SkinType {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String name;
+    private String description;
+    private String characteristics;
+    private String careTips;
 } 
