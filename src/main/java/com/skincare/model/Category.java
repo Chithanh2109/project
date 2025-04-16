@@ -43,6 +43,9 @@ public class Category {
     @Column(nullable = false)
     private boolean active = true;
     
+    @Column(name = "display_order", nullable = false)
+    private Integer displayOrder = 0;
+    
     @OneToMany(mappedBy = "category")
     private Set<Service> services = new HashSet<>();
     
@@ -110,6 +113,14 @@ public class Category {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+    
+    public Integer getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public void setDisplayOrder(Integer displayOrder) {
+        this.displayOrder = displayOrder;
     }
 
     public LocalDateTime getCreatedAt() {

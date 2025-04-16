@@ -46,6 +46,9 @@ public class Service {
     @Column(name = "duration", nullable = false)
     private Integer duration;
     
+    @Column(name = "image_url")
+    private String imageUrl;
+    
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -56,6 +59,9 @@ public class Service {
     
     @Column(name = "featured", nullable = false)
     private Boolean featured;
+    
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;
     
     @OneToMany(mappedBy = "service")
     private Set<AppointmentService> appointmentServices = new HashSet<>();
@@ -81,6 +87,7 @@ public class Service {
         updatedAt = LocalDateTime.now();
         status = ServiceStatus.PENDING;
         featured = false;
+        active = true;
     }
     
     @PreUpdate

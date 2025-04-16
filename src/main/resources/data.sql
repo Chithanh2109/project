@@ -21,14 +21,14 @@ INSERT INTO user_roles (user_id, role_id) VALUES (2, 2);
 INSERT INTO user_roles (user_id, role_id) VALUES (3, 1);
 
 -- Sample services
-INSERT INTO services (id, name, description, price, duration_minutes, is_active, created_at, updated_at)
-VALUES (1, 'Basic Facial', 'A basic facial treatment for all skin types', 50.0, 30, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO services (id, name, description, price, duration, active, created_at, updated_at, status, featured)
+VALUES (1, 'Basic Facial', 'A basic facial treatment for all skin types', 50.0, 30, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'PENDING', false);
 
-INSERT INTO services (id, name, description, price, duration_minutes, is_active, created_at, updated_at)
-VALUES (2, 'Deep Cleansing', 'Deep cleansing treatment for oily skin', 75.0, 45, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO services (id, name, description, price, duration, active, created_at, updated_at, status, featured)
+VALUES (2, 'Deep Cleansing', 'Deep cleansing treatment for oily skin', 75.0, 45, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'PENDING', false);
 
-INSERT INTO services (id, name, description, price, duration_minutes, is_active, created_at, updated_at)
-VALUES (3, 'Anti-Aging Treatment', 'Special treatment to reduce signs of aging', 100.0, 60, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO services (id, name, description, price, duration, active, created_at, updated_at, status, featured)
+VALUES (3, 'Anti-Aging Treatment', 'Special treatment to reduce signs of aging', 100.0, 60, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'PENDING', false);
 
 -- Sample customers
 INSERT INTO customers (id, user_id, skin_type, skin_concern, allergies, created_at, updated_at)

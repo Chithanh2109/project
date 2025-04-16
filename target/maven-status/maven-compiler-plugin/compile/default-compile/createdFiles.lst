@@ -14,6 +14,7 @@ com\skincare\model\OrderItem.class
 com\skincare\model\User.class
 com\skincare\service\AppointmentManagementService.class
 com\skincare\SkincareServiceApplication.class
+com\skincare\dto\SearchResultDTO.class
 com\skincare\controller\HomeController.class
 com\skincare\config\SecurityConfig.class
 com\skincare\controller\AdminDashboardController.class
@@ -28,7 +29,6 @@ com\skincare\controller\AppointmentController.class
 com\skincare\repository\QuizOptionRepository.class
 com\skincare\model\AppointmentStatus.class
 com\skincare\model\ServiceCategory.class
-com\skincare\SimpleApplication.class
 com\skincare\model\Service.class
 com\skincare\model\Appointment.class
 com\skincare\model\Order.class
@@ -42,6 +42,7 @@ com\skincare\model\Product.class
 com\skincare\model\Quiz.class
 com\skincare\model\Blog.class
 com\skincare\model\SkinConcern.class
+com\skincare\service\SkincareService.class
 com\skincare\repository\ProductRepository.class
 com\skincare\dto\ResultsByDay.class
 com\skincare\model\QuizOption.class
@@ -61,6 +62,7 @@ com\skincare\repository\UserRepository.class
 com\skincare\model\QuizResult.class
 com\skincare\service\ReportService.class
 com\skincare\model\SkinAssessment.class
+com\skincare\controller\ApiController.class
 com\skincare\model\ServiceStatus.class
 com\skincare\repository\ServiceRepository.class
 com\skincare\service\TherapistService.class
@@ -70,6 +72,7 @@ com\skincare\repository\QuizRepository.class
 com\skincare\repository\SkinConcernRepository.class
 com\skincare\dto\SkinConcernStat.class
 com\skincare\controller\UserController.class
+com\skincare\service\SkinConcernRepositoryImpl.class
 com\skincare\dto\ServiceStat.class
 com\skincare\controller\ServiceController.class
 com\skincare\service\BlogService.class

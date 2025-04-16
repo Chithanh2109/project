@@ -11,12 +11,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.skincare.model.Category;
 import com.skincare.model.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByActiveTrue();
-    List<Product> findByActiveTrueAndCategoryOrderByNameAsc(String category);
+    List<Product> findByActiveTrueAndCategoryOrderByNameAsc(Category category);
+    @Query("SELECT p FROM Product p WHERE p.active = true AND p.category.id = :categoryId ORDER BY p.name ASC")
+    List<Product> findByActiveTrueAndCategoryIdOrderByNameAsc(@Param("categoryId") Long categoryId);
     List<Product> findByActiveTrueAndBrandOrderByNameAsc(String brand);
     Optional<Product> findById(Long id);
     List<Product> findByNameContainingIgnoreCase(String keyword);

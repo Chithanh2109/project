@@ -9,7 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.skincare.model.Category;
 import com.skincare.model.Product;
+import com.skincare.repository.CategoryRepository;
 import com.skincare.repository.ProductRepository;
 
 @Service
@@ -18,12 +20,17 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     
+    @Autowired
+    private CategoryRepository categoryRepository;
+    
     public List<Product> getAllActiveProducts() {
         return productRepository.findByActiveTrue();
     }
     
-    public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByActiveTrueAndCategoryOrderByNameAsc(category);
+    public List<Product> getProductsByCategory(String categoryName) {
+        // Instead of trying to use a String as a Category, look up the Category by name
+        // or use the categoryId method
+        return productRepository.findByActiveTrueAndCategoryIdOrderByNameAsc(Long.parseLong(categoryName));
     }
     
     public List<Product> getProductsByBrand(String brand) {
