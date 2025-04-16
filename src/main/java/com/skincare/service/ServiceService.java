@@ -20,5 +20,11 @@ public interface ServiceService {
     List<Service> getFeaturedServices();
     List<Service> getAllActiveServices();
     List<Service> getRelatedServices(Long serviceId);
+    List<Service> getActiveServicesByCategory(Long categoryId);
     Quiz getActiveQuiz();
+    Optional<Category> getCategoryById(Long id);
+    Category saveCategory(Category category);
+    void deleteCategory(Long id);
+    Quiz saveQuiz(Quiz quiz);
+    List<Service> getPopularServices();
 } 

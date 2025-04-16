@@ -1,583 +1,388 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeautyCare - Chăm sóc da chuyên nghiệp</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --primary-color: #ff6b6b;
-            --secondary-color: #f9f9f9;
-            --dark-color: #343a40;
-            --light-color: #f8f9fa;
-            --gray-color: #6c757d;
-        }
-        
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-        }
-        
-        /* Header */
-        .navbar {
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 15px 0;
-        }
-        
-        .navbar-brand {
-            font-weight: bold;
-            color: var(--primary-color) !important;
-            font-size: 1.5rem;
-        }
-        
-        .nav-link {
-            color: var(--dark-color);
-            font-weight: 500;
-            margin: 0 10px;
-            transition: all 0.3s;
-        }
-        
-        .nav-link:hover {
-            color: var(--primary-color);
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1596178060810-72f53ce9a65c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;
-            color: white;
-            padding: 150px 0;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 30px;
-        }
-        
-        /* Categories Section */
-        .categories {
-            padding: 80px 0;
-            background-color: var(--light-color);
-        }
-        
-        .category-item {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
-            margin-bottom: 30px;
-            position: relative;
-        }
-        
-        .category-item:hover {
-            transform: translateY(-10px);
-        }
-        
-        .category-item img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-        
-        .category-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        /* Featured Products */
-        .featured-products {
-            padding: 80px 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--dark-color);
-            position: relative;
-            display: inline-block;
-            padding-bottom: 15px;
-        }
-        
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background-color: var(--primary-color);
-        }
-        
-        .product-card {
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-            margin-bottom: 30px;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        
-        .product-img {
-            height: 250px;
-            object-fit: cover;
-        }
-        
-        .product-title {
-            font-weight: bold;
-            margin: 15px 0 10px;
-        }
-        
-        .product-price {
-            font-size: 1.1rem;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
-        .product-rating {
-            color: #ffc107;
-            margin: 5px 0;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 80px 0;
-            background-color: var(--secondary-color);
-        }
-        
-        .testimonial-item {
-            text-align: center;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .testimonial-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            object-fit: cover;
-        }
-        
-        .testimonial-text {
-            font-style: italic;
-            margin-bottom: 20px;
-        }
-        
-        .testimonial-author {
-            font-weight: bold;
-            color: var(--dark-color);
-        }
-        
-        /* Newsletter */
-        .newsletter {
-            padding: 80px 0;
-            background: linear-gradient(to right, var(--primary-color), #ff9a9e);
-            color: white;
-        }
-        
-        .newsletter h2 {
-            margin-bottom: 20px;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 60px 0 20px;
-        }
-        
-        .footer-title {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-        
-        .footer-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 2px;
-            background-color: var(--primary-color);
-        }
-        
-        .footer-links {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .footer-links li {
-            margin-bottom: 15px;
-        }
-        
-        .footer-links a {
-            color: #ddd;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        
-        .footer-links a:hover {
-            color: var(--primary-color);
-            padding-left: 5px;
-        }
-        
-        .social-links a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255,255,255,0.1);
-            text-align: center;
-            line-height: 40px;
-            border-radius: 50%;
-            color: white;
-            margin-right: 10px;
-            transition: all 0.3s;
-        }
-        
-        .social-links a:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-5px);
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: 40px;
-        }
-        
-        /* Buttons */
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary:hover {
-            background-color: #ff5252;
-            border-color: #ff5252;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-        }
-        
-        .btn-outline-primary {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-outline-primary:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-        }
-    </style>
+    <th:block th:replace="~{layout/main :: head(~{::title}, ~{::link})}">
+        <title>Trang chủ - SkinCare Center</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    </th:block>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">BeautyCare</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/products">Sản phẩm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">Giới thiệu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Liên hệ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Đăng nhập</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-primary ms-2" href="/register">Đăng ký</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Chăm sóc làn da của bạn</h1>
-                    <p>Các sản phẩm chăm sóc da cao cấp với thành phần tự nhiên giúp làn da của bạn luôn tươi trẻ và rạng rỡ.</p>
-                    <a href="/products" class="btn btn-primary me-3">Khám phá sản phẩm</a>
-                    <a href="/consultation" class="btn btn-outline-light">Tư vấn miễn phí</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories Section -->
-    <section class="categories">
-        <div class="container">
-            <div class="section-title">
-                <h2>Danh mục sản phẩm</h2>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="category-item">
-                        <img src="https://images.unsplash.com/photo-1556228852-6d35a585d566?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Sản phẩm làm sạch">
-                        <div class="category-overlay">
-                            <h3>Sản phẩm làm sạch</h3>
-                            <a href="/products?category=cleansers" class="btn btn-outline-light mt-2">Xem thêm</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="category-item">
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Serum & Dưỡng chất">
-                        <div class="category-overlay">
-                            <h3>Serum & Dưỡng chất</h3>
-                            <a href="/products?category=serums" class="btn btn-outline-light mt-2">Xem thêm</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="category-item">
-                        <img src="https://images.unsplash.com/photo-1582072963301-d3a7a14d9d58?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Kem dưỡng ẩm">
-                        <div class="category-overlay">
-                            <h3>Kem dưỡng ẩm</h3>
-                            <a href="/products?category=moisturizers" class="btn btn-outline-light mt-2">Xem thêm</a>
+    <th:block th:replace="~{layout/main :: navbar}"></th:block>
+    
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section position-relative" style="background-image: url('/images/hero-bg.jpg');">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 hero-content">
+                        <h1 class="hero-title">Chăm sóc da chuyên nghiệp tại SkinCare Center</h1>
+                        <p class="hero-text">Trải nghiệm dịch vụ chăm sóc da cao cấp với đội ngũ chuyên viên giàu kinh nghiệm và công nghệ hiện đại. Đặt lịch ngay hôm nay để nhận ưu đãi đặc biệt!</p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a th:href="@{/booking}" class="btn btn-primary px-4 py-2">Đặt lịch ngay</a>
+                            <a th:href="@{/services}" class="btn btn-outline-light px-4 py-2">Khám phá dịch vụ</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Featured Products -->
-    <section class="featured-products">
-        <div class="container">
-            <div class="section-title">
-                <h2>Sản phẩm nổi bật</h2>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card product-card">
-                        <img src="https://images.unsplash.com/photo-1567721913486-6585f069b332?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" class="card-img-top product-img" alt="Sữa rửa mặt dịu nhẹ">
-                        <div class="card-body">
-                            <h5 class="product-title">Sữa rửa mặt dịu nhẹ</h5>
-                            <div class="product-rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
-                                <span class="ms-2">(120)</span>
+        </section>
+        
+        <!-- Featured Services Section -->
+        <section class="section-padding">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="section-title">Dịch vụ nổi bật</h2>
+                    <p class="section-subtitle">Khám phá những dịch vụ chăm sóc da được yêu thích nhất tại SkinCare Center</p>
+                </div>
+                
+                <div class="row g-4">
+                    <!-- Featured services will be dynamically loaded from the server -->
+                    <div class="col-md-4" th:each="service : ${featuredServices}">
+                        <div class="card service-card h-100">
+                            <img th:src="@{'/images/services/' + ${service.id} + '.jpg'}" 
+                                 class="card-img-top" 
+                                 th:alt="${service.name}"
+                                 src="/images/services/default.jpg" alt="Service Image">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title" th:text="${service.name}">Tên dịch vụ</h5>
+                                <p class="card-text" th:text="${#strings.abbreviate(service.description, 120)}">Mô tả dịch vụ</p>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="service-price" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'">500,000 ₫</span>
+                                        <span class="service-duration"><i class="bi bi-clock"></i> <span th:text="${service.duration} + ' phút'">60 phút</span></span>
+                                    </div>
+                                    <a th:href="@{'/services/' + ${service.id}}" class="btn btn-outline-primary w-100">Xem chi tiết</a>
+                                </div>
                             </div>
-                            <p class="product-price">350.000₫</p>
-                            <a href="/products/1" class="btn btn-outline-primary w-100">Xem chi tiết</a>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card product-card">
-                        <img src="https://images.unsplash.com/photo-1625772452859-1c03d5bf1137?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" class="card-img-top product-img" alt="Serum Vitamin C">
-                        <div class="card-body">
-                            <h5 class="product-title">Serum Vitamin C</h5>
-                            <div class="product-rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star"></i>
-                                <span class="ms-2">(85)</span>
+                    
+                    <!-- Fallback for when there are no services from the server -->
+                    <div class="col-md-4" th:if="${featuredServices == null || featuredServices.isEmpty()}">
+                        <div class="card service-card h-100">
+                            <img src="/images/services/facial.jpg" class="card-img-top" alt="Chăm sóc da mặt cơ bản">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Chăm sóc da mặt cơ bản</h5>
+                                <p class="card-text">Làm sạch sâu, tẩy tế bào chết, massage và đắp mặt nạ dưỡng ẩm giúp da sáng mịn và khỏe mạnh.</p>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="service-price">500,000 ₫</span>
+                                        <span class="service-duration"><i class="bi bi-clock"></i> 60 phút</span>
+                                    </div>
+                                    <a href="#" class="btn btn-outline-primary w-100">Xem chi tiết</a>
+                                </div>
                             </div>
-                            <p class="product-price">520.000₫</p>
-                            <a href="/products/2" class="btn btn-outline-primary w-100">Xem chi tiết</a>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card product-card">
-                        <img src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80" class="card-img-top product-img" alt="Kem chống nắng SPF 50+">
-                        <div class="card-body">
-                            <h5 class="product-title">Kem chống nắng SPF 50+</h5>
-                            <div class="product-rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <span class="ms-2">(210)</span>
+                    
+                    <div class="col-md-4" th:if="${featuredServices == null || featuredServices.isEmpty()}">
+                        <div class="card service-card h-100">
+                            <img src="/images/services/acne.jpg" class="card-img-top" alt="Điều trị mụn chuyên sâu">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Điều trị mụn chuyên sâu</h5>
+                                <p class="card-text">Giải pháp toàn diện cho da mụn với công nghệ hiện đại, giúp làm sạch sâu lỗ chân lông và ngăn ngừa mụn tái phát.</p>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="service-price">800,000 ₫</span>
+                                        <span class="service-duration"><i class="bi bi-clock"></i> 90 phút</span>
+                                    </div>
+                                    <a href="#" class="btn btn-outline-primary w-100">Xem chi tiết</a>
+                                </div>
                             </div>
-                            <p class="product-price">420.000₫</p>
-                            <a href="/products/3" class="btn btn-outline-primary w-100">Xem chi tiết</a>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card product-card">
-                        <img src="https://images.unsplash.com/photo-1596981628926-0559e8a72f60?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" class="card-img-top product-img" alt="Mặt nạ dưỡng ẩm">
-                        <div class="card-body">
-                            <h5 class="product-title">Mặt nạ dưỡng ẩm</h5>
-                            <div class="product-rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
-                                <span class="ms-2">(95)</span>
+                    
+                    <div class="col-md-4" th:if="${featuredServices == null || featuredServices.isEmpty()}">
+                        <div class="card service-card h-100">
+                            <img src="/images/services/massage.jpg" class="card-img-top" alt="Massage thư giãn">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">Massage thư giãn</h5>
+                                <p class="card-text">Massage mặt và cổ với tinh dầu thiên nhiên giúp thư giãn, giảm stress và ngăn ngừa lão hóa da.</p>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="service-price">600,000 ₫</span>
+                                        <span class="service-duration"><i class="bi bi-clock"></i> 75 phút</span>
+                                    </div>
+                                    <a href="#" class="btn btn-outline-primary w-100">Xem chi tiết</a>
+                                </div>
                             </div>
-                            <p class="product-price">180.000₫</p>
-                            <a href="/products/4" class="btn btn-outline-primary w-100">Xem chi tiết</a>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="text-center mt-5">
-                <a href="/products" class="btn btn-primary px-5">Xem tất cả sản phẩm</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>Khách hàng nói gì về chúng tôi</h2>
-            </div>
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="testimonial-item">
-                        <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Testimonial" class="testimonial-img">
-                        <p class="testimonial-text">"Sản phẩm của BeautyCare đã cải thiện làn da của tôi rất nhiều. Tôi đã tìm thấy các sản phẩm phù hợp với làn da nhạy cảm của mình."</p>
-                        <h5 class="testimonial-author">Nguyễn Thị Hương</h5>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="testimonial-item">
-                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Testimonial" class="testimonial-img">
-                        <p class="testimonial-text">"Tôi đã dùng serum Vitamin C trong 3 tháng và thấy sự khác biệt rõ rệt. Các vết thâm mờ đi và da sáng hơn nhiều."</p>
-                        <h5 class="testimonial-author">Trần Minh Tâm</h5>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="testimonial-item">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Testimonial" class="testimonial-img">
-                        <p class="testimonial-text">"Dịch vụ tư vấn rất chuyên nghiệp và sản phẩm chất lượng. Tôi đã giới thiệu BeautyCare cho tất cả bạn bè của mình."</p>
-                        <h5 class="testimonial-author">Lê Văn Đức</h5>
-                    </div>
+                
+                <div class="text-center mt-5">
+                    <a th:href="@{/services}" class="btn btn-outline-primary px-4">Xem tất cả dịch vụ</a>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Newsletter -->
-    <section class="newsletter">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center">
-                    <h2>Đăng ký nhận tin</h2>
-                    <p class="mb-4">Nhận thông tin về sản phẩm mới, khuyến mãi và các mẹo chăm sóc da.</p>
-                    <form class="d-flex justify-content-center">
-                        <div class="input-group mb-3" style="max-width: 500px;">
-                            <input type="email" class="form-control" placeholder="Email của bạn" required>
-                            <button class="btn btn-light" type="submit">Đăng ký</button>
+        </section>
+        
+        <!-- About Section -->
+        <section class="section-padding bg-light">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <img src="/images/about-skincare.jpg" alt="About SkinCare Center" class="img-fluid rounded shadow">
+                    </div>
+                    <div class="col-lg-6">
+                        <h2 class="section-title">Về SkinCare Center</h2>
+                        <p class="mb-4">SkinCare Center là trung tâm chăm sóc da hàng đầu tại Việt Nam với hơn 10 năm kinh nghiệm. Chúng tôi cung cấp các dịch vụ chăm sóc da chất lượng cao, sử dụng công nghệ hiện đại và sản phẩm từ các thương hiệu uy tín trên thế giới.</p>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-check-circle text-primary fs-4 me-3"></i>
+                                    <div>
+                                        <h5 class="mb-0">Chuyên viên giàu kinh nghiệm</h5>
+                                        <p class="mb-0 text-muted">Đội ngũ được đào tạo bài bản</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-award text-primary fs-4 me-3"></i>
+                                    <div>
+                                        <h5 class="mb-0">Sản phẩm chất lượng</h5>
+                                        <p class="mb-0 text-muted">Nhập khẩu chính hãng</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-buildings text-primary fs-4 me-3"></i>
+                                    <div>
+                                        <h5 class="mb-0">Không gian sang trọng</h5>
+                                        <p class="mb-0 text-muted">Thiết kế hiện đại, thoải mái</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-shield-check text-primary fs-4 me-3"></i>
+                                    <div>
+                                        <h5 class="mb-0">An toàn & Hiệu quả</h5>
+                                        <p class="mb-0 text-muted">Cam kết kết quả rõ rệt</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h4 class="footer-title">Về BeautyCare</h4>
-                    <p>BeautyCare cung cấp các sản phẩm chăm sóc da chất lượng cao với thành phần tự nhiên, giúp bạn có làn da khỏe mạnh và rạng rỡ.</p>
-                    <div class="social-links mt-4">
-                        <a href="#"><i class="bi bi-facebook"></i></a>
-                        <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-twitter"></i></a>
-                        <a href="#"><i class="bi bi-youtube"></i></a>
+                        <a th:href="@{/about}" class="btn btn-primary">Tìm hiểu thêm</a>
                     </div>
                 </div>
-                <div class="col-md-2 mb-4">
-                    <h4 class="footer-title">Liên kết</h4>
-                    <ul class="footer-links">
-                        <li><a href="/">Trang chủ</a></li>
-                        <li><a href="/products">Sản phẩm</a></li>
-                        <li><a href="/about">Giới thiệu</a></li>
-                        <li><a href="/contact">Liên hệ</a></li>
-                        <li><a href="/blog">Blog</a></li>
-                    </ul>
+            </div>
+        </section>
+        
+        <!-- Therapists Section -->
+        <section class="section-padding">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="section-title">Chuyên viên của chúng tôi</h2>
+                    <p class="section-subtitle">Gặp gỡ đội ngũ chuyên viên giàu kinh nghiệm tại SkinCare Center</p>
                 </div>
-                <div class="col-md-3 mb-4">
-                    <h4 class="footer-title">Danh mục</h4>
-                    <ul class="footer-links">
-                        <li><a href="/products?category=cleansers">Sản phẩm làm sạch</a></li>
-                        <li><a href="/products?category=serums">Serum & Dưỡng chất</a></li>
-                        <li><a href="/products?category=moisturizers">Kem dưỡng ẩm</a></li>
-                        <li><a href="/products?category=sunscreens">Kem chống nắng</a></li>
-                        <li><a href="/products?category=masks">Mặt nạ</a></li>
-                    </ul>
+                
+                <div class="row g-4">
+                    <!-- Experts will be dynamically loaded from the server -->
+                    <div class="col-md-4" th:each="therapist, iterStat : ${therapists}" th:if="${iterStat.index < 3}">
+                        <div class="card expert-card h-100">
+                            <img th:src="@{'/images/therapists/' + ${therapist.id} + '.jpg'}" 
+                                 class="expert-img" 
+                                 th:alt="${therapist.fullName}"
+                                 src="/images/therapists/default.jpg" alt="Therapist Image">
+                            <div class="card-body text-center">
+                                <h5 class="card-title" th:text="${therapist.fullName}">Tên chuyên viên</h5>
+                                <p class="expert-role" th:text="${therapist.role}">Chuyên viên chăm sóc da</p>
+                                <p class="card-text" th:text="${therapist.bio}">Mô tả chuyên viên</p>
+                                <div class="rating-stars mb-3">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                </div>
+                                <a th:href="@{'/therapists/' + ${therapist.id}}" class="btn btn-outline-primary">Xem hồ sơ</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Fallback for when there are no therapists from the server -->
+                    <div class="col-md-4" th:if="${therapists == null || therapists.isEmpty()}">
+                        <div class="card expert-card h-100">
+                            <img src="/images/therapists/therapist1.jpg" class="expert-img" alt="Nguyễn Thị Hương">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Nguyễn Thị Hương</h5>
+                                <p class="expert-role">Chuyên gia chăm sóc da</p>
+                                <p class="card-text">Hơn 8 năm kinh nghiệm trong lĩnh vực chăm sóc da và điều trị các vấn đề về da phức tạp.</p>
+                                <div class="rating-stars mb-3">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                </div>
+                                <a href="#" class="btn btn-outline-primary">Xem hồ sơ</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4" th:if="${therapists == null || therapists.isEmpty()}">
+                        <div class="card expert-card h-100">
+                            <img src="/images/therapists/therapist2.jpg" class="expert-img" alt="Trần Văn Nam">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Trần Văn Nam</h5>
+                                <p class="expert-role">Chuyên gia massage trị liệu</p>
+                                <p class="card-text">Chuyên gia massage với kỹ thuật độc đáo kết hợp Y học cổ truyền và phương pháp hiện đại.</p>
+                                <div class="rating-stars mb-3">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                </div>
+                                <a href="#" class="btn btn-outline-primary">Xem hồ sơ</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4" th:if="${therapists == null || therapists.isEmpty()}">
+                        <div class="card expert-card h-100">
+                            <img src="/images/therapists/therapist3.jpg" class="expert-img" alt="Lê Thị Minh Tâm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Lê Thị Minh Tâm</h5>
+                                <p class="expert-role">Chuyên gia điều trị mụn</p>
+                                <p class="card-text">Chuyên sâu về các phương pháp điều trị mụn và sẹo với chứng chỉ quốc tế về da liễu thẩm mỹ.</p>
+                                <div class="rating-stars mb-3">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                                <a href="#" class="btn btn-outline-primary">Xem hồ sơ</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3 mb-4">
-                    <h4 class="footer-title">Liên hệ</h4>
-                    <ul class="footer-links">
-                        <li><i class="bi bi-geo-alt me-2"></i> 123 Nguyễn Huệ, Quận 1, TP.HCM</li>
-                        <li><i class="bi bi-telephone me-2"></i> (028) 1234 5678</li>
-                        <li><i class="bi bi-envelope me-2"></i> info@beautycare.com</li>
-                        <li><i class="bi bi-clock me-2"></i> Thứ 2 - Thứ 7: 9:00 - 20:00</li>
-                    </ul>
+                
+                <div class="text-center mt-5">
+                    <a th:href="@{/therapists}" class="btn btn-outline-primary px-4">Xem tất cả chuyên viên</a>
                 </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2024 BeautyCare. Tất cả quyền được bảo lưu.</p>
+        </section>
+        
+        <!-- Testimonials Section -->
+        <section class="section-padding bg-light">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="section-title">Khách hàng nói gì về chúng tôi</h2>
+                    <p class="section-subtitle">Trải nghiệm thực tế từ khách hàng của SkinCare Center</p>
+                </div>
+                
+                <div class="swiper testimonialSwiper">
+                    <div class="swiper-wrapper pb-5">
+                        <div class="swiper-slide">
+                            <div class="card testimonial-card h-100">
+                                <div class="quote">
+                                    <i class="bi bi-quote fs-1 text-primary opacity-25"></i>
+                                    <p class="my-4">SkinCare Center là nơi tôi tin tưởng cho làn da của mình. Sau 3 tháng điều trị, làn da của tôi đã cải thiện rõ rệt, mụn giảm hẳn và sáng mịn hơn nhiều.</p>
+                                </div>
+                                <img src="/images/testimonials/client1.jpg" class="testimonial-avatar" alt="Avatar">
+                                <h5 class="testimonial-name">Phạm Thị Mai</h5>
+                                <p class="text-muted small">Khách hàng thường xuyên</p>
+                                <div class="rating-stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="swiper-slide">
+                            <div class="card testimonial-card h-100">
+                                <div class="quote">
+                                    <i class="bi bi-quote fs-1 text-primary opacity-25"></i>
+                                    <p class="my-4">Chuyên viên tại đây rất tận tâm và chuyên nghiệp. Họ tư vấn chi tiết và đưa ra phương pháp phù hợp với tình trạng da của tôi. Kết quả thực sự tuyệt vời!</p>
+                                </div>
+                                <img src="/images/testimonials/client2.jpg" class="testimonial-avatar" alt="Avatar">
+                                <h5 class="testimonial-name">Nguyễn Văn Tùng</h5>
+                                <p class="text-muted small">Khách hàng 6 tháng</p>
+                                <div class="rating-stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-half"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="swiper-slide">
+                            <div class="card testimonial-card h-100">
+                                <div class="quote">
+                                    <i class="bi bi-quote fs-1 text-primary opacity-25"></i>
+                                    <p class="my-4">Không gian spa rất sang trọng và thư giãn. Tôi thực sự thích các dịch vụ massage và trị liệu da mặt tại đây. Sẽ tiếp tục quay lại trong tương lai!</p>
+                                </div>
+                                <img src="/images/testimonials/client3.jpg" class="testimonial-avatar" alt="Avatar">
+                                <h5 class="testimonial-name">Trần Thị Hồng</h5>
+                                <p class="text-muted small">Khách hàng mới</p>
+                                <div class="rating-stars">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
             </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="py-5 bg-primary text-white">
+            <div class="container py-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8 mb-4 mb-md-0">
+                        <h2 class="fw-bold mb-3">Sẵn sàng cho làn da khỏe đẹp?</h2>
+                        <p class="mb-0 lead">Đặt lịch ngay hôm nay để nhận ưu đãi 20% cho lần đầu sử dụng dịch vụ!</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <a th:href="@{/booking}" class="btn btn-light px-4 py-2">Đặt lịch ngay</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <th:block th:replace="~{layout/main :: footer}"></th:block>
+    
+    <!-- Back to top button -->
+    <a href="#" id="backToTop" class="back-to-top"><i class="bi bi-arrow-up-circle-fill"></i></a>
+    
+    <th:block th:replace="~{layout/main :: scripts}"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <script>
+        const testimonialSwiper = new Swiper('.testimonialSwiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                },
+                992: {
+                    slidesPerView: 3,
+                }
+            }
+        });
+    </script>
 </body>
-</html> 
+</html>

@@ -53,7 +53,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query("SELECT COUNT(a) > 0 FROM Appointment a " +
            "WHERE a.customer.id = :customerId " +
            "AND a.appointmentDate BETWEEN :startTime AND :endTime " +
-           "AND a.status != com.skincare.model.Appointment.AppointmentStatus.CANCELLED")
+           "AND a.status != com.skincare.model.AppointmentStatus.CANCELLED")
     boolean existsCustomerScheduleConflict(
             @Param("customerId") Long customerId,
             @Param("startTime") LocalDateTime startTime,
@@ -70,7 +70,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query("SELECT COUNT(a) > 0 FROM Appointment a " +
            "WHERE a.therapist.id = :therapistId " +
            "AND a.appointmentDate BETWEEN :startTime AND :endTime " +
-           "AND a.status != com.skincare.model.Appointment.AppointmentStatus.CANCELLED " +
+           "AND a.status != com.skincare.model.AppointmentStatus.CANCELLED " +
            "AND (:appointmentId IS NULL OR a.id != :appointmentId)")
     boolean existsTherapistScheduleConflict(
             @Param("therapistId") Long therapistId,

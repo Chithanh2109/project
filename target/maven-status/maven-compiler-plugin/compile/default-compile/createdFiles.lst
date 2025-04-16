@@ -3,6 +3,7 @@ com\skincare\model\Customer.class
 com\skincare\model\ProfileNote.class
 com\skincare\dto\TherapistStat.class
 com\skincare\service\AppointmentServiceImpl.class
+com\skincare\controller\SimpleController.class
 com\skincare\model\UserType.class
 com\skincare\controller\AdminQuizController.class
 com\skincare\model\UserRole.class
@@ -27,6 +28,7 @@ com\skincare\controller\AppointmentController.class
 com\skincare\repository\QuizOptionRepository.class
 com\skincare\model\AppointmentStatus.class
 com\skincare\model\ServiceCategory.class
+com\skincare\SimpleApplication.class
 com\skincare\model\Service.class
 com\skincare\model\Appointment.class
 com\skincare\model\Order.class
@@ -40,7 +42,6 @@ com\skincare\model\Product.class
 com\skincare\model\Quiz.class
 com\skincare\model\Blog.class
 com\skincare\model\SkinConcern.class
-com\skincare\service\SkincareService.class
 com\skincare\repository\ProductRepository.class
 com\skincare\dto\ResultsByDay.class
 com\skincare\model\QuizOption.class
@@ -52,6 +53,7 @@ com\skincare\service\QuizServiceImpl.class
 com\skincare\model\QuizQuestion$QuestionType.class
 com\skincare\service\ProductService.class
 com\skincare\service\ServiceService.class
+com\skincare\controller\PublicController.class
 com\skincare\model\Rating.class
 com\skincare\service\AppointmentService.class
 com\skincare\model\CustomerProfile.class

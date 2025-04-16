@@ -40,6 +40,9 @@ public class Category {
     @Column(nullable = false)
     private String status = "ACTIVE"; // ACTIVE, INACTIVE
     
+    @Column(nullable = false)
+    private boolean active = true;
+    
     @OneToMany(mappedBy = "category")
     private Set<Service> services = new HashSet<>();
     
@@ -99,6 +102,14 @@ public class Category {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public LocalDateTime getCreatedAt() {

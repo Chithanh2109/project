@@ -1,21 +1,22 @@
 package com.skincare.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.skincare.model.Category;
 import com.skincare.model.Quiz;
+import com.skincare.model.Service;
 import com.skincare.model.ServiceStatus;
 import com.skincare.repository.CategoryRepository;
 import com.skincare.repository.QuizRepository;
 import com.skincare.repository.ServiceRepository;
 
-@Service
+@org.springframework.stereotype.Service
 public class SkincareService implements ServiceService {
     
     private final ServiceRepository serviceRepository;
@@ -29,105 +30,105 @@ public class SkincareService implements ServiceService {
         this.quizRepository = quizRepository;
     }
     
-    private List<com.skincare.model.Service> services = new ArrayList<>();
+    private List<Service> services = new ArrayList<>();
     
-    // Phương thức tạo dữ liệu mẫu khi khởi động ứng dụng
+    /**
+     * Initialize sample services and categories for demo purposes
+     */
     public void initSampleData() {
-        if (!services.isEmpty()) {
-            return;
+        // Create some sample categories if they don't exist
+        if (categoryRepository.count() == 0) {
+            Category facialCategory = new Category();
+            facialCategory.setName("Chăm sóc da mặt");
+            facialCategory.setDescription("Các dịch vụ chăm sóc, điều trị da mặt chuyên sâu");
+            categoryRepository.save(facialCategory);
+            
+            Category bodyCategory = new Category();
+            bodyCategory.setName("Chăm sóc body");
+            bodyCategory.setDescription("Các dịch vụ chăm sóc da toàn thân");
+            categoryRepository.save(bodyCategory);
+            
+            Category spaCategory = new Category();
+            spaCategory.setName("Massage & Spa");
+            spaCategory.setDescription("Các dịch vụ massage thư giãn, trị liệu");
+            categoryRepository.save(spaCategory);
         }
         
-        // Tạo các danh mục
-        Category facialCategory = new Category();
-        facialCategory.setId(1L);
-        facialCategory.setName("Facial Treatments");
-        facialCategory.setDescription("Various facial treatments for different skin types");
-        
-        Category bodyCategory = new Category();
-        bodyCategory.setId(2L);
-        bodyCategory.setName("Body Treatments");
-        bodyCategory.setDescription("Body care and massage treatments");
-        
-        Category acneCategory = new Category();
-        acneCategory.setId(3L);
-        acneCategory.setName("Acne & Scar Treatments");
-        acneCategory.setDescription("Specialized treatments for acne and scars");
-        
-        // Tạo dịch vụ mẫu
-        com.skincare.model.Service basicFacial = new com.skincare.model.Service();
-        basicFacial.setId(1L);
-        basicFacial.setName("Basic Facial");
-        basicFacial.setDescription("A deep cleansing facial that includes exfoliation, extraction, and hydration");
-        basicFacial.setPrice(new BigDecimal("500000"));
-        basicFacial.setDuration(60);
-        basicFacial.setCategory(facialCategory);
-        basicFacial.setStatus(ServiceStatus.PENDING);
-        basicFacial.setFeatured(true);
-        
-        com.skincare.model.Service advancedFacial = new com.skincare.model.Service();
-        advancedFacial.setId(2L);
-        advancedFacial.setName("Advanced Facial");
-        advancedFacial.setDescription("Premium facial with anti-aging serums and specialized massage techniques");
-        advancedFacial.setPrice(new BigDecimal("800000"));
-        advancedFacial.setDuration(90);
-        advancedFacial.setCategory(facialCategory);
-        advancedFacial.setStatus(ServiceStatus.PENDING);
-        advancedFacial.setFeatured(true);
-        
-        com.skincare.model.Service bodyScrub = new com.skincare.model.Service();
-        bodyScrub.setId(3L);
-        bodyScrub.setName("Body Scrub & Massage");
-        bodyScrub.setDescription("Full body exfoliation followed by a relaxing massage");
-        bodyScrub.setPrice(new BigDecimal("1200000"));
-        bodyScrub.setDuration(120);
-        bodyScrub.setCategory(bodyCategory);
-        bodyScrub.setStatus(ServiceStatus.PENDING);
-        bodyScrub.setFeatured(false);
-        
-        com.skincare.model.Service acneTreatment = new com.skincare.model.Service();
-        acneTreatment.setId(4L);
-        acneTreatment.setName("Acne Treatment");
-        acneTreatment.setDescription("Specialized treatment to reduce acne and prevent breakouts");
-        acneTreatment.setPrice(new BigDecimal("650000"));
-        acneTreatment.setDuration(75);
-        acneTreatment.setCategory(acneCategory);
-        acneTreatment.setStatus(ServiceStatus.PENDING);
-        acneTreatment.setFeatured(false);
-        
-        // Thêm vào danh sách
-        services.add(basicFacial);
-        services.add(advancedFacial);
-        services.add(bodyScrub);
-        services.add(acneTreatment);
+        // Create some sample services if they don't exist
+        if (serviceRepository.count() == 0) {
+            List<Category> categories = categoryRepository.findAll();
+            Category facialCategory = categories.stream()
+                    .filter(cat -> cat.getName().contains("da mặt"))
+                    .findFirst()
+                    .orElse(categories.get(0));
+            
+            Category bodyCategory = categories.stream()
+                    .filter(cat -> cat.getName().contains("body"))
+                    .findFirst()
+                    .orElse(categories.get(0));
+            
+            // Basic Facial
+            Service service1 = new Service();
+            service1.setName("Basic Facial");
+            service1.setDescription("Dịch vụ chăm sóc da cơ bản, phù hợp với mọi loại da");
+            service1.setPrice(new java.math.BigDecimal("500000"));
+            service1.setDuration(60);
+            service1.setCategory(facialCategory);
+            service1.setStatus(ServiceStatus.PENDING);
+            service1.setFeatured(true);
+            serviceRepository.save(service1);
+            
+            // Acne Treatment
+            Service service2 = new Service();
+            service2.setName("Acne Treatment");
+            service2.setDescription("Điều trị mụn chuyên sâu, giảm viêm và ngăn ngừa sẹo");
+            service2.setPrice(new java.math.BigDecimal("700000"));
+            service2.setDuration(75);
+            service2.setCategory(facialCategory);
+            service2.setStatus(ServiceStatus.PENDING);
+            service2.setFeatured(false);
+            serviceRepository.save(service2);
+            
+            // Body Scrub
+            Service service3 = new Service();
+            service3.setName("Body Scrub");
+            service3.setDescription("Tẩy tế bào chết toàn thân, làm mềm và sáng da");
+            service3.setPrice(new java.math.BigDecimal("600000"));
+            service3.setDuration(90);
+            service3.setCategory(bodyCategory);
+            service3.setStatus(ServiceStatus.PENDING);
+            service3.setFeatured(true);
+            serviceRepository.save(service3);
+        }
     }
     
     @Override
-    public List<com.skincare.model.Service> getAllServices() {
+    public List<Service> getAllServices() {
         return serviceRepository.findAll();
     }
     
     @Override
-    public List<com.skincare.model.Service> getActiveServices() {
-        return serviceRepository.findByStatus(ServiceStatus.PENDING);
+    public List<Service> getActiveServices() {
+        return serviceRepository.findByActiveTrue();
     }
     
     @Override
-    public Optional<com.skincare.model.Service> getServiceById(Long id) {
+    public Optional<Service> getServiceById(Long id) {
         return serviceRepository.findById(id);
     }
     
     @Override
-    public List<com.skincare.model.Service> getServicesByCategory(Long categoryId) {
+    public List<Service> getServicesByCategory(Long categoryId) {
         return serviceRepository.findByCategory_Id(categoryId);
     }
     
     @Override
-    public List<com.skincare.model.Service> searchServices(String keyword) {
+    public List<Service> searchServices(String keyword) {
         return serviceRepository.findByNameContainingIgnoreCase(keyword);
     }
     
     @Override
-    public com.skincare.model.Service saveService(com.skincare.model.Service service) {
+    public Service saveService(Service service) {
         return serviceRepository.save(service);
     }
     
@@ -143,29 +144,70 @@ public class SkincareService implements ServiceService {
     
     @Override
     public List<Category> getActiveCategories() {
-        return categoryRepository.findByStatusOrderByNameAsc("ACTIVE");
+        return categoryRepository.findAll();
     }
     
     @Override
-    public List<com.skincare.model.Service> getFeaturedServices() {
-        return serviceRepository.findByFeaturedTrue();
+    public Optional<Category> getCategoryById(Long id) {
+        return categoryRepository.findById(id);
     }
     
     @Override
-    public List<com.skincare.model.Service> getAllActiveServices() {
-        return serviceRepository.findByStatus(ServiceStatus.PENDING);
+    public Category saveCategory(Category category) {
+        return categoryRepository.save(category);
     }
     
     @Override
-    public List<com.skincare.model.Service> getRelatedServices(Long serviceId) {
-        com.skincare.model.Service service = serviceRepository.findById(serviceId)
-            .orElseThrow(() -> new RuntimeException("Service not found"));
-        return serviceRepository.findByCategoryAndIdNot(service.getCategory(), serviceId);
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
     }
     
     @Override
     public Quiz getActiveQuiz() {
-        return quizRepository.findByActiveTrue()
-            .orElseThrow(() -> new RuntimeException("No active quiz found"));
+        return quizRepository.findByActiveTrue().orElse(null);
+    }
+    
+    @Override
+    public Quiz saveQuiz(Quiz quiz) {
+        return quizRepository.save(quiz);
+    }
+    
+    @Override
+    public List<Service> getRelatedServices(Long serviceId) {
+        // Get the current service
+        Optional<Service> serviceOpt = serviceRepository.findById(serviceId);
+        if (!serviceOpt.isPresent()) {
+            return Collections.emptyList();
+        }
+        
+        Service service = serviceOpt.get();
+        
+        // Get services from the same category
+        return serviceRepository.findByCategoryAndIdNot(service.getCategory(), serviceId)
+                .stream()
+                .limit(4)
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public List<Service> getPopularServices() {
+        // Return featured services as popular services
+        // In a real implementation, this would typically be based on booking statistics
+        return serviceRepository.findByFeaturedTrue();
+    }
+    
+    @Override
+    public List<Service> getFeaturedServices() {
+        return serviceRepository.findByFeaturedTrue();
+    }
+    
+    @Override
+    public List<Service> getAllActiveServices() {
+        return serviceRepository.findByStatus(ServiceStatus.PENDING);
+    }
+    
+    @Override
+    public List<Service> getActiveServicesByCategory(Long categoryId) {
+        return serviceRepository.findByCategoryIdAndActiveTrue(categoryId);
     }
 } 

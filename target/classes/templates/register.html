@@ -1,55 +1,269 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="layout :: layout(~{::title}, ~{::content})">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Đăng ký - Skincare Service</title>
+    <th:block th:replace="~{layout/main :: head(~{::title}, ~{::link})}">
+        <title>Đăng ký tài khoản - SkinCare Center</title>
+    </th:block>
 </head>
-<body>
-    <div th:fragment="content">
-        <div class="register-container">
-            <div class="register-form">
-                <h2>Đăng ký tài khoản</h2>
-                <form th:action="@{/register}" method="post" th:object="${user}">
-                    <div class="form-group">
-                        <label for="username">Tên đăng nhập</label>
-                        <input type="text" id="username" name="username" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Mật khẩu</label>
-                        <input type="password" id="password" name="password" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmPassword">Xác nhận mật khẩu</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="fullName">Họ và tên</label>
-                        <input type="text" id="fullName" name="fullName" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Số điện thoại</label>
-                        <input type="tel" id="phone" name="phone" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input type="checkbox" id="terms" name="terms" class="form-check-input" required>
-                            <label for="terms" class="form-check-label">
-                                Tôi đồng ý với <a href="/terms">Điều khoản sử dụng</a> và <a href="/privacy">Chính sách bảo mật</a>
-                            </label>
+<body class="bg-light">
+    <th:block th:replace="~{layout/main :: navbar}"></th:block>
+    
+    <main>
+        <section class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body p-4 p-md-5">
+                                <div class="text-center mb-4">
+                                    <h2 class="fw-bold">Đăng ký tài khoản</h2>
+                                    <p class="text-muted">Tạo tài khoản để đặt lịch và trải nghiệm dịch vụ tại SkinCare Center</p>
+                                </div>
+                                
+                                <!-- Alert messages -->
+                                <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+                                <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+                                
+                                <!-- Registration Form -->
+                                <form th:action="@{/register}" method="post" th:object="${user}" class="needs-validation" novalidate>
+                                    <div class="row g-3">
+                                        <!-- Personal Information -->
+                                        <div class="col-12">
+                                            <h5 class="mb-3 border-bottom pb-2">Thông tin cá nhân</h5>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="firstName" class="form-label">Họ <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
+                                            <div class="invalid-feedback">Vui lòng nhập họ của bạn.</div>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="lastName" class="form-label">Tên <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required>
+                                            <div class="invalid-feedback">Vui lòng nhập tên của bạn.</div>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                            <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                                            <div class="invalid-feedback">Vui lòng nhập địa chỉ email hợp lệ.</div>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="phoneNumber" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                            <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}" 
+                                                pattern="(0|84|\+84)\d{9}" required>
+                                            <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ (VD: 0901234567).</div>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="dateOfBirth" class="form-label">Ngày sinh</label>
+                                            <input type="date" class="form-control" id="dateOfBirth" th:field="*{dateOfBirth}">
+                                            <div class="text-danger" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Giới tính</label>
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="FEMALE" th:field="*{gender}" checked>
+                                                    <label class="form-check-label" for="genderFemale">Nữ</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="gender" id="genderMale" value="MALE" th:field="*{gender}">
+                                                    <label class="form-check-label" for="genderMale">Nam</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="gender" id="genderOther" value="OTHER" th:field="*{gender}">
+                                                    <label class="form-check-label" for="genderOther">Khác</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Account Information -->
+                                        <div class="col-12 mt-4">
+                                            <h5 class="mb-3 border-bottom pb-2">Thông tin tài khoản</h5>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="username" class="form-label">Tên đăng nhập <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="username" th:field="*{username}" required>
+                                            <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                                            <small class="text-muted">Tên đăng nhập phải có ít nhất 5 ký tự, không có khoảng trắng và ký tự đặc biệt.</small>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="password" class="form-label">Mật khẩu <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="password" th:field="*{password}" required
+                                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
+                                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <div class="invalid-feedback">Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và số.</div>
+                                            </div>
+                                            <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label for="confirmPassword" class="form-label">Xác nhận mật khẩu <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <div class="invalid-feedback">Vui lòng xác nhận mật khẩu của bạn.</div>
+                                            </div>
+                                            <div id="passwordMatchError" class="text-danger d-none">Mật khẩu không khớp.</div>
+                                        </div>
+                                        
+                                        <div class="col-12 mt-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                                                <label class="form-check-label" for="agreeTerms">
+                                                    Tôi đồng ý với <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Điều khoản & Điều kiện</a> của SkinCare Center
+                                                </label>
+                                                <div class="invalid-feedback">
+                                                    Bạn phải đồng ý với điều khoản và điều kiện để tiếp tục.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12 mt-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="subscribeNewsletter" name="subscribeNewsletter">
+                                                <label class="form-check-label" for="subscribeNewsletter">
+                                                    Tôi muốn nhận thông báo về chương trình khuyến mãi qua email
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12 mt-4">
+                                            <div class="d-grid">
+                                                <button class="btn btn-primary py-2" type="submit">Đăng ký tài khoản</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                                <div class="text-center mt-4">
+                                    <p>Đã có tài khoản? <a th:href="@{/login}" class="text-decoration-none">Đăng nhập</a></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-block">Đăng ký</button>
-                    </div>
-                </form>
-                <div class="login-link">
-                    <p>Đã có tài khoản? <a href="/login">Đăng nhập ngay</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Terms and Conditions Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Điều khoản & Điều kiện</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>1. Đồng ý với Điều khoản</h6>
+                    <p>Bằng cách truy cập và sử dụng dịch vụ của SkinCare Center, bạn đồng ý chịu ràng buộc bởi các điều khoản và điều kiện này.</p>
+                    
+                    <h6>2. Tài khoản người dùng</h6>
+                    <p>Khi tạo tài khoản với chúng tôi, bạn phải cung cấp thông tin chính xác, đầy đủ và cập nhật mọi lúc. Việc không làm như vậy có thể dẫn đến việc chấm dứt tài khoản của bạn trên dịch vụ của chúng tôi.</p>
+                    
+                    <h6>3. Đặt lịch và hủy lịch</h6>
+                    <p>Bạn có thể hủy hoặc thay đổi lịch hẹn ít nhất 24 giờ trước thời gian hẹn đã đặt. Việc hủy muộn hơn có thể dẫn đến việc áp dụng phí hủy.</p>
+                    
+                    <h6>4. Trách nhiệm của khách hàng</h6>
+                    <p>Khách hàng chịu trách nhiệm thông báo cho nhân viên của chúng tôi về bất kỳ vấn đề sức khỏe, dị ứng hoặc điều kiện y tế nào có thể ảnh hưởng đến việc điều trị.</p>
+                    
+                    <h6>5. Bảo mật thông tin</h6>
+                    <p>Chúng tôi cam kết bảo vệ thông tin cá nhân của bạn. Thông tin của bạn sẽ không được chia sẻ với bên thứ ba nếu không có sự đồng ý của bạn, trừ khi pháp luật yêu cầu.</p>
+                    
+                    <h6>6. Thay đổi điều khoản</h6>
+                    <p>Chúng tôi có quyền sửa đổi các điều khoản này bất kỳ lúc nào. Việc tiếp tục sử dụng dịch vụ của chúng tôi sau khi thay đổi được đăng tải đồng nghĩa với việc bạn chấp nhận những thay đổi đó.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="acceptTerms" data-bs-dismiss="modal">Tôi đồng ý</button>
                 </div>
             </div>
         </div>
     </div>
+    
+    <th:block th:replace="~{layout/main :: footer}"></th:block>
+    
+    <th:block th:replace="~{layout/main :: scripts}"></th:block>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            const togglePassword = document.getElementById('togglePassword');
+            const password = document.getElementById('password');
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const confirmPassword = document.getElementById('confirmPassword');
+            
+            togglePassword.addEventListener('click', function() {
+                togglePasswordVisibility(password, this);
+            });
+            
+            toggleConfirmPassword.addEventListener('click', function() {
+                togglePasswordVisibility(confirmPassword, this);
+            });
+            
+            function togglePasswordVisibility(inputField, button) {
+                const type = inputField.getAttribute('type') === 'password' ? 'text' : 'password';
+                inputField.setAttribute('type', type);
+                
+                // Toggle eye icon
+                button.querySelector('i').classList.toggle('bi-eye');
+                button.querySelector('i').classList.toggle('bi-eye-slash');
+            }
+            
+            // Accept terms
+            document.getElementById('acceptTerms').addEventListener('click', function() {
+                document.getElementById('agreeTerms').checked = true;
+                document.getElementById('agreeTerms').dispatchEvent(new Event('change'));
+            });
+            
+            // Password match validation
+            const form = document.querySelector('form');
+            const passwordMatchError = document.getElementById('passwordMatchError');
+            
+            form.addEventListener('submit', function(event) {
+                if (password.value !== confirmPassword.value) {
+                    event.preventDefault();
+                    passwordMatchError.classList.remove('d-none');
+                    confirmPassword.classList.add('is-invalid');
+                } else {
+                    passwordMatchError.classList.add('d-none');
+                    confirmPassword.classList.remove('is-invalid');
+                }
+                
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            });
+            
+            // Check password match on input
+            confirmPassword.addEventListener('input', function() {
+                if (password.value === confirmPassword.value) {
+                    passwordMatchError.classList.add('d-none');
+                    confirmPassword.classList.remove('is-invalid');
+                } else {
+                    passwordMatchError.classList.remove('d-none');
+                    confirmPassword.classList.add('is-invalid');
+                }
+            });
+        });
+    </script>
 </body>
 </html> 

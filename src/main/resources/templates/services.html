@@ -1,327 +1,419 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dịch vụ - SkinCare Center</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <th:block th:replace="~{layout/main :: head(~{::title}, ~{::link})}">
+        <title>Dịch Vụ - SkinCare Center</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    </th:block>
+    <style>
+        .service-banner {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/service-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+        
+        .category-filter {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .category-btn {
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .category-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .service-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+            border: none;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .service-card .card-img-container {
+            height: 220px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .service-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .service-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .service-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: rgba(106, 76, 147, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .service-price {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .service-duration {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .service-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            margin-top: 15px;
+        }
+        
+        .package-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border: none;
+            position: relative;
+        }
+        
+        .package-card .card-header {
+            background: linear-gradient(135deg, var(--primary-color), #9370DB);
+            color: white;
+            border: none;
+            padding: 20px;
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background-color: #FF6B6B;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            box-shadow: 0 5px 10px rgba(255, 107, 107, 0.3);
+            z-index: 1;
+        }
+        
+        .benefit-item {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .benefit-item i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            margin-top: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .service-banner {
+                height: 300px;
+            }
+            
+            .service-card .card-img-container {
+                height: 180px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="bg-primary text-white py-4">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-4">
-                    <h1 class="mb-0">SkinCare Center</h1>
-                </div>
-                <div class="col-md-8">
-                    <nav class="d-flex justify-content-end">
-                        <ul class="nav">
-                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/}">Trang chủ</a></li>
-                            <li class="nav-item"><a class="nav-link text-white active" th:href="@{/services}">Dịch vụ</a></li>
-                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/about}">Giới thiệu</a></li>
-                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/contact}">Liên hệ</a></li>
-                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/login}">Đăng nhập</a></li>
-                        </ul>
-                    </nav>
+    <th:block th:replace="~{layout/main :: navbar}"></th:block>
+    
+    <main>
+        <!-- Hero Banner -->
+        <section class="service-banner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8" data-aos="fade-right" data-aos-duration="800">
+                        <h1 class="display-4 fw-bold mb-3">Dịch vụ chăm sóc da cao cấp</h1>
+                        <p class="lead mb-4">Trải nghiệm dịch vụ chăm sóc da tốt nhất với công nghệ hiện đại và các chuyên gia hàng đầu.</p>
+                        <div class="d-flex flex-wrap gap-3">
+                            <a href="#services" class="btn btn-primary px-4 py-2">Xem dịch vụ</a>
+                            <a th:href="@{/booking}" class="btn btn-outline-light px-4 py-2">Đặt lịch ngay</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
-
-    <section class="py-5 bg-light">
-        <div class="container">
-            <h2 class="display-4 text-center mb-5">Dịch vụ của chúng tôi</h2>
+        </section>
+        
+        <!-- Services Section -->
+        <section class="section-padding" id="services">
+            <div class="container">
+                <div class="text-center mb-5" data-aos="fade-up" data-aos-duration="800">
+                    <h2 class="section-title">Dịch vụ của chúng tôi</h2>
+                    <p class="section-subtitle">Chúng tôi cung cấp các dịch vụ chăm sóc da chuyên nghiệp với công nghệ hiện đại</p>
+                </div>
+                
+                <!-- Category Filter -->
+                <div class="category-filter mb-5" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+                    <div class="text-center">
+                        <button class="btn category-btn active" onclick="filterServices('all', event)">Tất cả dịch vụ</button>
+                        <button th:each="category : ${categories}" class="btn category-btn" 
+                                th:onclick="'filterServices(' + ${category.id} + ', event)'" 
+                                th:text="${category.name}">Danh mục</button>
+                    </div>
+                </div>
+                
+                <div class="row" id="servicesList">
+                    <!-- Service Cards -->
+                    <div th:each="service : ${services}" class="col-md-6 col-lg-4 mb-4 service-item" 
+                         th:data-category="${service.category.id}" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                        <div class="service-card h-100">
+                            <div class="card-img-container">
+                                <img th:src="@{'/images/services/' + ${service.id} + '.jpg'}" 
+                                     src="/images/services/default.jpg" 
+                                     class="card-img-top" 
+                                     th:alt="${service.name}" 
+                                     alt="Service Image">
+                                <div th:if="${service.featured}" class="service-badge">Nổi bật</div>
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <div>
+                                    <h5 class="card-title" th:text="${service.name}">Tên dịch vụ</h5>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge rounded-pill" 
+                                              th:style="'background-color: ' + ${service.category.color ?: '#6a4c93'}" 
+                                              th:text="${service.category.name}">Danh mục</span>
+                                    </div>
+                                    <p class="card-text" th:text="${#strings.abbreviate(service.description, 120)}">Mô tả dịch vụ</p>
+                                </div>
+                                <div class="service-footer mt-auto">
+                                    <div>
+                                        <span class="service-price" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'">500,000 ₫</span>
+                                        <div class="service-duration"><i class="bi bi-clock"></i> <span th:text="${service.duration} + ' phút'">60 phút</span></div>
+                                    </div>
+                                    <a th:href="@{'/services/' + ${service.id}}" class="btn btn-outline-primary">Chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Service Packages -->
+        <section class="section-padding bg-light">
+            <div class="container">
+                <div class="text-center mb-5" data-aos="fade-up" data-aos-duration="800">
+                    <h2 class="section-title">Gói dịch vụ chăm sóc da</h2>
+                    <p class="section-subtitle">Tiết kiệm hơn với các gói dịch vụ kết hợp đặc biệt của chúng tôi</p>
+                </div>
+                
+                <div class="row">
+                    <!-- Package 1 -->
+                    <div class="col-md-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+                        <div class="package-card">
+                            <div class="discount-badge">Giảm 15%</div>
+                            <div class="card-header">
+                                <h3 class="mb-0">Gói chăm sóc da cơ bản (5 buổi)</h3>
+                                <p class="text-white-50 mb-0">Phù hợp cho mọi loại da</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div>
+                                        <span class="text-muted fs-6"><del>2,350,000 ₫</del></span>
+                                        <h4 class="text-primary mb-0">2,000,000 ₫</h4>
+                                    </div>
+                                    <span class="badge bg-light text-dark p-2">5 buổi x 60 phút</span>
+                                </div>
+                                
+                                <p>Gói dịch vụ này giúp làm sạch sâu, dưỡng ẩm và cải thiện tone màu da, phù hợp với mọi loại da.</p>
+                                
+                                <div class="mb-4">
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Làm sạch da chuyên sâu</div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Tẩy tế bào chết</div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Massage mặt thư giãn</div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Đắp mặt nạ dưỡng ẩm</div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Tư vấn chăm sóc da tại nhà</div>
+                                    </div>
+                                </div>
+                                
+                                <a href="#" class="btn btn-primary w-100">Đặt lịch ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Package 2 -->
+                    <div class="col-md-6" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                        <div class="package-card">
+                            <div class="discount-badge">Giảm 20%</div>
+                            <div class="card-header">
+                                <h3 class="mb-0">Gói trị mụn toàn diện (6 buổi)</h3>
+                                <p class="text-white-50 mb-0">Dành cho da mụn và có vấn đề</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div>
+                                        <span class="text-muted fs-6"><del>4,350,000 ₫</del></span>
+                                        <h4 class="text-primary mb-0">3,500,000 ₫</h4>
+                                    </div>
+                                    <span class="badge bg-light text-dark p-2">6 buổi x 90 phút</span>
+                                </div>
+                                
+                                <p>Gói điều trị mụn chuyên sâu, kết hợp các phương pháp hiện đại để loại bỏ mụn và ngăn ngừa tái phát.</p>
+                                
+                                <div class="mb-4">
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Phân tích và tư vấn tình trạng da</div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Làm sạch da và lỗ chân lông</div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Điều trị mụn chuyên sâu</div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Đắp mặt nạ se khít lỗ chân lông</div>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="bi bi-check-circle-fill"></i>
+                                        <div>Hướng dẫn chế độ ăn uống kiểm soát mụn</div>
+                                    </div>
+                                </div>
+                                
+                                <a href="#" class="btn btn-primary w-100">Đặt lịch ngay</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section class="section-padding" data-aos="fade-up" data-aos-duration="800">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <img src="/images/contact-skincare.jpg" alt="Contact Us" class="img-fluid rounded-lg shadow">
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="ps-lg-4">
+                            <h2 class="section-title text-start">Liên hệ ngay với chúng tôi</h2>
+                            <p class="mb-4">Liên hệ với SkinCare Center để được tư vấn chi tiết về các dịch vụ phù hợp với làn da của bạn.</p>
+                            
+                            <div class="d-flex mb-4">
+                                <div class="flex-shrink-0">
+                                    <i class="bi bi-telephone-fill fs-1 text-primary"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h5>Gọi điện thoại</h5>
+                                    <p class="mb-0">+84 28 3123 4567</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex mb-4">
+                                <div class="flex-shrink-0">
+                                    <i class="bi bi-envelope-fill fs-1 text-primary"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h5>Email</h5>
+                                    <p class="mb-0">info@skincarecenter.vn</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="bi bi-geo-alt-fill fs-1 text-primary"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h5>Địa chỉ</h5>
+                                    <p class="mb-0">123 Nguyễn Huệ, Quận 1, TP. Hồ Chí Minh</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <a href="#" class="btn btn-primary px-4 py-2">Đặt lịch tư vấn</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <th:block th:replace="~{layout/main :: footer}"></th:block>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS (Animate On Scroll)
+            AOS.init();
             
-            <div class="row mb-5">
-                <div class="col-md-3">
-                    <div class="list-group">
-                        <a href="#all-services" class="list-group-item list-group-item-action active">Tất cả dịch vụ</a>
-                        <a href="#facial" class="list-group-item list-group-item-action">Chăm sóc da mặt</a>
-                        <a href="#body" class="list-group-item list-group-item-action">Chăm sóc cơ thể</a>
-                        <a href="#specialized" class="list-group-item list-group-item-action">Điều trị chuyên sâu</a>
-                        <a href="#packages" class="list-group-item list-group-item-action">Gói liệu trình</a>
-                    </div>
-                </div>
-                <div class="col-md-9">
-                    <div class="input-group mb-4">
-                        <input type="text" class="form-control" placeholder="Tìm kiếm dịch vụ...">
-                        <button class="btn btn-primary" type="button">Tìm kiếm</button>
-                    </div>
-                    
-                    <div id="all-services">
-                        <h3 class="border-bottom pb-2 mb-4">Tất cả dịch vụ</h3>
-                        
-                        <div class="row" th:if="${services != null}">
-                            <div class="col-md-6 mb-4" th:each="service : ${services}">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title" th:text="${service.name}">Tên dịch vụ</h4>
-                                        <p class="card-text" th:text="${service.description}">Mô tả dịch vụ</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">500.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark" th:text="${service.duration} + ' phút'">60 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Dịch vụ mặc định khi không có dữ liệu -->
-                        <div class="row" th:if="${services == null}">
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Chăm sóc da cơ bản</h4>
-                                        <p class="card-text">Liệu trình làm sạch da chuyên sâu, loại bỏ tế bào chết, cung cấp dưỡng chất và hydrat hóa da.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">450.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">60 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Trị mụn chuyên sâu</h4>
-                                        <p class="card-text">Liệu trình đặc trị dành cho da mụn, giúp tiêu viêm, kháng khuẩn và phục hồi da tổn thương.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">650.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">75 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Massage thư giãn</h4>
-                                        <p class="card-text">Liệu pháp massage toàn thân giúp thư giãn, giảm căng thẳng và cải thiện tuần hoàn máu.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">550.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">90 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Tắm trắng toàn thân</h4>
-                                        <p class="card-text">Liệu trình làm trắng da an toàn, loại bỏ tế bào chết, dưỡng ẩm và cải thiện tông màu da.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">850.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">120 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="facial" class="mt-5">
-                        <h3 class="border-bottom pb-2 mb-4">Chăm sóc da mặt</h3>
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Chăm sóc da cơ bản</h4>
-                                        <p class="card-text">Liệu trình làm sạch da chuyên sâu, loại bỏ tế bào chết, cung cấp dưỡng chất và hydrat hóa da.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">450.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">60 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Trị mụn chuyên sâu</h4>
-                                        <p class="card-text">Liệu trình đặc trị dành cho da mụn, giúp tiêu viêm, kháng khuẩn và phục hồi da tổn thương.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">650.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">75 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="body" class="mt-5">
-                        <h3 class="border-bottom pb-2 mb-4">Chăm sóc cơ thể</h3>
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Massage thư giãn</h4>
-                                        <p class="card-text">Liệu pháp massage toàn thân giúp thư giãn, giảm căng thẳng và cải thiện tuần hoàn máu.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">550.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">90 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Tắm trắng toàn thân</h4>
-                                        <p class="card-text">Liệu trình làm trắng da an toàn, loại bỏ tế bào chết, dưỡng ẩm và cải thiện tông màu da.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">850.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">120 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="specialized" class="mt-5">
-                        <h3 class="border-bottom pb-2 mb-4">Điều trị chuyên sâu</h3>
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Trẻ hóa da bằng laser</h4>
-                                        <p class="card-text">Công nghệ laser tiên tiến giúp kích thích tái tạo collagen, cải thiện nếp nhăn và làm săn chắc da.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">1.500.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">60 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Điều trị nám chuyên sâu</h4>
-                                        <p class="card-text">Liệu trình đặc biệt kết hợp công nghệ và sản phẩm chuyên biệt giúp điều trị nám, tàn nhang hiệu quả.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">1.200.000 VNĐ</span>
-                                            <span class="badge bg-info text-dark">90 phút</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="packages" class="mt-5">
-                        <h3 class="border-bottom pb-2 mb-4">Gói liệu trình</h3>
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Gói chăm sóc da cơ bản (5 buổi)</h4>
-                                        <p class="card-text">Liệu trình 5 buổi chăm sóc da cơ bản, giúp da sạch khỏe, cải thiện kết cấu và độ đàn hồi.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">2.000.000 VNĐ</span>
-                                            <span class="badge bg-warning text-dark">Tiết kiệm 15%</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
-                                        <h4 class="card-title">Gói trị mụn toàn diện (6 buổi)</h4>
-                                        <p class="card-text">Liệu trình 6 buổi đặc trị mụn, kiểm soát dầu và cải thiện sẹo mụn, phù hợp với da mụn nặng.</p>
-                                        <div class="d-flex justify-content-between align-items-center mt-3">
-                                            <span class="text-primary fw-bold">3.500.000 VNĐ</span>
-                                            <span class="badge bg-warning text-dark">Tiết kiệm 20%</span>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-white border-top-0">
-                                        <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiết</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-5 bg-primary text-white">
-        <div class="container text-center">
-            <h3 class="mb-4">Bạn cần tư vấn về dịch vụ phù hợp?</h3>
-            <p class="lead">Đội ngũ chuyên gia của chúng tôi sẽ giúp bạn tìm ra dịch vụ phù hợp nhất với tình trạng và nhu cầu của bạn.</p>
-            <a href="/contact" class="btn btn-light btn-lg mt-3">Liên hệ ngay</a>
-        </div>
-    </section>
-
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5>SkinCare Center</h5>
-                    <p>Cung cấp dịch vụ chăm sóc da chuyên nghiệp hàng đầu.</p>
-                </div>
-                <div class="col-md-4">
-                    <h5>Liên hệ</h5>
-                    <p>Email: info@skincarecenter.com<br>
-                       Phone: 0123-456-789<br>
-                       Address: 123 Đường ABC, Quận XYZ, TP. HCM</p>
-                </div>
-                <div class="col-md-4">
-                    <h5>Theo dõi chúng tôi</h5>
-                    <div class="d-flex gap-3">
-                        <a href="#" class="text-white"><i class="bi bi-facebook"></i> Facebook</a>
-                        <a href="#" class="text-white"><i class="bi bi-instagram"></i> Instagram</a>
-                        <a href="#" class="text-white"><i class="bi bi-twitter"></i> Twitter</a>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12 text-center">
-                    <p class="mb-0">&copy; 2023 SkinCare Center. All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            // Category filter functionality
+            window.filterServices = function(categoryId, event) {
+                const serviceItems = document.querySelectorAll('.service-item');
+                const categoryButtons = document.querySelectorAll('.category-btn');
+                
+                // Update active button
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+                
+                // Filter services
+                serviceItems.forEach(item => {
+                    if (categoryId === 'all' || item.dataset.category === categoryId.toString()) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html> 

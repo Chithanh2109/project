@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{layout/main :: head(~{::title}, ~{::link})}">
+        <title>Đặt lịch - SkinCare Center</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    </th:block>
+</head>
+<body>
+    <th:block th:replace="~{layout/main :: navbar}"></th:block>
+    
+    <main>
+        <!-- Banner Section -->
+        <section class="hero-section position-relative" style="background-image: url('/images/booking-banner.jpg'); height: 300px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 hero-content text-center mx-auto">
+                        <h1 class="hero-title">Đặt lịch hẹn</h1>
+                        <p class="hero-text">Đặt lịch để trải nghiệm dịch vụ chăm sóc da chuyên nghiệp tại SkinCare Center</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Booking Form Section -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4 p-md-5">
+                                <h2 class="text-center mb-4">Thông tin đặt lịch</h2>
+                                
+                                <!-- Success/Error Messages -->
+                                <div class="alert alert-success" th:if="${success}" th:text="${success}">
+                                    Đặt lịch thành công! Chúng tôi sẽ liên hệ xác nhận sớm.
+                                </div>
+                                <div class="alert alert-danger" th:if="${error}" th:text="${error}">
+                                    Đã có lỗi xảy ra. Vui lòng thử lại sau.
+                                </div>
+                                
+                                <!-- Booking Form -->
+                                <form th:action="@{/booking}" method="post" th:object="${bookingForm}" class="needs-validation" novalidate>
+                                    <input type="hidden" th:if="${preSelectedService}" name="serviceId" th:value="${preSelectedService.id}">
+                                    <input type="hidden" th:if="${preSelectedTherapist}" name="therapistId" th:value="${preSelectedTherapist.id}">
+                                    
+                                    <!-- Personal Information -->
+                                    <div class="mb-4">
+                                        <h5 class="border-bottom pb-2 mb-3">Thông tin cá nhân</h5>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="fullName" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="fullName" name="fullName" 
+                                                       th:value="${#authentication.principal != null ? #authentication.principal.fullName : ''}"
+                                                       required>
+                                                <div class="invalid-feedback">Vui lòng nhập họ tên của bạn.</div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                                <input type="tel" class="form-control" id="phone" name="phone"
+                                                       th:value="${#authentication.principal != null ? #authentication.principal.phone : ''}"
+                                                       required pattern="[0-9]{10,11}">
+                                                <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ.</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                       th:value="${#authentication.principal != null ? #authentication.principal.email : ''}">
+                                                <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="dateOfBirth" class="form-label">Ngày sinh</label>
+                                                <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth"
+                                                       th:value="${#authentication.principal != null ? #authentication.principal.dateOfBirth : ''}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Appointment Details -->
+                                    <div class="mb-4">
+                                        <h5 class="border-bottom pb-2 mb-3">Chi tiết lịch hẹn</h5>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="service" class="form-label">Dịch vụ <span class="text-danger">*</span></label>
+                                                <select class="form-select" id="service" name="serviceId" required 
+                                                       th:disabled="${preSelectedService != null}">
+                                                    <option value="" selected disabled>Chọn dịch vụ</option>
+                                                    <optgroup th:each="category : ${categories}" th:label="${category.name}">
+                                                        <option th:each="service : ${servicesByCategory.get(category.id)}" 
+                                                                th:value="${service.id}" 
+                                                                th:text="${service.name}"
+                                                                th:selected="${preSelectedService != null && preSelectedService.id == service.id}"
+                                                                th:data-duration="${service.duration}"
+                                                                th:data-price="${service.price}">Dịch vụ</option>
+                                                    </optgroup>
+                                                </select>
+                                                <div class="invalid-feedback">Vui lòng chọn dịch vụ.</div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="therapist" class="form-label">Chuyên viên <span class="text-danger">*</span></label>
+                                                <select class="form-select" id="therapist" name="therapistId" required
+                                                        th:disabled="${preSelectedTherapist != null}">
+                                                    <option value="" selected disabled>Chọn chuyên viên</option>
+                                                    <option th:each="therapist : ${therapists}" 
+                                                            th:value="${therapist.id}" 
+                                                            th:text="${therapist.fullName}"
+                                                            th:selected="${preSelectedTherapist != null && preSelectedTherapist.id == therapist.id}">Chuyên viên</option>
+                                                </select>
+                                                <div class="invalid-feedback">Vui lòng chọn chuyên viên.</div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="appointmentDate" class="form-label">Ngày hẹn <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" id="appointmentDate" name="appointmentDate" required min="">
+                                                <div class="invalid-feedback">Vui lòng chọn ngày hẹn.</div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="appointmentTime" class="form-label">Giờ hẹn <span class="text-danger">*</span></label>
+                                                <select class="form-select" id="appointmentTime" name="appointmentTime" required>
+                                                    <option value="" selected disabled>Chọn giờ hẹn</option>
+                                                    <option value="09:00">09:00</option>
+                                                    <option value="10:00">10:00</option>
+                                                    <option value="11:00">11:00</option>
+                                                    <option value="13:00">13:00</option>
+                                                    <option value="14:00">14:00</option>
+                                                    <option value="15:00">15:00</option>
+                                                    <option value="16:00">16:00</option>
+                                                    <option value="17:00">17:00</option>
+                                                    <option value="18:00">18:00</option>
+                                                    <option value="19:00">19:00</option>
+                                                </select>
+                                                <div class="invalid-feedback">Vui lòng chọn giờ hẹn.</div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="notes" class="form-label">Ghi chú</label>
+                                            <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Nhập yêu cầu hoặc thông tin thêm (nếu có)"></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Service Information Card -->
+                                    <div class="card bg-light mb-4" id="serviceInfoCard" style="display: none;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Thông tin dịch vụ</h5>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <p class="mb-1"><strong>Thời gian:</strong> <span id="serviceDuration">60 phút</span></p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p class="mb-1"><strong>Giá:</strong> <span id="servicePrice">500,000 ₫</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-4">
+                                        <input class="form-check-input" type="checkbox" value="" id="termsCheck" required>
+                                        <label class="form-check-label" for="termsCheck">
+                                            Tôi đồng ý với <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">điều khoản và điều kiện</a> của SkinCare Center
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            Bạn phải đồng ý với điều khoản và điều kiện để tiếp tục.
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary px-5 py-2">Đặt lịch ngay</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Terms and Conditions Modal -->
+        <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="termsModalLabel">Điều khoản và Điều kiện</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>1. Đặt lịch và Hủy lịch</h6>
+                        <p>Quý khách vui lòng đặt lịch trước ít nhất 24 giờ. Trong trường hợp cần hủy hoặc thay đổi lịch hẹn, vui lòng thông báo cho chúng tôi trước ít nhất 6 giờ.</p>
+                        
+                        <h6>2. Thời gian đến</h6>
+                        <p>Quý khách vui lòng đến trước giờ hẹn 15 phút để làm thủ tục và tư vấn. Nếu quý khách đến trễ, thời gian điều trị có thể bị rút ngắn để đảm bảo không ảnh hưởng đến lịch hẹn tiếp theo.</p>
+                        
+                        <h6>3. Chính sách thanh toán</h6>
+                        <p>Quý khách có thể thanh toán bằng tiền mặt, thẻ ngân hàng hoặc chuyển khoản. Đối với các gói dịch vụ, quý khách cần thanh toán trước ít nhất 50% giá trị.</p>
+                        
+                        <h6>4. Chính sách bảo mật</h6>
+                        <p>SkinCare Center cam kết bảo mật thông tin cá nhân của quý khách và chỉ sử dụng thông tin cho mục đích liên hệ về lịch hẹn.</p>
+                        
+                        <h6>5. Quy định khác</h6>
+                        <p>SkinCare Center có quyền từ chối phục vụ nếu quý khách không tuân thủ các quy định của trung tâm hoặc có các vấn đề về sức khỏe không phù hợp với dịch vụ.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Tôi đồng ý</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <th:block th:replace="~{layout/main :: footer}"></th:block>
+    
+    <!-- Back to top button -->
+    <a href="#" id="backToTop" class="back-to-top"><i class="bi bi-arrow-up-circle-fill"></i></a>
+    
+    <th:block th:replace="~{layout/main :: scripts}"></th:block>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/vn.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set min date for appointment date picker (tomorrow)
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('appointmentDate').min = tomorrow.toISOString().split('T')[0];
+            
+            // Initialize date picker
+            flatpickr("#appointmentDate", {
+                locale: "vn",
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                disable: [
+                    function(date) {
+                        // Disable Sundays
+                        return date.getDay() === 0;
+                    }
+                ]
+            });
+            
+            // Show service info when service is selected
+            const serviceSelect = document.getElementById('service');
+            const serviceInfoCard = document.getElementById('serviceInfoCard');
+            const serviceDuration = document.getElementById('serviceDuration');
+            const servicePrice = document.getElementById('servicePrice');
+            
+            // Check if there's a pre-selected service
+            if (serviceSelect && serviceSelect.value) {
+                const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+                const duration = selectedOption.getAttribute('data-duration');
+                const price = selectedOption.getAttribute('data-price');
+                
+                if (duration && price) {
+                    serviceDuration.textContent = duration + ' phút';
+                    servicePrice.textContent = new Intl.NumberFormat('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                    }).format(price);
+                    serviceInfoCard.style.display = 'block';
+                }
+            }
+            
+            if (serviceSelect) {
+                serviceSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const duration = selectedOption.getAttribute('data-duration');
+                    const price = selectedOption.getAttribute('data-price');
+                    
+                    if (duration && price) {
+                        serviceDuration.textContent = duration + ' phút';
+                        servicePrice.textContent = new Intl.NumberFormat('vi-VN', {
+                            style: 'currency',
+                            currency: 'VND'
+                        }).format(price);
+                        serviceInfoCard.style.display = 'block';
+                    } else {
+                        serviceInfoCard.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

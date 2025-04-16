@@ -43,4 +43,14 @@ public class TherapistService {
     public void deleteTherapist(Long id) {
         userRepository.deleteById(id);
     }
+    
+    /**
+     * Get featured therapists for homepage display
+     * @return List of featured therapists
+     */
+    public List<User> getFeaturedTherapists() {
+        // For now, we'll return all active therapists as featured
+        // This could be enhanced to filter by a "featured" flag in the future
+        return userRepository.findActiveTherapists();
+    }
 } 

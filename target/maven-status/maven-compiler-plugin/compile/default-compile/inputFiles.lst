@@ -18,6 +18,7 @@ C:\QLSV\project-main\src\main\java\com\skincare\controller\rest\ServiceRestContr
 C:\QLSV\project-main\src\main\java\com\skincare\repository\AppointmentServiceRepository.java
 C:\QLSV\project-main\src\main\java\com\skincare\service\TherapistService.java
 C:\QLSV\project-main\src\main\java\com\skincare\controller\HomeController.java
+C:\QLSV\project-main\src\main\java\com\skincare\controller\PublicController.java
 C:\QLSV\project-main\src\main\java\com\skincare\controller\QuizController.java
 C:\QLSV\project-main\src\main\java\com\skincare\model\AppointmentService.java
 C:\QLSV\project-main\src\main\java\com\skincare\model\RoleType.java
@@ -31,6 +32,7 @@ C:\QLSV\project-main\src\main\java\com\skincare\controller\ServiceController.jav
 C:\QLSV\project-main\src\main\java\com\skincare\service\ReportServiceImpl.java
 C:\QLSV\project-main\src\main\java\com\skincare\service\UserService.java
 C:\QLSV\project-main\src\main\java\com\skincare\model\UserType.java
+C:\QLSV\project-main\src\main\java\com\skincare\SimpleApplication.java
 C:\QLSV\project-main\src\main\java\com\skincare\model\CustomerProfile.java
 C:\QLSV\project-main\src\main\java\com\skincare\model\QuizQuestion.java
 C:\QLSV\project-main\src\main\java\com\skincare\controller\AdminController.java
@@ -47,6 +49,7 @@ C:\QLSV\project-main\src\main\java\com\skincare\model\SkinConcern.java
 C:\QLSV\project-main\src\main\java\com\skincare\service\ServiceService.java
 C:\QLSV\project-main\src\main\java\com\skincare\dto\ServiceStat.java
 C:\QLSV\project-main\src\main\java\com\skincare\model\Customer.java
+C:\QLSV\project-main\src\main\java\com\skincare\controller\SimpleController.java
 C:\QLSV\project-main\src\main\java\com\skincare\dto\DashboardStats.java
 C:\QLSV\project-main\src\main\java\com\skincare\model\UserStatus.java
 C:\QLSV\project-main\src\main\java\com\skincare\dto\ResultsByDay.java
