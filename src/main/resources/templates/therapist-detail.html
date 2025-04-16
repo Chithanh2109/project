@@ -7,6 +7,125 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .therapist-banner {
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            padding: 40px 0;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            color: white;
+        }
+        .therapist-banner h1 {
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            font-weight: 700;
+        }
+        .therapist-banner .rating {
+            color: #FFD700;
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .therapist-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+        .therapist-card:hover {
+            transform: translateY(-5px);
+        }
+        .therapist-statistic {
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            color: white;
+            margin-bottom: 25px;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .stat-text {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f8f9fa;
+            color: #4e54c8;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+        .social-btn:hover {
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            color: white;
+            transform: translateY(-3px);
+        }
+        .contact-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(78, 84, 200, 0.1);
+            color: #4e54c8;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        .specialty-badge {
+            background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            margin: 5px;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        .certificate-item {
+            border-left: 3px solid #4e54c8;
+            padding-left: 15px;
+            margin-bottom: 15px;
+        }
+        .review-card {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+            transition: transform 0.3s ease;
+        }
+        .review-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .booking-btn {
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        .booking-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
 <body>
     <header class="bg-primary text-white py-4">
@@ -41,139 +160,138 @@
                 </ol>
             </nav>
             
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <div class="card-body text-center">
-                            <div class="mb-3">
-                                <img src="https://via.placeholder.com/150" class="rounded-circle img-fluid" alt="Profile Picture">
-                            </div>
-                            <h3 class="mb-2" th:text="${therapist.firstName} + ' ' + ${therapist.lastName}">Tên chuyên viên</h3>
-                            <p class="text-muted">Chuyên viên chăm sóc da</p>
-                            
-                            <div class="d-flex justify-content-center gap-2 mt-3">
-                                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-facebook"></i></a>
-                                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-instagram"></i></a>
-                                <a href="#" class="btn btn-sm btn-outline-primary"><i class="bi bi-linkedin"></i></a>
-                            </div>
-                        </div>
+            <div class="therapist-banner text-center">
+                <div class="container">
+                    <img src="https://via.placeholder.com/150" class="profile-img shadow" alt="Profile Picture">
+                    <h1 class="display-5 mb-2" th:text="${therapist.firstName} + ' ' + ${therapist.lastName}">Tên chuyên viên</h1>
+                    <p class="lead mb-3">Chuyên viên chăm sóc da</p>
+                    <div class="rating mb-3">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                        <span class="text-white ms-2">4.8/5 (56 đánh giá)</span>
                     </div>
-                    
-                    <div class="card mb-4">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="card-title mb-0">Thông tin liên hệ</h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="bi bi-envelope me-2"></i>
-                                    <span th:text="${therapist.email}">email@example.com</span>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="bi bi-telephone me-2"></i>
-                                    <span th:text="${therapist.phone}">0123 456 789</span>
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="bi bi-calendar-check me-2"></i>
-                                    <span>Đặt lịch hẹn</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="card-title mb-0">Chuyên môn</h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush" th:if="${specialties != null && !specialties.empty}">
-                                <li class="list-group-item" th:each="specialty : ${specialties}" th:text="${specialty.name}">Chuyên môn 1</li>
-                            </ul>
-                            <ul class="list-group list-group-flush" th:if="${specialties == null || specialties.empty}">
-                                <li class="list-group-item">Chăm sóc da mặt</li>
-                                <li class="list-group-item">Điều trị mụn</li>
-                                <li class="list-group-item">Trị nám, tàn nhang</li>
-                                <li class="list-group-item">Massage thư giãn</li>
-                            </ul>
-                        </div>
+                    <div class="d-flex justify-content-center gap-2">
+                        <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-linkedin"></i></a>
                     </div>
                 </div>
-                
-                <div class="col-md-8">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h4 class="card-title">Giới thiệu</h4>
-                            <p class="card-text" th:if="${therapist.bio != null}" th:text="${therapist.bio}">
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card therapist-card mb-4">
+                        <div class="card-body p-4">
+                            <h3 class="card-title border-bottom pb-3 mb-4">Giới thiệu</h3>
+                            <p class="card-text fs-5" th:if="${therapist.bio != null}" th:text="${therapist.bio}">
                                 Giới thiệu về chuyên viên...
                             </p>
-                            <p class="card-text" th:if="${therapist.bio == null}">
+                            <p class="card-text fs-5" th:if="${therapist.bio == null}">
                                 Với hơn 5 năm kinh nghiệm trong lĩnh vực thẩm mỹ và chăm sóc da, tôi đã giúp hàng trăm khách hàng cải thiện làn da của họ và tìm lại sự tự tin. 
                                 Tôi tin rằng mỗi làn da đều có nhu cầu riêng biệt và cần được chăm sóc với phương pháp phù hợp. 
                                 Với sự kết hợp giữa kiến thức chuyên môn, công nghệ hiện đại và sản phẩm chất lượng cao, tôi cam kết mang đến cho khách hàng trải nghiệm chăm sóc da tốt nhất.
                             </p>
-                        </div>
-                    </div>
-                    
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h4 class="card-title">Chứng chỉ & Đào tạo</h4>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h6 class="mb-0">Chứng chỉ Kỹ thuật viên Thẩm mỹ</h6>
-                                            <small class="text-muted">Học viện Thẩm mỹ Quốc tế</small>
-                                        </div>
-                                        <small class="text-muted">2018 - 2019</small>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-4">
+                                    <div class="therapist-statistic">
+                                        <div class="stat-number">5+</div>
+                                        <div class="stat-text">Năm kinh nghiệm</div>
                                     </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h6 class="mb-0">Chuyên gia Chăm sóc da</h6>
-                                            <small class="text-muted">Trung tâm Đào tạo Spa Chuyên nghiệp</small>
-                                        </div>
-                                        <small class="text-muted">2019 - 2020</small>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h6 class="mb-0">Khóa học Điều trị mụn chuyên sâu</h6>
-                                            <small class="text-muted">Viện Thẩm mỹ & Da liễu</small>
-                                        </div>
-                                        <small class="text-muted">2021</small>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Đánh giá từ khách hàng</h4>
-                            <div class="d-flex align-items-center mb-4">
-                                <div class="me-3">
-                                    <span class="display-4">4.8</span>
                                 </div>
-                                <div>
-                                    <div class="d-flex text-warning mb-2">
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-fill"></i>
-                                        <i class="bi bi-star-half"></i>
+                                <div class="col-md-4">
+                                    <div class="therapist-statistic">
+                                        <div class="stat-number">300+</div>
+                                        <div class="stat-text">Khách hàng</div>
                                     </div>
-                                    <span>Dựa trên 56 đánh giá</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="therapist-statistic">
+                                        <div class="stat-number">15+</div>
+                                        <div class="stat-text">Dịch vụ</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card therapist-card mb-4">
+                        <div class="card-body p-4">
+                            <h3 class="card-title border-bottom pb-3 mb-4">Chuyên môn</h3>
+                            <div class="d-flex flex-wrap" th:if="${specialties != null && !specialties.empty}">
+                                <span class="specialty-badge" th:each="specialty : ${specialties}" th:text="${specialty.name}">Chuyên môn 1</span>
+                            </div>
+                            <div class="d-flex flex-wrap" th:if="${specialties == null || specialties.empty}">
+                                <span class="specialty-badge">Chăm sóc da mặt</span>
+                                <span class="specialty-badge">Điều trị mụn</span>
+                                <span class="specialty-badge">Trị nám, tàn nhang</span>
+                                <span class="specialty-badge">Massage thư giãn</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card therapist-card mb-4">
+                        <div class="card-body p-4">
+                            <h3 class="card-title border-bottom pb-3 mb-4">Chứng chỉ & Đào tạo</h3>
+                            <div class="certificate-item">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div>
+                                        <h5 class="mb-0">Chứng chỉ Kỹ thuật viên Thẩm mỹ</h5>
+                                        <p class="text-muted mb-0">Học viện Thẩm mỹ Quốc tế</p>
+                                    </div>
+                                    <span class="badge bg-primary">2018 - 2019</span>
+                                </div>
+                            </div>
+                            <div class="certificate-item">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div>
+                                        <h5 class="mb-0">Chuyên gia Chăm sóc da</h5>
+                                        <p class="text-muted mb-0">Trung tâm Đào tạo Spa Chuyên nghiệp</p>
+                                    </div>
+                                    <span class="badge bg-primary">2019 - 2020</span>
+                                </div>
+                            </div>
+                            <div class="certificate-item">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div>
+                                        <h5 class="mb-0">Khóa học Điều trị mụn chuyên sâu</h5>
+                                        <p class="text-muted mb-0">Viện Thẩm mỹ & Da liễu</p>
+                                    </div>
+                                    <span class="badge bg-primary">2021</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card therapist-card">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h3 class="card-title mb-0">Đánh giá từ khách hàng</h3>
+                                <div class="d-flex align-items-center">
+                                    <span class="display-6 fw-bold me-2">4.8</span>
+                                    <div>
+                                        <div class="d-flex text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                        </div>
+                                        <span class="small text-muted">56 đánh giá</span>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="border-top pt-3">
-                                <div class="mb-4">
-                                    <div class="d-flex justify-content-between mb-2">
+                            <div class="review-card">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User">
                                         <div>
                                             <h6 class="mb-0">Nguyễn Thị Hà</h6>
-                                            <div class="text-warning">
+                                            <div class="text-warning small">
                                                 <i class="bi bi-star-fill"></i>
                                                 <i class="bi bi-star-fill"></i>
                                                 <i class="bi bi-star-fill"></i>
@@ -181,16 +299,19 @@
                                                 <i class="bi bi-star-fill"></i>
                                             </div>
                                         </div>
-                                        <small class="text-muted">2 tuần trước</small>
                                     </div>
-                                    <p>Chuyên viên rất tận tâm và chuyên nghiệp. Làn da của tôi đã cải thiện rõ rệt sau liệu trình điều trị mụn.</p>
+                                    <small class="text-muted">2 tuần trước</small>
                                 </div>
-                                
-                                <div class="mb-4">
-                                    <div class="d-flex justify-content-between mb-2">
+                                <p class="mb-0">Chuyên viên rất tận tâm và chuyên nghiệp. Làn da của tôi đã cải thiện rõ rệt sau liệu trình điều trị mụn.</p>
+                            </div>
+                            
+                            <div class="review-card">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User">
                                         <div>
                                             <h6 class="mb-0">Trần Văn Nam</h6>
-                                            <div class="text-warning">
+                                            <div class="text-warning small">
                                                 <i class="bi bi-star-fill"></i>
                                                 <i class="bi bi-star-fill"></i>
                                                 <i class="bi bi-star-fill"></i>
@@ -198,14 +319,134 @@
                                                 <i class="bi bi-star"></i>
                                             </div>
                                         </div>
-                                        <small class="text-muted">1 tháng trước</small>
                                     </div>
-                                    <p>Tôi rất hài lòng với dịch vụ massage và tư vấn chăm sóc da. Chuyên viên hiểu rõ về nhu cầu của tôi.</p>
+                                    <small class="text-muted">1 tháng trước</small>
                                 </div>
-                                
+                                <p class="mb-0">Tôi rất hài lòng với dịch vụ massage và tư vấn chăm sóc da. Chuyên viên hiểu rõ về nhu cầu của tôi.</p>
+                            </div>
+                            
+                            <div class="text-center mt-4">
+                                <a href="#" class="btn btn-outline-primary">Xem tất cả đánh giá</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card therapist-card mb-4">
+                        <div class="card-body p-4 text-center">
+                            <h3 class="card-title mb-4">Đặt lịch hẹn</h3>
+                            <p class="fs-5 mb-4">Đặt lịch hẹn ngay với chuyên viên để được tư vấn và trải nghiệm dịch vụ!</p>
+                            <a th:href="@{/booking}" class="btn btn-primary booking-btn w-100 mb-3">
+                                <i class="bi bi-calendar-check me-2"></i>Đặt lịch hẹn
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="card therapist-card mb-4">
+                        <div class="card-header bg-primary text-white p-3">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-person-lines-fill me-2"></i>
+                                Thông tin liên hệ
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="contact-icon">
+                                    <i class="bi bi-envelope"></i>
+                                </div>
                                 <div>
-                                    <a href="#" class="btn btn-outline-primary">Xem tất cả đánh giá</a>
+                                    <h6 class="mb-0">Email</h6>
+                                    <p class="mb-0 text-muted" th:text="${therapist.email}">email@example.com</p>
                                 </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="contact-icon">
+                                    <i class="bi bi-telephone"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Điện thoại</h6>
+                                    <p class="mb-0 text-muted" th:text="${therapist.phone}">0123 456 789</p>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="contact-icon">
+                                    <i class="bi bi-geo-alt"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Địa chỉ làm việc</h6>
+                                    <p class="mb-0 text-muted">SkinCare Center - 123 Đường Nguyễn Huệ, Quận 1, TP.HCM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card therapist-card mb-4">
+                        <div class="card-header bg-primary text-white p-3">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-calendar-week me-2"></i>
+                                Lịch làm việc
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between px-0">
+                                    <span>Thứ Hai - Thứ Sáu:</span>
+                                    <span class="text-primary">8:00 - 18:00</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between px-0">
+                                    <span>Thứ Bảy:</span>
+                                    <span class="text-primary">9:00 - 17:00</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between px-0">
+                                    <span>Chủ Nhật:</span>
+                                    <span class="text-primary">Nghỉ</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="card therapist-card">
+                        <div class="card-header bg-primary text-white p-3">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-award me-2"></i>
+                                Dịch vụ nổi bật
+                            </h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="list-group list-group-flush">
+                                <a href="#" class="list-group-item list-group-item-action p-3">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://via.placeholder.com/50" class="rounded me-3" alt="Service">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-0">Chăm sóc da cơ bản</h6>
+                                            <small class="text-muted">450.000 VNĐ, 60 phút</small>
+                                        </div>
+                                        <i class="bi bi-chevron-right"></i>
+                                    </div>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action p-3">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://via.placeholder.com/50" class="rounded me-3" alt="Service">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-0">Trị mụn chuyên sâu</h6>
+                                            <small class="text-muted">650.000 VNĐ, 90 phút</small>
+                                        </div>
+                                        <i class="bi bi-chevron-right"></i>
+                                    </div>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action p-3">
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://via.placeholder.com/50" class="rounded me-3" alt="Service">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-0">Massage thư giãn</h6>
+                                            <small class="text-muted">550.000 VNĐ, 75 phút</small>
+                                        </div>
+                                        <i class="bi bi-chevron-right"></i>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
