@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${appName}">Hệ thống Quản lý Dịch vụ Chăm sóc Da</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="display-4" th:text="${appName}">Hệ thống Quản lý Dịch vụ Chăm sóc Da</h1>
+                <p class="lead" th:text="${welcomeMessage}">Chào mừng đến với Hệ thống Quản lý Dịch vụ Chăm sóc Da</p>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="text-center">Đăng nhập / Đăng ký</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <a href="#" class="btn btn-primary btn-block" th:text="${loginText}">Đăng nhập</a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="#" class="btn btn-success btn-block" th:text="${registerText}">Đăng ký</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="col-md-12 text-center">
+                <h2>Chuyển đổi ngôn ngữ</h2>
+                <div class="btn-group">
+                    <a href="?lang=vi" class="btn btn-outline-primary">Tiếng Việt</a>
+                    <a href="?lang=en" class="btn btn-outline-primary">English</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html> 

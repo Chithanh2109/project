@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm đánh giá da - SkinCare Center</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .question-section {
+            display: none;
+        }
+        .question-section.active {
+            display: block;
+        }
+        .progress {
+            height: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-primary text-white py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <h1 class="mb-0">SkinCare Center</h1>
+                </div>
+                <div class="col-md-8">
+                    <nav class="d-flex justify-content-end">
+                        <ul class="nav">
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/}">Trang chủ</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/services}">Dịch vụ</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/therapists}">Chuyên viên</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/about}">Giới thiệu</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/contact}">Liên hệ</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/blog}">Blog</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/login}">Đăng nhập</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/quiz}">Bài khảo sát da</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Câu hỏi</li>
+                        </ol>
+                    </nav>
+                    
+                    <div class="card shadow-sm">
+                        <div class="card-body p-4">
+                            <h2 class="card-title text-center mb-4" th:text="${quiz != null ? quiz.title : 'Đánh giá tình trạng da của bạn'}">Đánh giá tình trạng da của bạn</h2>
+                            
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Tiến độ: <span id="current-question">1</span>/<span id="total-questions" th:text="${questions != null ? questions.size() : 10}">10</span></span>
+                                    <span id="progress-percentage">10%</span>
+                                </div>
+                                <div class="progress">
+                                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            
+                            <form id="quiz-form" th:action="@{/quiz/submit}" method="post">
+                                <input type="hidden" name="sessionId" th:value="${sessionId}" />
+                                
+                                <!-- Questions from database -->
+                                <div th:if="${questions != null && !questions.empty}">
+                                    <div th:each="question, questionStat : ${questions}" th:id="'question-' + ${questionStat.index + 1}" 
+                                         class="question-section" th:classappend="${questionStat.index == 0 ? 'active' : ''}">
+                                         
+                                        <h4 class="mb-4" th:text="${questionStat.index + 1} + '. ' + ${question.text}">1. Câu hỏi mẫu?</h4>
+                                        
+                                        <div class="mb-4">
+                                            <div class="form-check mb-3" th:each="option : ${question.options}">
+                                                <input class="form-check-input" type="radio" 
+                                                       th:name="'answer-' + ${question.id}"
+                                                       th:id="'option-' + ${question.id} + '-' + ${option.id}"
+                                                       th:value="${option.id}" required>
+                                                <label class="form-check-label" 
+                                                       th:for="'option-' + ${question.id} + '-' + ${option.id}"
+                                                       th:text="${option.text}">
+                                                    Option text
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between mt-4">
+                                            <button type="button" class="btn btn-outline-secondary prev-question" th:if="${!questionStat.first}">
+                                                <i class="bi bi-arrow-left me-2"></i>Câu trước
+                                            </button>
+                                            <div th:if="${questionStat.first}"></div>
+                                            
+                                            <button type="button" class="btn btn-primary next-question" th:if="${!questionStat.last}">
+                                                Câu tiếp<i class="bi bi-arrow-right ms-2"></i>
+                                            </button>
+                                            <button type="submit" class="btn btn-success" th:if="${questionStat.last}">
+                                                Hoàn thành<i class="bi bi-check-circle ms-2"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Default questions when no data is available -->
+                                <div th:if="${questions == null || questions.empty}">
+                                    <div id="question-1" class="question-section active">
+                                        <h4 class="mb-4">1. Bạn mô tả loại da của mình như thế nào?</h4>
+                                        
+                                        <div class="mb-4">
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-1" id="option-1-1" value="1" required>
+                                                <label class="form-check-label" for="option-1-1">
+                                                    Da khô, thường có cảm giác căng và bong tróc
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-1" id="option-1-2" value="2">
+                                                <label class="form-check-label" for="option-1-2">
+                                                    Da dầu, đặc biệt ở vùng chữ T (trán, mũi, cằm)
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-1" id="option-1-3" value="3">
+                                                <label class="form-check-label" for="option-1-3">
+                                                    Da hỗn hợp, dầu ở vùng chữ T và khô ở má
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-1" id="option-1-4" value="4">
+                                                <label class="form-check-label" for="option-1-4">
+                                                    Da thường, không quá khô hay quá dầu
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="answer-1" id="option-1-5" value="5">
+                                                <label class="form-check-label" for="option-1-5">
+                                                    Da nhạy cảm, dễ bị kích ứng và đỏ
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-end mt-4">
+                                            <button type="button" class="btn btn-primary next-question">
+                                                Câu tiếp<i class="bi bi-arrow-right ms-2"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="question-2" class="question-section">
+                                        <h4 class="mb-4">2. Bạn có thường xuyên bị mụn không?</h4>
+                                        
+                                        <div class="mb-4">
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-2" id="option-2-1" value="1" required>
+                                                <label class="form-check-label" for="option-2-1">
+                                                    Không bao giờ hoặc hiếm khi
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-2" id="option-2-2" value="2">
+                                                <label class="form-check-label" for="option-2-2">
+                                                    Thỉnh thoảng, chủ yếu khi căng thẳng hoặc trong chu kỳ kinh nguyệt
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-2" id="option-2-3" value="3">
+                                                <label class="form-check-label" for="option-2-3">
+                                                    Thường xuyên, chủ yếu ở vùng chữ T
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-2" id="option-2-4" value="4">
+                                                <label class="form-check-label" for="option-2-4">
+                                                    Thường xuyên, trên khắp khuôn mặt
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="answer-2" id="option-2-5" value="5">
+                                                <label class="form-check-label" for="option-2-5">
+                                                    Mụn nặng và dai dẳng
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between mt-4">
+                                            <button type="button" class="btn btn-outline-secondary prev-question">
+                                                <i class="bi bi-arrow-left me-2"></i>Câu trước
+                                            </button>
+                                            <button type="button" class="btn btn-primary next-question">
+                                                Câu tiếp<i class="bi bi-arrow-right ms-2"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="question-3" class="question-section">
+                                        <h4 class="mb-4">3. Da của bạn nhạy cảm như thế nào với ánh nắng mặt trời?</h4>
+                                        
+                                        <div class="mb-4">
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-3" id="option-3-1" value="1" required>
+                                                <label class="form-check-label" for="option-3-1">
+                                                    Rất nhạy cảm, luôn bị cháy nắng và không bao giờ rám nắng
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-3" id="option-3-2" value="2">
+                                                <label class="form-check-label" for="option-3-2">
+                                                    Dễ bị cháy nắng, hiếm khi rám nắng
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-3" id="option-3-3" value="3">
+                                                <label class="form-check-label" for="option-3-3">
+                                                    Đôi khi bị cháy nắng, dần dần chuyển sang rám nắng
+                                                </label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="answer-3" id="option-3-4" value="4">
+                                                <label class="form-check-label" for="option-3-4">
+                                                    Hiếm khi bị cháy nắng, dễ dàng rám nắng
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="answer-3" id="option-3-5" value="5">
+                                                <label class="form-check-label" for="option-3-5">
+                                                    Không bao giờ bị cháy nắng, luôn rám nắng
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between mt-4">
+                                            <button type="button" class="btn btn-outline-secondary prev-question">
+                                                <i class="bi bi-arrow-left me-2"></i>Câu trước
+                                            </button>
+                                            <button type="submit" class="btn btn-success">
+                                                Hoàn thành<i class="bi bi-check-circle ms-2"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 d-none d-md-block">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Lưu ý khi làm trắc nghiệm</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Hãy trả lời thật chính xác để nhận được tư vấn phù hợp nhất.</li>
+                                <li class="list-group-item">Không có câu trả lời đúng hay sai, chọn lựa chọn phù hợp nhất với bạn.</li>
+                                <li class="list-group-item">Bạn có thể quay lại câu hỏi trước để thay đổi đáp án.</li>
+                                <li class="list-group-item">Kết quả sẽ được hiển thị ngay sau khi hoàn thành.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>SkinCare Center</h4>
+                    <p>Chăm sóc sức khỏe làn da của bạn là sứ mệnh của chúng tôi.</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>Liên hệ</h4>
+                    <p><i class="bi bi-geo-alt"></i> 123 Đường Nguyễn Huệ, Quận 1, TP.HCM</p>
+                    <p><i class="bi bi-telephone"></i> (028) 1234 5678</p>
+                    <p><i class="bi bi-envelope"></i> info@skincarecenter.com</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>Theo dõi chúng tôi</h4>
+                    <div class="d-flex gap-3 fs-4">
+                        <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-center">
+                    <p class="mb-0">© 2023 SkinCare Center. Tất cả các quyền được bảo lưu.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const totalQuestions = $('.question-section').length;
+            $('#total-questions').text(totalQuestions);
+            
+            // Function to update progress
+            function updateProgress(currentQuestion) {
+                const percentage = Math.round((currentQuestion / totalQuestions) * 100);
+                $('#current-question').text(currentQuestion);
+                $('#progress-percentage').text(percentage + '%');
+                $('#progress-bar').css('width', percentage + '%').attr('aria-valuenow', percentage);
+            }
+            
+            // Next question button
+            $('.next-question').click(function() {
+                const currentSection = $(this).closest('.question-section');
+                const currentId = currentSection.attr('id');
+                const currentNum = parseInt(currentId.split('-')[1]);
+                
+                // Check if question is answered
+                const questionInputs = currentSection.find('input[type="radio"]');
+                const isAnswered = questionInputs.is(':checked');
+                
+                if (!isAnswered) {
+                    alert('Vui lòng chọn một đáp án trước khi tiếp tục.');
+                    return;
+                }
+                
+                const nextNum = currentNum + 1;
+                const nextSection = $('#question-' + nextNum);
+                
+                if (nextSection.length) {
+                    currentSection.removeClass('active');
+                    nextSection.addClass('active');
+                    updateProgress(nextNum);
+                    
+                    // Scroll to top of form
+                    $('html, body').animate({
+                        scrollTop: $('#quiz-form').offset().top - 100
+                    }, 200);
+                }
+            });
+            
+            // Previous question button
+            $('.prev-question').click(function() {
+                const currentSection = $(this).closest('.question-section');
+                const currentId = currentSection.attr('id');
+                const currentNum = parseInt(currentId.split('-')[1]);
+                
+                const prevNum = currentNum - 1;
+                const prevSection = $('#question-' + prevNum);
+                
+                if (prevSection.length) {
+                    currentSection.removeClass('active');
+                    prevSection.addClass('active');
+                    updateProgress(prevNum);
+                    
+                    // Scroll to top of form
+                    $('html, body').animate({
+                        scrollTop: $('#quiz-form').offset().top - 100
+                    }, 200);
+                }
+            });
+            
+            // Initialize
+            updateProgress(1);
+        });
+    </script>
+</body>
+</html> 

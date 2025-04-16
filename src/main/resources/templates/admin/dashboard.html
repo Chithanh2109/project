@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Quản lý spa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/Chart.min.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <style>
+        .card-counter {
+            box-shadow: 0 4px 8px rgba(0,0,0,.1);
+            padding: 20px 10px;
+            background-color: #fff;
+            height: 100px;
+            border-radius: 5px;
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 20px;
+        }
+        
+        .card-counter:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,.2);
+            transform: translateY(-2px);
+        }
+        
+        .card-counter.primary {
+            background-color: #007bff;
+            color: #FFF;
+        }
+        
+        .card-counter.success {
+            background-color: #28a745;
+            color: #FFF;
+        }
+        
+        .card-counter.info {
+            background-color: #17a2b8;
+            color: #FFF;
+        }
+        
+        .card-counter.warning {
+            background-color: #ffc107;
+            color: #FFF;
+        }
+        
+        .card-counter.danger {
+            background-color: #dc3545;
+            color: #FFF;
+        }
+        
+        .card-counter i {
+            font-size: 4em;
+            opacity: 0.3;
+        }
+        
+        .card-counter .count-numbers {
+            position: absolute;
+            right: 35px;
+            top: 20px;
+            font-size: 32px;
+            display: block;
+        }
+        
+        .card-counter .count-name {
+            position: absolute;
+            right: 35px;
+            top: 65px;
+            font-style: italic;
+            text-transform: capitalize;
+            opacity: 0.8;
+            display: block;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3 sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/admin/dashboard}">
+                                <i class="bi bi-speedometer2 me-2"></i> Bảng điều khiển
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/appointments}">
+                                <i class="bi bi-calendar-check me-2"></i> Lịch hẹn
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/services}">
+                                <i class="bi bi-card-list me-2"></i> Dịch vụ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/therapists}">
+                                <i class="bi bi-people me-2"></i> Chuyên viên
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/customers}">
+                                <i class="bi bi-person-badge me-2"></i> Khách hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/quiz}">
+                                <i class="bi bi-question-circle me-2"></i> Trắc nghiệm
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/reports}">
+                                <i class="bi bi-bar-chart me-2"></i> Báo cáo
+                            </a>
+                        </li>
+                        <li class="nav-item mt-3">
+                            <a class="nav-link text-danger" th:href="@{/logout}">
+                                <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Bảng điều khiển</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="exportReport()">
+                                <i class="bi bi-download me-1"></i> Xuất báo cáo
+                            </button>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="timeRangeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-calendar3 me-1"></i> Hôm nay
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="timeRangeDropdown">
+                                <li><a class="dropdown-item" href="#" onclick="changeTimeRange('today')">Hôm nay</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changeTimeRange('yesterday')">Hôm qua</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changeTimeRange('thisWeek')">Tuần này</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changeTimeRange('lastWeek')">Tuần trước</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changeTimeRange('thisMonth')">Tháng này</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changeTimeRange('lastMonth')">Tháng trước</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="changeTimeRange('custom')">Tùy chỉnh...</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Counter Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card-counter primary">
+                            <i class="bi bi-calendar-check"></i>
+                            <span class="count-numbers" th:text="${stats.totalAppointments}">0</span>
+                            <span class="count-name">Lịch hẹn</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-counter success">
+                            <i class="bi bi-person-badge"></i>
+                            <span class="count-numbers" th:text="${stats.totalCustomers}">0</span>
+                            <span class="count-name">Khách hàng</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-counter info">
+                            <i class="bi bi-arrow-up-right"></i>
+                            <span class="count-numbers" th:text="${stats.completionRate + '%'}">0%</span>
+                            <span class="count-name">Tỷ lệ hoàn thành</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-counter warning">
+                            <i class="bi bi-currency-dollar"></i>
+                            <span class="count-numbers" th:text="${#numbers.formatDecimal(stats.revenue / 1000000, 0, 1) + 'M'}">0M</span>
+                            <span class="count-name">Doanh thu (VNĐ)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Lịch hẹn theo ngày</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="appointmentsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Trạng thái lịch hẹn</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="appointmentStatusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Dịch vụ phổ biến</h5>
+                                <a href="/admin/services" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Dịch vụ</th>
+                                                <th class="text-center">Số lượt đặt</th>
+                                                <th class="text-end">Doanh thu</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="service : ${popularServices}">
+                                                <td th:text="${service.name}">Facial Basic</td>
+                                                <td class="text-center" th:text="${service.bookingCount}">25</td>
+                                                <td class="text-end" th:text="${#numbers.formatDecimal(service.revenue, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">2,500,000 VNĐ</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card shadow-sm h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Hiệu suất chuyên viên</h5>
+                                <a href="/admin/therapists" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Chuyên viên</th>
+                                                <th class="text-center">Lịch hẹn</th>
+                                                <th class="text-center">Đánh giá</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="therapist : ${topTherapists}">
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-light rounded-circle p-1 me-2">
+                                                            <i class="bi bi-person"></i>
+                                                        </div>
+                                                        <span th:text="${therapist.fullName}">Nguyễn Thị A</span>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center" th:text="${therapist.appointmentCount}">42</td>
+                                                <td class="text-center">
+                                                    <div class="d-flex justify-content-center align-items-center">
+                                                        <span th:text="${therapist.averageRating}">4.8</span>
+                                                        <i class="bi bi-star-fill text-warning ms-1"></i>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Appointments -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">Lịch hẹn gần đây</h5>
+                        <a href="/admin/appointments" class="btn btn-sm btn-outline-primary">Xem tất cả</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Mã</th>
+                                        <th>Khách hàng</th>
+                                        <th>Dịch vụ</th>
+                                        <th>Thời gian</th>
+                                        <th>Chuyên viên</th>
+                                        <th class="text-center">Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="appointment : ${recentAppointments}">
+                                        <td th:text="${appointment.id}">APT123</td>
+                                        <td th:text="${appointment.customer.fullName}">Nguyễn Văn A</td>
+                                        <td>
+                                            <span th:if="${appointment.services.size() == 1}" th:text="${appointment.services[0].service.name}">Facial Classic</span>
+                                            <span th:if="${appointment.services.size() > 1}" th:text="${appointment.services[0].service.name + ' +' + (appointment.services.size() - 1)}">Facial Classic +2</span>
+                                        </td>
+                                        <td th:text="${#temporals.format(appointment.appointmentDate, 'dd/MM/yyyy HH:mm')}">01/01/2023 10:00</td>
+                                        <td th:text="${appointment.therapist != null ? appointment.therapist.fullName : 'Chưa phân công'}">Nguyễn Thị B</td>
+                                        <td class="text-center">
+                                            <span th:class="${'badge ' + 
+                                                            (appointment.status == 'PENDING' ? 'bg-warning' : 
+                                                            appointment.status == 'CONFIRMED' ? 'bg-primary' : 
+                                                            appointment.status == 'CHECKED_IN' ? 'bg-info' : 
+                                                            appointment.status == 'IN_PROGRESS' ? 'bg-primary' : 
+                                                            appointment.status == 'COMPLETED' ? 'bg-success' : 
+                                                            appointment.status == 'CHECKED_OUT' ? 'bg-success' : 
+                                                            appointment.status == 'CANCELLED' ? 'bg-danger' : 'bg-secondary')}"
+                                                  th:text="${appointment.status == 'PENDING' ? 'Chờ xác nhận' : 
+                                                            appointment.status == 'CONFIRMED' ? 'Đã xác nhận' : 
+                                                            appointment.status == 'CHECKED_IN' ? 'Đã đến' : 
+                                                            appointment.status == 'IN_PROGRESS' ? 'Đang thực hiện' : 
+                                                            appointment.status == 'COMPLETED' ? 'Hoàn thành' : 
+                                                            appointment.status == 'CHECKED_OUT' ? 'Đã thanh toán' : 
+                                                            appointment.status == 'CANCELLED' ? 'Đã hủy' : 
+                                                            appointment.status == 'NO_SHOW' ? 'Vắng mặt' : appointment.status}">
+                                                Trạng thái
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script th:inline="javascript">
+        // Dữ liệu từ server
+        const appointmentDates = /*[[${appointmentDates}]]*/ [];
+        const appointmentCounts = /*[[${appointmentCounts}]]*/ [];
+        const statusLabels = /*[[${statusLabels}]]*/ [];
+        const statusCounts = /*[[${statusCounts}]]*/ [];
+        
+        // Biểu đồ lịch hẹn theo ngày
+        const appointmentsCtx = document.getElementById('appointmentsChart').getContext('2d');
+        const appointmentsChart = new Chart(appointmentsCtx, {
+            type: 'line',
+            data: {
+                labels: appointmentDates,
+                datasets: [{
+                    label: 'Số lượng lịch hẹn',
+                    data: appointmentCounts,
+                    backgroundColor: 'rgba(13, 110, 253, 0.2)',
+                    borderColor: 'rgba(13, 110, 253, 1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointBackgroundColor: 'rgba(13, 110, 253, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    }
+                }
+            }
+        });
+        
+        // Biểu đồ trạng thái lịch hẹn
+        const statusCtx = document.getElementById('appointmentStatusChart').getContext('2d');
+        const statusChart = new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: statusLabels,
+                datasets: [{
+                    data: statusCounts,
+                    backgroundColor: [
+                        'rgba(255, 193, 7, 0.8)',  // Chờ xác nhận
+                        'rgba(13, 110, 253, 0.8)', // Đã xác nhận
+                        'rgba(13, 202, 240, 0.8)', // Đã đến
+                        'rgba(13, 110, 253, 0.8)', // Đang thực hiện
+                        'rgba(25, 135, 84, 0.8)',  // Hoàn thành
+                        'rgba(25, 135, 84, 0.8)',  // Đã thanh toán
+                        'rgba(220, 53, 69, 0.8)',  // Đã hủy
+                        'rgba(108, 117, 125, 0.8)' // Vắng mặt
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    }
+                }
+            }
+        });
+        
+        function changeTimeRange(range) {
+            // Cập nhật text của dropdown
+            document.getElementById('timeRangeDropdown').innerText = 
+                range === 'today' ? 'Hôm nay' :
+                range === 'yesterday' ? 'Hôm qua' :
+                range === 'thisWeek' ? 'Tuần này' :
+                range === 'lastWeek' ? 'Tuần trước' :
+                range === 'thisMonth' ? 'Tháng này' :
+                range === 'lastMonth' ? 'Tháng trước' : 'Tùy chỉnh';
+            
+            // Xác định ngày bắt đầu và kết thúc
+            let start, end;
+            const today = new Date();
+            end = today.toISOString().split('T')[0]; // Định dạng YYYY-MM-DD
+            
+            if (range === 'today') {
+                start = end;
+            } else if (range === 'yesterday') {
+                const yesterday = new Date(today);
+                yesterday.setDate(today.getDate() - 1);
+                start = yesterday.toISOString().split('T')[0];
+                end = start;
+            } else if (range === 'thisWeek') {
+                const firstDay = new Date(today);
+                const day = today.getDay();
+                const diff = today.getDate() - day + (day === 0 ? -6 : 1); // Điều chỉnh cho Chủ nhật
+                firstDay.setDate(diff);
+                start = firstDay.toISOString().split('T')[0];
+            } else if (range === 'lastWeek') {
+                const lastWeekEnd = new Date(today);
+                lastWeekEnd.setDate(today.getDate() - today.getDay() - (today.getDay() === 0 ? 0 : 7));
+                const lastWeekStart = new Date(lastWeekEnd);
+                lastWeekStart.setDate(lastWeekEnd.getDate() - 6);
+                start = lastWeekStart.toISOString().split('T')[0];
+                end = lastWeekEnd.toISOString().split('T')[0];
+            } else if (range === 'thisMonth') {
+                start = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-01';
+            } else if (range === 'lastMonth') {
+                const lastMonth = new Date(today);
+                lastMonth.setMonth(today.getMonth() - 1);
+                start = lastMonth.getFullYear() + '-' + (lastMonth.getMonth() + 1).toString().padStart(2, '0') + '-01';
+                end = today.getFullYear() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-01';
+                // Trừ một ngày để lấy ngày cuối cùng của tháng trước
+                const endDate = new Date(end);
+                endDate.setDate(endDate.getDate() - 1);
+                end = endDate.toISOString().split('T')[0];
+            } else if (range === 'custom') {
+                // Hiển thị date range picker hoặc modal để lựa chọn tùy chỉnh
+                console.log('Hiển thị bộ chọn khoảng thời gian');
+                return;
+            }
+            
+            // Tải lại trang dashboard với khoảng thời gian mới
+            window.location.href = '/admin/dashboard?start=' + start + '&end=' + end;
+        }
+        
+        function exportReport() {
+            // Tạo form để mở cửa sổ mới với báo cáo
+            const form = document.createElement('form');
+            form.method = 'GET';
+            form.action = '/admin/reports/export';
+            form.target = '_blank';
+            
+            // Thêm tham số khoảng thời gian hiện tại
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('start')) {
+                const startInput = document.createElement('input');
+                startInput.type = 'hidden';
+                startInput.name = 'start';
+                startInput.value = urlParams.get('start');
+                form.appendChild(startInput);
+            }
+            
+            if (urlParams.has('end')) {
+                const endInput = document.createElement('input');
+                endInput.type = 'hidden';
+                endInput.name = 'end';
+                endInput.value = urlParams.get('end');
+                form.appendChild(endInput);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+    </script>
+</body>
+</html> 

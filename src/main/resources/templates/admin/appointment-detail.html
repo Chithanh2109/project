@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết lịch hẹn | Quản lý spa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3 sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/dashboard}">
+                                <i class="bi bi-speedometer2 me-2"></i> Bảng điều khiển
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" th:href="@{/admin/appointments}">
+                                <i class="bi bi-calendar-check me-2"></i> Lịch hẹn
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/services}">
+                                <i class="bi bi-card-list me-2"></i> Dịch vụ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/therapists}">
+                                <i class="bi bi-people me-2"></i> Chuyên viên
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/customers}">
+                                <i class="bi bi-person-badge me-2"></i> Khách hàng
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/admin/reports}">
+                                <i class="bi bi-bar-chart me-2"></i> Báo cáo
+                            </a>
+                        </li>
+                        <li class="nav-item mt-3">
+                            <a class="nav-link text-danger" th:href="@{/logout}">
+                                <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Chi tiết lịch hẹn #<span th:text="${appointment.id}">123</span></h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a th:href="@{/admin/appointments}" class="btn btn-sm btn-secondary" aria-label="Quay lại danh sách lịch hẹn">
+                            <i class="bi bi-arrow-left"></i> Quay lại
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Alert messages -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-1"></i> <span th:text="${successMessage}">Thành công</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-1"></i> <span th:text="${errorMessage}">Lỗi</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="row mb-4">
+                    <!-- Appointment Details Card -->
+                    <div class="col-md-8">
+                        <div class="card mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Thông tin lịch hẹn</h5>
+                                <span th:class="${'badge ' + (appointment.status == 'PENDING' ? 'bg-warning' : 
+                                                            appointment.status == 'CHECKED_IN' ? 'bg-info' : 
+                                                            appointment.status == 'IN_PROGRESS' ? 'bg-primary' : 
+                                                            appointment.status == 'COMPLETED' ? 'bg-success' : 'bg-danger'))}"
+                                      th:text="${appointment.status == 'PENDING' ? 'Đang chờ' : 
+                                                appointment.status == 'CHECKED_IN' ? 'Đã đến' : 
+                                                appointment.status == 'IN_PROGRESS' ? 'Đang thực hiện' : 
+                                                appointment.status == 'COMPLETED' ? 'Hoàn thành' : 'Đã hủy'}">
+                                    Trạng thái
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>Ngày hẹn:</strong> <span th:text="${#temporals.format(appointment.appointmentDate, 'dd/MM/yyyy')}">01/01/2023</span></p>
+                                        <p><strong>Giờ hẹn:</strong> <span th:text="${#temporals.format(appointment.startTime, 'HH:mm')}">10:00</span> - <span th:text="${#temporals.format(appointment.endTime, 'HH:mm')}">11:00</span></p>
+                                        <p><strong>Mã đặt lịch:</strong> <span th:text="${appointment.bookingCode}">ABC123</span></p>
+                                        <p><strong>Người tạo lịch:</strong> <span th:text="${appointment.createdBy}">Admin</span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong>Người cập nhật:</strong> <span th:text="${appointment.updatedBy}">Admin</span></p>
+                                        <p><strong>Thời gian tạo:</strong> <span th:text="${#temporals.format(appointment.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2023 10:00</span></p>
+                                        <p><strong>Cập nhật lần cuối:</strong> <span th:text="${#temporals.format(appointment.updatedAt, 'dd/MM/yyyy HH:mm')}">01/01/2023 10:00</span></p>
+                                        <p><strong>Ghi chú:</strong> <span th:text="${appointment.notes ?: 'Không có'}">Ghi chú</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service Details -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Dịch vụ đã đặt</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Tên dịch vụ</th>
+                                                <th>Thời gian</th>
+                                                <th class="text-end">Giá</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="service : ${appointment.services}">
+                                                <td th:text="${service.name}">Massage mặt</td>
+                                                <td th:text="${service.duration + ' phút'}">60 phút</td>
+                                                <td class="text-end" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">500.000 VNĐ</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="2" class="text-end">Tổng cộng:</th>
+                                                <th class="text-end" th:text="${#numbers.formatDecimal(appointment.totalAmount, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">500.000 VNĐ</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer and Actions -->
+                    <div class="col-md-4">
+                        <!-- Customer Info -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Thông tin khách hàng</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-light rounded-circle p-2 me-3">
+                                        <i class="bi bi-person fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0" th:text="${appointment.customer.fullName}">Nguyễn Văn A</h6>
+                                        <small class="text-muted" th:text="${appointment.customer.email}">email@example.com</small>
+                                    </div>
+                                </div>
+                                <p class="mb-1"><i class="bi bi-telephone me-2"></i> <span th:text="${appointment.customer.phone}">0123456789</span></p>
+                                <p><i class="bi bi-calendar-date me-2"></i> Khách hàng từ <span th:text="${#temporals.format(appointment.customer.createdAt, 'dd/MM/yyyy')}">01/01/2023</span></p>
+                                
+                                <a th:href="@{/admin/customers/{id}(id=${appointment.customer.id})}" class="btn btn-outline-primary btn-sm mt-2 w-100">
+                                    <i class="bi bi-person-badge me-1"></i> Xem hồ sơ khách hàng
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Therapist Info -->
+                        <div class="card mb-4" th:if="${appointment.therapist != null}">
+                            <div class="card-header">
+                                <h5 class="mb-0">Chuyên viên phụ trách</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="bg-light rounded-circle p-2 me-3">
+                                        <i class="bi bi-person fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0" th:text="${appointment.therapist.fullName}">Nguyễn Thị B</h6>
+                                        <small class="text-muted" th:text="${appointment.therapist.specialty}">Chuyên gia massage</small>
+                                    </div>
+                                </div>
+                                <p><i class="bi bi-telephone me-2"></i> <span th:text="${appointment.therapist.phone}">0123456789</span></p>
+                            </div>
+                        </div>
+
+                        <!-- Assign Therapist Form -->
+                        <div class="card mb-4" th:if="${appointment.status == 'CHECKED_IN' && appointment.therapist == null}">
+                            <div class="card-header">
+                                <h5 class="mb-0">Chỉ định chuyên viên</h5>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{/admin/appointments/{id}/assign-therapist(id=${appointment.id})}" method="post">
+                                    <div class="mb-3">
+                                        <label for="therapistId" class="form-label">Chọn chuyên viên</label>
+                                        <select class="form-select" id="therapistId" name="therapistId" required>
+                                            <option value="">-- Chọn chuyên viên --</option>
+                                            <option th:each="therapist : ${availableTherapists}" 
+                                                    th:value="${therapist.id}" 
+                                                    th:text="${therapist.fullName}">
+                                                Chuyên viên
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-person-check me-1"></i> Chỉ định chuyên viên
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Thao tác</h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Check-in Button -->
+                                <button th:if="${appointment.status.name() == 'PENDING'}" type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#checkInModal" aria-label="Check-in lịch hẹn">
+                                    <i class="bi bi-check-circle"></i> Check-in
+                                </button>
+
+                                <!-- Start Service Button -->
+                                <form th:if="${appointment.status == 'CHECKED_IN' && appointment.therapist != null}" th:action="@{/admin/appointments/{id}/start(id=${appointment.id})}" method="post" class="mb-2">
+                                    <button type="submit" class="btn btn-info w-100">
+                                        <i class="bi bi-play-circle me-1"></i> Bắt đầu dịch vụ
+                                    </button>
+                                </form>
+
+                                <!-- Complete Button -->
+                                <form th:if="${appointment.status == 'IN_PROGRESS'}" th:action="@{/admin/appointments/{id}/complete(id=${appointment.id})}" method="post" class="mb-2">
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="bi bi-check-circle me-1"></i> Hoàn thành
+                                    </button>
+                                </form>
+
+                                <!-- Cancel Button -->
+                                <button th:if="${appointment.status.name() == 'PENDING' || appointment.status.name() == 'CONFIRMED'}" type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal" aria-label="Hủy lịch hẹn">
+                                    <i class="bi bi-x-circle"></i> Hủy lịch hẹn
+                                </button>
+
+                                <!-- Add Notes Button -->
+                                <button class="btn btn-outline-secondary w-100" data-bs-toggle="modal" data-bs-target="#notesModal">
+                                    <i class="bi bi-pencil-square me-1"></i> Thêm ghi chú
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Notes Modal -->
+    <div class="modal fade" id="notesModal" tabindex="-1" aria-labelledby="notesModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form th:action="@{/admin/appointments/{id}/add-notes(id=${appointment.id})}" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="notesModalLabel">Thêm ghi chú cho lịch hẹn</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Ghi chú</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="4" th:text="${appointment.notes}"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Lưu ghi chú</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

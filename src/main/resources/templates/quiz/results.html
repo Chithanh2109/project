@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả đánh giá da - SkinCare Center</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header class="bg-primary text-white py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <h1 class="mb-0">SkinCare Center</h1>
+                </div>
+                <div class="col-md-8">
+                    <nav class="d-flex justify-content-end">
+                        <ul class="nav">
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/}">Trang chủ</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/services}">Dịch vụ</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/therapists}">Chuyên viên</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/about}">Giới thiệu</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/contact}">Liên hệ</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/blog}">Blog</a></li>
+                            <li class="nav-item"><a class="nav-link text-white" th:href="@{/login}">Đăng nhập</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/quiz}">Bài khảo sát da</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Kết quả</li>
+                        </ol>
+                    </nav>
+                    
+                    <div class="card shadow-sm mb-4 text-center">
+                        <div class="card-body p-5">
+                            <div class="mb-4">
+                                <div class="bg-success d-inline-flex text-white rounded-circle align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                    <i class="bi bi-check-lg fs-1"></i>
+                                </div>
+                            </div>
+                            <h2 class="mb-3">Cảm ơn bạn đã hoàn thành bài khảo sát!</h2>
+                            <p class="lead">Dựa trên các câu trả lời của bạn, chúng tôi đã phân tích tình trạng da và đưa ra các đề xuất phù hợp nhất.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header bg-primary text-white">
+                                    <h4 class="card-title mb-0">Loại da của bạn</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-3">
+                                        <img th:if="${result != null && result.skinType != null}" th:src="@{'/images/skin-types/' + ${result.skinType.name().toLowerCase()} + '.jpg'}" class="img-fluid rounded" alt="Skin Type" style="max-height: 150px;">
+                                        <img th:if="${result == null || result.skinType == null}" src="https://via.placeholder.com/150" class="img-fluid rounded" alt="Skin Type">
+                                    </div>
+                                    
+                                    <h5 class="mb-3" th:text="${result != null && result.skinType != null ? T(com.skincare.model.SkinType).valueOf(result.skinType).getDescription() : 'Da hỗn hợp'}">Da hỗn hợp</h5>
+                                    
+                                    <p th:if="${result != null && result.skinType != null}" th:text="${result.skinTypeDescription}">
+                                        Da của bạn có vùng chữ T (trán, mũi, cằm) thường tiết nhiều dầu, trong khi các vùng khác như má có thể khô hơn.
+                                    </p>
+                                    <p th:if="${result == null || result.skinType == null}">
+                                        Da của bạn có vùng chữ T (trán, mũi, cằm) thường tiết nhiều dầu, trong khi các vùng khác như má có thể khô hơn. Loại da này cần được cân bằng độ ẩm và kiểm soát dầu cho từng vùng khác nhau.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-8 mb-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-header bg-primary text-white">
+                                    <h4 class="card-title mb-0">Các vấn đề da chính</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div th:if="${result != null && result.skinConcerns != null && !result.skinConcerns.empty}">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3" th:each="concern : ${result.skinConcerns}">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <i class="bi bi-exclamation-circle text-warning fs-4"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h5 th:text="${concern.name}">Vấn đề</h5>
+                                                        <p th:text="${concern.description}">Mô tả vấn đề</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Default concerns when no data is available -->
+                                    <div th:if="${result == null || result.skinConcerns == null || result.skinConcerns.empty}">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <i class="bi bi-exclamation-circle text-warning fs-4"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h5>Mụn trứng cá nhẹ</h5>
+                                                        <p>Bạn có xu hướng xuất hiện mụn nhẹ tại vùng chữ T, đặc biệt là trong thời kỳ căng thẳng hoặc chu kỳ kinh nguyệt.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <i class="bi bi-exclamation-circle text-warning fs-4"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h5>Mất nước</h5>
+                                                        <p>Da của bạn có dấu hiệu mất nước, khiến cho vùng má đôi khi cảm thấy căng và thiếu độ đàn hồi.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <i class="bi bi-exclamation-circle text-warning fs-4"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h5>Lỗ chân lông to</h5>
+                                                        <p>Lỗ chân lông ở vùng mũi và má có xu hướng giãn rộng, làm bề mặt da không đều.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <i class="bi bi-exclamation-circle text-warning fs-4"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h5>Dầu thừa</h5>
+                                                        <p>Da tiết dầu nhiều ở vùng trán, mũi và cằm, đặc biệt là vào giữa ngày.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="card-title mb-0">Dịch vụ đề xuất</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row" th:if="${result != null && result.recommendedServices != null && !result.recommendedServices.empty}">
+                                <div class="col-md-6 mb-4" th:each="service : ${result.recommendedServices}">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="${service.name}">Tên dịch vụ</h5>
+                                            <p class="card-text" th:text="${service.description}">Mô tả dịch vụ</p>
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">500.000 VNĐ</span>
+                                                <span class="badge bg-info text-dark" th:text="${service.duration} + ' phút'">60 phút</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-white border-top-0">
+                                            <a th:href="@{'/services/' + ${service.id}}" class="btn btn-sm btn-outline-primary">Xem chi tiết</a>
+                                            <a href="#" class="btn btn-sm btn-primary">Đặt ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Default services when no data is available -->
+                            <div class="row" th:if="${result == null || result.recommendedServices == null || result.recommendedServices.empty}">
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Liệu trình cân bằng dầu & ẩm</h5>
+                                            <p class="card-text">Dịch vụ chuyên biệt cho da hỗn hợp, giúp cân bằng độ ẩm và kiểm soát dầu thừa. Làm sạch sâu, thải độc và cân bằng pH cho da.</p>
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <span class="text-primary fw-bold">650.000 VNĐ</span>
+                                                <span class="badge bg-info text-dark">75 phút</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-white border-top-0">
+                                            <a href="#" class="btn btn-sm btn-outline-primary">Xem chi tiết</a>
+                                            <a href="#" class="btn btn-sm btn-primary">Đặt ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Điều trị mụn chuyên sâu</h5>
+                                            <p class="card-text">Liệu trình kết hợp làm sạch sâu, điều trị mụn chuyên nghiệp và cân bằng da. Giảm viêm, kháng khuẩn và ngăn ngừa mụn tái phát.</p>
+                                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                                <span class="text-primary fw-bold">750.000 VNĐ</span>
+                                                <span class="badge bg-info text-dark">90 phút</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-white border-top-0">
+                                            <a href="#" class="btn btn-sm btn-outline-primary">Xem chi tiết</a>
+                                            <a href="#" class="btn btn-sm btn-primary">Đặt ngay</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="card-title mb-0">Lời khuyên chăm sóc da</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    <div class="text-center">
+                                        <div class="mb-3">
+                                            <i class="bi bi-droplet text-primary fs-1"></i>
+                                        </div>
+                                        <h5>Làm sạch đúng cách</h5>
+                                        <p>Sử dụng sữa rửa mặt dịu nhẹ, không chứa sulfate. Rửa mặt hai lần mỗi ngày, sáng và tối.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="text-center">
+                                        <div class="mb-3">
+                                            <i class="bi bi-moisture text-primary fs-1"></i>
+                                        </div>
+                                        <h5>Cân bằng dưỡng ẩm</h5>
+                                        <p>Dùng kem dưỡng ẩm dạng gel cho vùng chữ T và kem đặc hơn cho vùng má khô hơn.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="text-center">
+                                        <div class="mb-3">
+                                            <i class="bi bi-sun text-primary fs-1"></i>
+                                        </div>
+                                        <h5>Bảo vệ khỏi ánh nắng</h5>
+                                        <p>Luôn sử dụng kem chống nắng SPF ít nhất 30 mỗi ngày, kể cả khi ở trong nhà.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <p class="mb-0"><strong>Lưu ý:</strong> Kết quả này là đánh giá sơ bộ dựa trên các câu trả lời của bạn. Để có đánh giá chính xác và chi tiết hơn, bạn nên đến trung tâm để được các chuyên viên da liễu tư vấn trực tiếp.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a th:href="@{/}" class="btn btn-outline-secondary me-2">Về trang chủ</a>
+                        <a th:href="@{/services}" class="btn btn-primary">Xem tất cả dịch vụ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>SkinCare Center</h4>
+                    <p>Chăm sóc sức khỏe làn da của bạn là sứ mệnh của chúng tôi.</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>Liên hệ</h4>
+                    <p><i class="bi bi-geo-alt"></i> 123 Đường Nguyễn Huệ, Quận 1, TP.HCM</p>
+                    <p><i class="bi bi-telephone"></i> (028) 1234 5678</p>
+                    <p><i class="bi bi-envelope"></i> info@skincarecenter.com</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>Theo dõi chúng tôi</h4>
+                    <div class="d-flex gap-3 fs-4">
+                        <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-center">
+                    <p class="mb-0">© 2023 SkinCare Center. Tất cả các quyền được bảo lưu.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+</body>
+</html> 
