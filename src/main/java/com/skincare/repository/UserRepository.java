@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.userType = :userType")
     List<User> findByUserType(@Param("userType") UserType userType);
     
-    List<User> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName);
+    List<User> findByFullNameContainingIgnoreCase(String name);
     
     boolean existsByUsername(String username);
     
@@ -33,6 +33,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName")
     List<User> findByRoleName(String roleName);
     
-    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = 'ROLE_THERAPIST' AND u.active = true")
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = 'ROLE_THERAPIST' AND u.isActive = true")
     List<User> findActiveTherapists();
 } 
