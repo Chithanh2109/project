@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.skincare.model.Product;
 import com.skincare.service.ProductService;
@@ -61,18 +62,21 @@ public class ProductController {
         return "products/by-brand";
     }
 
-    @GetMapping
+    @GetMapping("/api")
+    @ResponseBody
     public ResponseEntity<Page<Product>> getAllProducts(Pageable pageable) {
         return ResponseEntity.ok(productService.findAll(pageable));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/{id}")
+    @ResponseBody
     public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.findById(id));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseBody
     public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) {
         return ResponseEntity.ok(productService.save(product));
     }
