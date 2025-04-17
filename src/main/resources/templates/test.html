@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm tra ứng dụng - BeautyCare</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .success-box {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        h1 {
+            color: #ff6b6b;
+            border-bottom: 2px solid #ff6b6b;
+            padding-bottom: 10px;
+        }
+        ul {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ứng dụng BeautyCare đang chạy!</h1>
+    
+    <div class="success-box">
+        <p><strong>Chúc mừng!</strong> Nếu bạn thấy trang này, có nghĩa là ứng dụng Spring Boot đã khởi động thành công.</p>
+    </div>
+    
+    <h2>Các trang có thể truy cập:</h2>
+    <ul>
+        <li><a href="/">Trang chủ</a></li>
+        <li><a href="/products">Sản phẩm</a></li>
+        <li><a href="/about">Giới thiệu</a></li>
+        <li><a href="/contact">Liên hệ</a></li>
+        <li><a href="/login">Đăng nhập</a></li>
+        <li><a href="/register">Đăng ký</a></li>
+    </ul>
+    
+    <h2>Thông tin cấu hình:</h2>
+    <ul>
+        <li>Context path: <code>/baitapjavathaychien</code></li>
+        <li>Port: <code>8090</code></li>
+        <li>Database: <code>H2 in-memory</code></li>
+        <li>Thời gian khởi động: <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}"></span></li>
+    </ul>
+</body>
+</html> 

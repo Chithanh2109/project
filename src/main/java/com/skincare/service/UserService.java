@@ -109,7 +109,7 @@ public class UserService {
     }
 
     public List<User> searchUsers(String keyword) {
-        return userRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(keyword, keyword);
+        return userRepository.findByFullNameContainingIgnoreCase(keyword);
     }
 
 } 

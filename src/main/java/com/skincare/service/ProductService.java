@@ -22,8 +22,8 @@ public class ProductService {
         return productRepository.findByActiveTrue();
     }
     
-    public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByActiveTrueAndCategoryOrderByNameAsc(category);
+    public List<Product> getProductsByCategory(Long categoryId) {
+        return productRepository.findByActiveTrueAndCategory_IdOrderByNameAsc(categoryId);
     }
     
     public List<Product> getProductsByBrand(String brand) {

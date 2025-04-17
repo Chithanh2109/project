@@ -16,7 +16,7 @@ import com.skincare.model.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByActiveTrue();
-    List<Product> findByActiveTrueAndCategoryOrderByNameAsc(String category);
+    List<Product> findByActiveTrueAndCategory_IdOrderByNameAsc(Long categoryId);
     List<Product> findByActiveTrueAndBrandOrderByNameAsc(String brand);
     Optional<Product> findById(Long id);
     List<Product> findByNameContainingIgnoreCase(String keyword);

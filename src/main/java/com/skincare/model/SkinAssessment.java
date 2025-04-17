@@ -15,18 +15,20 @@ public class SkinAssessment {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
-
+    
     @Column(name = "assessment_date", nullable = false)
     private LocalDateTime assessmentDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "skin_type", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "skin_type_id", nullable = false)
     private SkinType skinType;
 
-    @ElementCollection
-    @CollectionTable(name = "skin_concerns", joinColumns = @JoinColumn(name = "assessment_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "concern")
+    @ManyToMany
+    @JoinTable(
+        name = "assessment_skin_concerns",
+        joinColumns = @JoinColumn(name = "assessment_id"),
+        inverseJoinColumns = @JoinColumn(name = "skin_concern_id")
+    )
     private Set<SkinConcern> skinConcerns = new HashSet<>();
 
     @Column(name = "notes", length = 1000)

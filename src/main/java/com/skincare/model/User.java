@@ -70,9 +70,6 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "customer")
-    private Set<Appointment> customerAppointments = new HashSet<>();
-
     @OneToMany(mappedBy = "therapist")
     private Set<Appointment> therapistAppointments = new HashSet<>();
 

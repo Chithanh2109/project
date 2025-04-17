@@ -2,6 +2,7 @@ D:\btnhomjava\project8888888\src\main\java\com\skincare\controller\LanguageContr
 D:\btnhomjava\project8888888\src\main\java\com\skincare\model\Category.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\service\ReportServiceImpl.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\model\UserType.java
+D:\btnhomjava\project8888888\src\main\java\com\skincare\config\SkinConcernDataInitializer.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\controller\AdminController.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\controller\rest\ServiceRestController.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\service\QuizServiceImpl.java
@@ -13,7 +14,10 @@ D:\btnhomjava\project8888888\src\main\java\com\skincare\model\Role.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\controller\ServiceController.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\service\ReportService.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\service\UserService.java
+D:\btnhomjava\project8888888\src\main\java\com\skincare\controller\WebController.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\service\AppointmentService.java
+D:\btnhomjava\project8888888\src\main\java\com\skincare\controller\TestController.java
+D:\btnhomjava\project8888888\src\main\java\com\skincare\repository\CustomerRepository.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\repository\ServiceRepository.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\service\ServiceService.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\dto\SkinConcernStat.java
@@ -27,6 +31,7 @@ D:\btnhomjava\project8888888\src\main\java\com\skincare\repository\SkinConcernRe
 D:\btnhomjava\project8888888\src\main\java\com\skincare\dto\TherapistStat.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\model\Quiz.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\dto\ServiceStat.java
+D:\btnhomjava\project8888888\src\main\java\com\skincare\controller\AuthController.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\model\RoleType.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\model\Customer.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\model\ProfileNote.java
@@ -49,6 +54,7 @@ D:\btnhomjava\project8888888\src\main\java\com\skincare\service\QuizService.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\SkincareServiceApplication.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\model\OrderItem.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\model\Appointment.java
+D:\btnhomjava\project8888888\src\main\java\com\skincare\controller\SimpleTestController.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\repository\CategoryRepository.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\controller\ProductController.java
 D:\btnhomjava\project8888888\src\main\java\com\skincare\service\TherapistService.java

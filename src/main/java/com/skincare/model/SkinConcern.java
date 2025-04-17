@@ -1,23 +1,30 @@
 package com.skincare.model;
 
-public enum SkinConcern {
-    ACNE("Mụn"),
-    AGING("Lão hóa"),
-    DARK_SPOTS("Đốm nâu"),
-    DRYNESS("Khô da"),
-    HYPERPIGMENTATION("Tăng sắc tố"),
-    LARGE_PORES("Lỗ chân lông to"),
-    REDNESS("Đỏ da"),
-    SENSITIVITY("Nhạy cảm"),
-    WRINKLES("Nếp nhăn");
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    private final String description;
-
-    SkinConcern(String description) {
+@Entity
+@Table(name = "skin_concerns")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class SkinConcern {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String name;
+    private String description;
+    
+    // Constructor với chỉ description
+    public SkinConcern(String description) {
         this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
     }
 } 

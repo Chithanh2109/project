@@ -2,6 +2,7 @@ package com.skincare.service;
 
 import com.skincare.model.Appointment;
 import com.skincare.model.AppointmentService;
+import com.skincare.model.Customer;
 import com.skincare.model.Service;
 import com.skincare.model.User;
 import com.skincare.model.AppointmentStatus;
@@ -9,6 +10,7 @@ import com.skincare.model.ServiceStatus;
 import com.skincare.model.UserType;
 import com.skincare.repository.AppointmentRepository;
 import com.skincare.repository.AppointmentServiceRepository;
+import com.skincare.repository.CustomerRepository;
 import com.skincare.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ public class AppointmentServiceImpl {
 
     private final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
     private final AppointmentServiceRepository appointmentServiceRepository;
     private final ServiceService serviceService;
     private final UserService userService;
@@ -33,11 +36,13 @@ public class AppointmentServiceImpl {
     @Autowired
     public AppointmentServiceImpl(AppointmentRepository appointmentRepository,
                                       UserRepository userRepository,
+                                      CustomerRepository customerRepository,
                                       AppointmentServiceRepository appointmentServiceRepository,
                                       ServiceService serviceService,
                                       UserService userService) {
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
+        this.customerRepository = customerRepository;
         this.appointmentServiceRepository = appointmentServiceRepository;
         this.serviceService = serviceService;
         this.userService = userService;
@@ -48,7 +53,7 @@ public class AppointmentServiceImpl {
     }
 
     public List<Appointment> getAppointmentsByCustomer(Long customerId) {
-        User customer = userRepository.findById(customerId)
+        Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại: " + customerId));
         return appointmentRepository.findByCustomerOrderByAppointmentDateDesc(customer);
     }
@@ -170,9 +175,17 @@ public class AppointmentServiceImpl {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch hẹn: " + id));
 
-        if (user.getUserType() != UserType.ADMIN && 
-            user.getUserType() != UserType.THERAPIST && 
-            !appointment.getCustomer().getId().equals(user.getId())) {
+        // Kiểm tra quyền hủy lịch - chỉ admin, therapist hoặc khách hàng đặt lịch mới được hủy
+        boolean isAdmin = user.getUserType() == UserType.ADMIN;
+        boolean isTherapist = user.getUserType() == UserType.THERAPIST;
+        boolean isOwner = false;
+        
+        // Kiểm tra xem user hiện tại có phải là người đặt lịch không
+        if (appointment.getCustomer() != null && user.getEmail() != null) {
+            isOwner = user.getEmail().equals(appointment.getCustomer().getEmail());
+        }
+        
+        if (!isAdmin && !isTherapist && !isOwner) {
             throw new RuntimeException("Bạn không có quyền hủy lịch hẹn này");
         }
 

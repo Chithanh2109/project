@@ -35,7 +35,7 @@ public class ProductController {
     @GetMapping
     public String listProducts(Model model) {
         model.addAttribute("products", productService.getAllActiveProducts());
-        return "products/list";
+        return "products";
     }
 
     @GetMapping("/{id}")
@@ -48,10 +48,10 @@ public class ProductController {
                 .orElse("redirect:/products");
     }
 
-    @GetMapping("/category/{category}")
-    public String productsByCategory(@PathVariable String category, Model model) {
-        model.addAttribute("products", productService.getProductsByCategory(category));
-        model.addAttribute("category", category);
+    @GetMapping("/category-view/{categoryId}")
+    public String productsByCategory(@PathVariable Long categoryId, Model model) {
+        model.addAttribute("products", productService.getProductsByCategory(categoryId));
+        model.addAttribute("categoryId", categoryId);
         return "products/by-category";
     }
 

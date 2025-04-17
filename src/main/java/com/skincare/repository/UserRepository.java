@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.userType = :userType")
     List<User> findByUserType(@Param("userType") UserType userType);
     
-    List<User> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName);
+    List<User> findByFullNameContainingIgnoreCase(String fullName);
     
     boolean existsByUsername(String username);
     

@@ -143,7 +143,7 @@ public class SkincareService implements ServiceService {
     
     @Override
     public List<Category> getActiveCategories() {
-        return categoryRepository.findByStatusOrderByNameAsc("ACTIVE");
+        return categoryRepository.findByStatusEquals("ACTIVE");
     }
     
     @Override

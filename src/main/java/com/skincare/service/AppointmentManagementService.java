@@ -21,6 +21,8 @@ import com.skincare.repository.AppointmentRepository;
 import com.skincare.repository.AppointmentServiceRepository;
 import com.skincare.repository.ServiceRepository;
 import com.skincare.repository.UserRepository;
+import com.skincare.model.Customer;
+import com.skincare.repository.CustomerRepository;
 
 @Service
 public class AppointmentManagementService {
@@ -29,17 +31,20 @@ public class AppointmentManagementService {
     private final UserRepository userRepository;
     private final AppointmentServiceRepository appointmentServiceRepository;
     private final ServiceRepository serviceRepository;
+    private final CustomerRepository customerRepository;
 
     @Autowired
     public AppointmentManagementService(
             AppointmentRepository appointmentRepository,
             UserRepository userRepository,
             AppointmentServiceRepository appointmentServiceRepository,
-            ServiceRepository serviceRepository) {
+            ServiceRepository serviceRepository,
+            CustomerRepository customerRepository) {
         this.appointmentRepository = appointmentRepository;
         this.userRepository = userRepository;
         this.appointmentServiceRepository = appointmentServiceRepository;
         this.serviceRepository = serviceRepository;
+        this.customerRepository = customerRepository;
     }
 
     public List<Appointment> getAllAppointments() {
@@ -47,7 +52,7 @@ public class AppointmentManagementService {
     }
 
     public List<Appointment> getAppointmentsByCustomer(Long customerId) {
-        User customer = userRepository.findById(customerId)
+        Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại: " + customerId));
         return appointmentRepository.findByCustomerOrderByAppointmentDateDesc(customer);
     }
@@ -110,6 +115,24 @@ public class AppointmentManagementService {
         
         // Tính lại tổng tiền
         calculateTotalAmount(savedAppointment.getId());
+        
+        // Thay đổi code trên dòng 52
+        User user = userRepository.findById(appointment.getCustomerId())
+                .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại: " + appointment.getCustomerId()));
+
+        // Tìm customer tương ứng
+        Customer customer = customerRepository.findByEmail(user.getEmail());
+        if (customer == null) {
+            // Tạo mới customer nếu chưa tồn tại
+            customer = new Customer();
+            customer.setFirstName(user.getFullName().split(" ")[0]);
+            customer.setLastName(user.getFullName().substring(user.getFullName().indexOf(" ") + 1));
+            customer.setEmail(user.getEmail());
+            customer.setPhoneNumber(user.getPhoneNumber());
+            customer.setAddress(user.getAddress());
+            customer = customerRepository.save(customer);
+        }
+        appointment.setCustomer(customer);
         
         return savedAppointment;
     }

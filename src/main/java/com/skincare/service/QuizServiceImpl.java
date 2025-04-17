@@ -132,7 +132,7 @@ public class QuizServiceImpl implements QuizService {
         
         for (SkinConcern concern : identifiedConcerns) {
             // Sử dụng name() của enum thay vì getName()
-            summary.append("- ").append(concern.name()).append(": ").append(concern.getDescription()).append("\n");
+            summary.append("- ").append(concern.getName()).append(": ").append(concern.getDescription()).append("\n");
         }
         
         summary.append("\nChúng tôi đề xuất các dịch vụ sau để giải quyết các vấn đề trên:\n");
@@ -263,7 +263,7 @@ public class QuizServiceImpl implements QuizService {
                 .map(entry -> {
                     double percentage = (entry.getValue() * 100.0) / totalResults;
                     return new SkinConcernStat(
-                            entry.getKey().name(), // Sử dụng name() thay vì getName()
+                            entry.getKey().getName(), // Sử dụng name() thay vì getName()
                             entry.getValue(), 
                             Math.round(percentage * 10) / 10.0);
                 })

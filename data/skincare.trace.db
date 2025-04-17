@@ -1,0 +1,1324 @@
+2025-04-17 08:11:47.700089+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table appointment_services (\000d\000a        id bigint not null auto_increment,\000d\000a        created_at datetime(6),\000d\000a        end_time datetime(6),\000d\000a        price decimal(38,2),\000d\000a        start_time datetime(6),\000d\000a        status enum ('PENDING','IN_PROGRESS','COMPLETED','CANCELLED'),\000d\000a        treatment_results varchar(255),\000d\000a        updated_at datetime(6),\000d\000a        appointment_id bigint,\000d\000a        performed_by bigint,\000d\000a        service_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table appointment_services (
+        id bigint not null auto_increment,
+        created_at datetime(6),
+        end_time datetime(6),
+        price decimal(38,2),
+        start_time datetime(6),
+        status enum ('PENDING','IN_PROGRESS','COMPLETED','CANCELLED'),
+        treatment_results varchar(255),
+        updated_at datetime(6),
+        appointment_id bigint,
+        performed_by bigint,
+        service_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:47.739235+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table appointments (\000d\000a        id bigint not null auto_increment,\000d\000a        appointment_date datetime(6) not null,\000d\000a        cancellation_fee decimal(38,2),\000d\000a        cancellation_reason varchar(255),\000d\000a        cancelled_at datetime(6),\000d\000a        checkin_time datetime(6),\000d\000a        checkout_time datetime(6),\000d\000a        confirmed_at datetime(6),\000d\000a        created_at datetime(6) not null,\000d\000a        payment_method varchar(255),\000d\000a        payment_status varchar(255),\000d\000a        status enum ('PENDING','CONFIRMED','CHECKED_IN','IN_PROGRESS','CHECKED_OUT','COMPLETED','CANCELLED','NO_SHOW') not null,\000d\000a        total_amount decimal(38,2) not null,\000d\000a        updated_at datetime(6),\000d\000a        customer_id bigint not null,\000d\000a        therapist_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table appointments (
+        id bigint not null auto_increment,
+        appointment_date datetime(6) not null,
+        cancellation_fee decimal(38,2),
+        cancellation_reason varchar(255),
+        cancelled_at datetime(6),
+        checkin_time datetime(6),
+        checkout_time datetime(6),
+        confirmed_at datetime(6),
+        created_at datetime(6) not null,
+        payment_method varchar(255),
+        payment_status varchar(255),
+        status enum ('PENDING','CONFIRMED','CHECKED_IN','IN_PROGRESS','CHECKED_OUT','COMPLETED','CANCELLED','NO_SHOW') not null,
+        total_amount decimal(38,2) not null,
+        updated_at datetime(6),
+        customer_id bigint not null,
+        therapist_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:47.759429+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table assessment_services (\000d\000a        assessment_id bigint not null,\000d\000a        service_id bigint not null,\000d\000a        primary key (assessment_id, service_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table assessment_services (
+        assessment_id bigint not null,
+        service_id bigint not null,
+        primary key (assessment_id, service_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:47.774127+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table assessment_skin_concerns (\000d\000a        assessment_id bigint not null,\000d\000a        skin_concern_id bigint not null,\000d\000a        primary key (assessment_id, skin_concern_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table assessment_skin_concerns (
+        assessment_id bigint not null,
+        skin_concern_id bigint not null,
+        primary key (assessment_id, skin_concern_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:47.818095+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table blogs (\000d\000a        id bigint not null auto_increment,\000d\000a        content TEXT not null,\000d\000a        created_at datetime(6) not null,\000d\000a        featured bit,\000d\000a        image_url varchar(255),\000d\000a        published_date datetime(6),\000d\000a        status varchar(255) not null,\000d\000a        summary varchar(500),\000d\000a        title varchar(255) not null,\000d\000a        updated_at datetime(6) not null,\000d\000a        author_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table blogs (
+        id bigint not null auto_increment,
+        content TEXT not null,
+        created_at datetime(6) not null,
+        featured bit,
+        image_url varchar(255),
+        published_date datetime(6),
+        status varchar(255) not null,
+        summary varchar(500),
+        title varchar(255) not null,
+        updated_at datetime(6) not null,
+        author_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:47.885929+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table categories (\000d\000a        id bigint not null auto_increment,\000d\000a        created_at datetime(6) not null,\000d\000a        description varchar(1000),\000d\000a        name varchar(255) not null,\000d\000a        status varchar(255) not null,\000d\000a        updated_at datetime(6) not null,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table categories (
+        id bigint not null auto_increment,
+        created_at datetime(6) not null,
+        description varchar(1000),
+        name varchar(255) not null,
+        status varchar(255) not null,
+        updated_at datetime(6) not null,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:47.940322+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table customer_profiles (\000d\000a        id bigint not null auto_increment,\000d\000a        customer_id bigint,\000d\000a        skin_type_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table customer_profiles (
+        id bigint not null auto_increment,
+        customer_id bigint,
+        skin_type_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:47.973654+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table customer_skin_concerns (\000d\000a        customer_profile_id bigint not null,\000d\000a        skin_concern_id bigint not null\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table customer_skin_concerns (
+        customer_profile_id bigint not null,
+        skin_concern_id bigint not null
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.016038+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table customers (\000d\000a        id bigint not null auto_increment,\000d\000a        address varchar(255),\000d\000a        birthdate datetime(6),\000d\000a        created_at datetime(6),\000d\000a        email varchar(255),\000d\000a        first_name varchar(255) not null,\000d\000a        last_name varchar(255) not null,\000d\000a        notes varchar(255),\000d\000a        phone_number varchar(255),\000d\000a        updated_at datetime(6),\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table customers (
+        id bigint not null auto_increment,
+        address varchar(255),
+        birthdate datetime(6),
+        created_at datetime(6),
+        email varchar(255),
+        first_name varchar(255) not null,
+        last_name varchar(255) not null,
+        notes varchar(255),
+        phone_number varchar(255),
+        updated_at datetime(6),
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.031989+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table feedback (\000d\000a        id bigint not null auto_increment,\000d\000a        comment varchar(1000),\000d\000a        created_at datetime(6) not null,\000d\000a        rating integer not null,\000d\000a        updated_at datetime(6) not null,\000d\000a        appointment_id bigint not null,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table feedback (
+        id bigint not null auto_increment,
+        comment varchar(1000),
+        created_at datetime(6) not null,
+        rating integer not null,
+        updated_at datetime(6) not null,
+        appointment_id bigint not null,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.048777+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table option_skin_concern (\000d\000a        option_id bigint not null,\000d\000a        skin_concern_id bigint not null,\000d\000a        primary key (option_id, skin_concern_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table option_skin_concern (
+        option_id bigint not null,
+        skin_concern_id bigint not null,
+        primary key (option_id, skin_concern_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.079546+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table order_items (\000d\000a        id bigint not null auto_increment,\000d\000a        price decimal(38,2) not null,\000d\000a        quantity integer not null,\000d\000a        subtotal decimal(38,2) not null,\000d\000a        order_id bigint,\000d\000a        product_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table order_items (
+        id bigint not null auto_increment,
+        price decimal(38,2) not null,
+        quantity integer not null,
+        subtotal decimal(38,2) not null,
+        order_id bigint,
+        product_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.097920+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table orders (\000d\000a        id bigint not null auto_increment,\000d\000a        order_date datetime(6) not null,\000d\000a        phone_number varchar(255),\000d\000a        shipping_address varchar(255),\000d\000a        status enum ('PENDING','PROCESSING','SHIPPED','DELIVERED','CANCELLED'),\000d\000a        total_amount decimal(38,2) not null,\000d\000a        user_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table orders (
+        id bigint not null auto_increment,
+        order_date datetime(6) not null,
+        phone_number varchar(255),
+        shipping_address varchar(255),
+        status enum ('PENDING','PROCESSING','SHIPPED','DELIVERED','CANCELLED'),
+        total_amount decimal(38,2) not null,
+        user_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.131407+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table products (\000d\000a        id bigint not null auto_increment,\000d\000a        active bit not null,\000d\000a        brand varchar(50),\000d\000a        created_at datetime(6),\000d\000a        description varchar(1000),\000d\000a        image_url varchar(255),\000d\000a        name varchar(255) not null,\000d\000a        price decimal(38,2) not null,\000d\000a        stock integer,\000d\000a        updated_at datetime(6),\000d\000a        category_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table products (
+        id bigint not null auto_increment,
+        active bit not null,
+        brand varchar(50),
+        created_at datetime(6),
+        description varchar(1000),
+        image_url varchar(255),
+        name varchar(255) not null,
+        price decimal(38,2) not null,
+        stock integer,
+        updated_at datetime(6),
+        category_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.152169+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table profile_notes (\000d\000a        id bigint not null auto_increment,\000d\000a        created_at datetime(6),\000d\000a        note varchar(1000) not null,\000d\000a        created_by_id bigint,\000d\000a        customer_profile_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table profile_notes (
+        id bigint not null auto_increment,
+        created_at datetime(6),
+        note varchar(1000) not null,
+        created_by_id bigint,
+        customer_profile_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.165538+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table quiz_options (\000d\000a        id bigint not null auto_increment,\000d\000a        option_text varchar(255) not null,\000d\000a        weight integer,\000d\000a        question_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table quiz_options (
+        id bigint not null auto_increment,
+        option_text varchar(255) not null,
+        weight integer,
+        question_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.184104+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table quiz_questions (\000d\000a        id bigint not null auto_increment,\000d\000a        order_index integer,\000d\000a        question_text varchar(255) not null,\000d\000a        question_type enum ('SINGLE_CHOICE','MULTIPLE_CHOICE','TEXT_INPUT'),\000d\000a        quiz_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table quiz_questions (
+        id bigint not null auto_increment,
+        order_index integer,
+        question_text varchar(255) not null,
+        question_type enum ('SINGLE_CHOICE','MULTIPLE_CHOICE','TEXT_INPUT'),
+        quiz_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.216482+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table quiz_results (\000d\000a        id bigint not null auto_increment,\000d\000a        completed_at datetime(6),\000d\000a        result_summary varchar(1000),\000d\000a        quiz_id bigint,\000d\000a        user_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table quiz_results (
+        id bigint not null auto_increment,
+        completed_at datetime(6),
+        result_summary varchar(1000),
+        quiz_id bigint,
+        user_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.231252+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table quizzes (\000d\000a        id bigint not null auto_increment,\000d\000a        active bit,\000d\000a        created_at datetime(6),\000d\000a        description varchar(255),\000d\000a        title varchar(255),\000d\000a        updated_at datetime(6),\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table quizzes (
+        id bigint not null auto_increment,
+        active bit,
+        created_at datetime(6),
+        description varchar(255),
+        title varchar(255),
+        updated_at datetime(6),
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.264908+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table ratings (\000d\000a        id bigint not null auto_increment,\000d\000a        comment varchar(500),\000d\000a        is_public bit not null,\000d\000a        rating_date datetime(6) not null,\000d\000a        rating_value integer not null,\000d\000a        appointment_id bigint,\000d\000a        customer_id bigint,\000d\000a        service_id bigint,\000d\000a        specialist_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table ratings (
+        id bigint not null auto_increment,
+        comment varchar(500),
+        is_public bit not null,
+        rating_date datetime(6) not null,
+        rating_value integer not null,
+        appointment_id bigint,
+        customer_id bigint,
+        service_id bigint,
+        specialist_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.287557+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table result_recommended_service (\000d\000a        result_id bigint not null,\000d\000a        service_id bigint not null,\000d\000a        primary key (result_id, service_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table result_recommended_service (
+        result_id bigint not null,
+        service_id bigint not null,
+        primary key (result_id, service_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.306418+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table result_skin_concern (\000d\000a        result_id bigint not null,\000d\000a        skin_concern_id bigint not null,\000d\000a        primary key (result_id, skin_concern_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table result_skin_concern (
+        result_id bigint not null,
+        skin_concern_id bigint not null,
+        primary key (result_id, skin_concern_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.315451+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table service_skin_concerns (\000d\000a        service_id bigint not null,\000d\000a        skin_concern_id bigint not null,\000d\000a        primary key (service_id, skin_concern_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table service_skin_concerns (
+        service_id bigint not null,
+        skin_concern_id bigint not null,
+        primary key (service_id, skin_concern_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.351740+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table services (\000d\000a        id bigint not null auto_increment,\000d\000a        created_at datetime(6) not null,\000d\000a        description varchar(1000),\000d\000a        duration integer not null,\000d\000a        featured bit not null,\000d\000a        name varchar(255) not null,\000d\000a        price decimal(38,2) not null,\000d\000a        status enum ('PENDING','IN_PROGRESS','COMPLETED','CANCELLED') not null,\000d\000a        updated_at datetime(6) not null,\000d\000a        category_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table services (
+        id bigint not null auto_increment,
+        created_at datetime(6) not null,
+        description varchar(1000),
+        duration integer not null,
+        featured bit not null,
+        name varchar(255) not null,
+        price decimal(38,2) not null,
+        status enum ('PENDING','IN_PROGRESS','COMPLETED','CANCELLED') not null,
+        updated_at datetime(6) not null,
+        category_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.364558+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table skin_assessments (\000d\000a        id bigint not null auto_increment,\000d\000a        assessment_date datetime(6) not null,\000d\000a        created_at datetime(6),\000d\000a        notes varchar(1000),\000d\000a        recommendations varchar(1000),\000d\000a        updated_at datetime(6),\000d\000a        customer_id bigint not null,\000d\000a        customer_profile_id bigint,\000d\000a        skin_type_id bigint not null,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table skin_assessments (
+        id bigint not null auto_increment,
+        assessment_date datetime(6) not null,
+        created_at datetime(6),
+        notes varchar(1000),
+        recommendations varchar(1000),
+        updated_at datetime(6),
+        customer_id bigint not null,
+        customer_profile_id bigint,
+        skin_type_id bigint not null,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.381810+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table skin_concerns (\000d\000a        id bigint not null auto_increment,\000d\000a        description varchar(255),\000d\000a        name varchar(255),\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table skin_concerns (
+        id bigint not null auto_increment,
+        description varchar(255),
+        name varchar(255),
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.397748+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table skin_types (\000d\000a        id bigint not null auto_increment,\000d\000a        care_tips varchar(255),\000d\000a        characteristics varchar(255),\000d\000a        description varchar(255),\000d\000a        name varchar(255),\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table skin_types (
+        id bigint not null auto_increment,
+        care_tips varchar(255),
+        characteristics varchar(255),
+        description varchar(255),
+        name varchar(255),
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.414456+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table user_roles (\000d\000a        user_id bigint not null,\000d\000a        role_id bigint not null,\000d\000a        primary key (user_id, role_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table user_roles (
+        user_id bigint not null,
+        role_id bigint not null,
+        primary key (user_id, role_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:11:48.445233+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_PROFILES" not found (this database is empty); SQL statement:
+
+    alter table customer_profiles 
+       drop index UK_joftwv6r96fq3bdnu7q00hq1w [42104-224]
+2025-04-17 08:11:48.448328+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_PROFILES" not found; SQL statement:
+
+    alter table customer_profiles 
+       add constraint UK_joftwv6r96fq3bdnu7q00hq1w unique (custom [42102-224]
+2025-04-17 08:11:48.450320+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMERS" not found (this database is empty); SQL statement:
+
+    alter table customers 
+       drop index UK_rfbvkrffamfql7cjmen8v976v [42104-224]
+2025-04-17 08:11:48.451318+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMERS" not found; SQL statement:
+
+    alter table customers 
+       add constraint UK_rfbvkrffamfql7cjmen8v976v unique ( [42102-224]
+2025-04-17 08:11:48.453311+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FEEDBACK" not found (this database is empty); SQL statement:
+
+    alter table feedback 
+       drop index UK_eicffywgx67t4cyky7tckf3h [42104-224]
+2025-04-17 08:11:48.455305+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FEEDBACK" not found; SQL statement:
+
+    alter table feedback 
+       add constraint UK_eicffywgx67t4cyky7tckf3h unique (appointme [42102-224]
+2025-04-17 08:11:48.458237+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENT_SERVICES" not found; SQL statement:
+
+    alter table appointment_services 
+       add constraint FK7smp9csy21h26g51aii9gvfn8 
+       foreign key (appointment_id) 
+       references appointment [42102-224]
+2025-04-17 08:11:48.471296+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENT_SERVICES" not found; SQL statement:
+
+    alter table appointment_services 
+       add constraint FK61qvvsb25yjladbbi4hs6in6q 
+       foreign key (performed_by) 
+       references user [42102-224]
+2025-04-17 08:11:48.480998+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENT_SERVICES" not found; SQL statement:
+
+    alter table appointment_services 
+       add constraint FK68fbfnf0iy7uq0tfb5mjmm2hx 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:11:48.497900+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENTS" not found; SQL statement:
+
+    alter table appointments 
+       add constraint FKrlbb09f329sfsmftrh7y0yxtk 
+       foreign key (customer_id) 
+       references customer [42102-224]
+2025-04-17 08:11:48.514509+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENTS" not found; SQL statement:
+
+    alter table appointments 
+       add constraint FKokyn1wetjc1lk3ujxk3lrf6cw 
+       foreign key (therapist_id) 
+       references user [42102-224]
+2025-04-17 08:11:48.531374+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ASSESSMENT_SERVICES" not found; SQL statement:
+
+    alter table assessment_services 
+       add constraint FKdgf6i7dw5hjr7k22v8x2ghnon 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:11:48.552144+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ASSESSMENT_SERVICES" not found; SQL statement:
+
+    alter table assessment_services 
+       add constraint FKsv5t67001wm1bsph4d305x7u9 
+       foreign key (assessment_id) 
+       references skin_assessment [42102-224]
+2025-04-17 08:11:48.570316+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ASSESSMENT_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table assessment_skin_concerns 
+       add constraint FKjmpq9nv7kldy0wm0o0b9vacgs 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:11:48.581206+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ASSESSMENT_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table assessment_skin_concerns 
+       add constraint FKn161jweyg2quw8bfvq612ikhi 
+       foreign key (assessment_id) 
+       references skin_assessment [42102-224]
+2025-04-17 08:11:48.597981+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "BLOGS" not found; SQL statement:
+
+    alter table blogs 
+       add constraint FKt8g0udj2fq40771g38t2t011n 
+       foreign key (author_id) 
+       references user [42102-224]
+2025-04-17 08:11:48.597981+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_PROFILES" not found; SQL statement:
+
+    alter table customer_profiles 
+       add constraint FKnjy1dugyof18fa21tu22fu98j 
+       foreign key (customer_id) 
+       references customer [42102-224]
+2025-04-17 08:11:48.614709+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_PROFILES" not found; SQL statement:
+
+    alter table customer_profiles 
+       add constraint FK4tucrd8na7r8em81p9qtg6vax 
+       foreign key (skin_type_id) 
+       references skin_type [42102-224]
+2025-04-17 08:11:48.631387+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table customer_skin_concerns 
+       add constraint FK2vxuy84uoe91qkn2qr1jwtep0 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:11:48.650321+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table customer_skin_concerns 
+       add constraint FKtp2kuopvb68ptx0n08a8wf2fq 
+       foreign key (customer_profile_id) 
+       references customer_profile [42102-224]
+2025-04-17 08:11:48.664608+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FEEDBACK" not found; SQL statement:
+
+    alter table feedback 
+       add constraint FK6puyfd8hdougii528jh0doddh 
+       foreign key (appointment_id) 
+       references appointment [42102-224]
+2025-04-17 08:11:48.681305+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OPTION_SKIN_CONCERN" not found; SQL statement:
+
+    alter table option_skin_concern 
+       add constraint FKbeyl1quemtvc8j2mftbhxnwcg 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:11:48.697816+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OPTION_SKIN_CONCERN" not found; SQL statement:
+
+    alter table option_skin_concern 
+       add constraint FKip1oqi7iw7xstic7cea10n759 
+       foreign key (option_id) 
+       references quiz_option [42102-224]
+2025-04-17 08:11:48.714578+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ORDER_ITEMS" not found; SQL statement:
+
+    alter table order_items 
+       add constraint FKbioxgbv59vetrxe0ejfubep1w 
+       foreign key (order_id) 
+       references order [42102-224]
+2025-04-17 08:11:48.730263+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ORDER_ITEMS" not found; SQL statement:
+
+    alter table order_items 
+       add constraint FKocimc7dtr037rh4ls4l95nlfi 
+       foreign key (product_id) 
+       references product [42102-224]
+2025-04-17 08:11:48.731193+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ORDERS" not found; SQL statement:
+
+    alter table orders 
+       add constraint FK32ql8ubntj5uh44ph9659tiih 
+       foreign key (user_id) 
+       references user [42102-224]
+2025-04-17 08:11:48.747767+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUCTS" not found; SQL statement:
+
+    alter table products 
+       add constraint FKog2rp4qthbtt2lfyhfo32lsw9 
+       foreign key (category_id) 
+       references categorie [42102-224]
+2025-04-17 08:11:48.766678+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PROFILE_NOTES" not found; SQL statement:
+
+    alter table profile_notes 
+       add constraint FKrgrcrqqk0uerkug82gadeb7d9 
+       foreign key (created_by_id) 
+       references user [42102-224]
+2025-04-17 08:11:48.780230+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PROFILE_NOTES" not found; SQL statement:
+
+    alter table profile_notes 
+       add constraint FKt3aj2vnnchva2d6w8ax3sveup 
+       foreign key (customer_profile_id) 
+       references customer_profile [42102-224]
+2025-04-17 08:11:48.781304+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUIZ_OPTIONS" not found; SQL statement:
+
+    alter table quiz_options 
+       add constraint FKhkuvmd7qk1lmtq3hy9htpinkr 
+       foreign key (question_id) 
+       references quiz_question [42102-224]
+2025-04-17 08:11:48.798145+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUIZ_QUESTIONS" not found; SQL statement:
+
+    alter table quiz_questions 
+       add constraint FKanfmgf6ksbdnv7ojb0pfve54q 
+       foreign key (quiz_id) 
+       references quizze [42102-224]
+2025-04-17 08:11:48.814558+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUIZ_RESULTS" not found; SQL statement:
+
+    alter table quiz_results 
+       add constraint FKmmvfwhutqbn5u6n25e4405pw9 
+       foreign key (quiz_id) 
+       references quizze [42102-224]
+2025-04-17 08:11:48.840177+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUIZ_RESULTS" not found; SQL statement:
+
+    alter table quiz_results 
+       add constraint FKc31xkn83q9v6yf9gh2spkvxrc 
+       foreign key (user_id) 
+       references user [42102-224]
+2025-04-17 08:11:48.860990+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RATINGS" not found; SQL statement:
+
+    alter table ratings 
+       add constraint FK2y1t7p77ym3en66xplb7oo98f 
+       foreign key (appointment_id) 
+       references appointment [42102-224]
+2025-04-17 08:11:48.879267+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RATINGS" not found; SQL statement:
+
+    alter table ratings 
+       add constraint FKl4khx88jtvmxkvnt3elik528p 
+       foreign key (customer_id) 
+       references user [42102-224]
+2025-04-17 08:11:48.897991+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RATINGS" not found; SQL statement:
+
+    alter table ratings 
+       add constraint FK5lu9nh6g1l7vhogjj8h2qydyb 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:11:48.917079+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RATINGS" not found; SQL statement:
+
+    alter table ratings 
+       add constraint FKfkw75kvx3jiw2do4y8h75dnl2 
+       foreign key (specialist_id) 
+       references user [42102-224]
+2025-04-17 08:11:48.931246+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RESULT_RECOMMENDED_SERVICE" not found; SQL statement:
+
+    alter table result_recommended_service 
+       add constraint FK15s7o7ycpok65jojujhs0f4vp 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:11:48.947916+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RESULT_RECOMMENDED_SERVICE" not found; SQL statement:
+
+    alter table result_recommended_service 
+       add constraint FKr1gluoctmrpoja4fbn01fqu5s 
+       foreign key (result_id) 
+       references quiz_result [42102-224]
+2025-04-17 08:11:48.971062+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RESULT_SKIN_CONCERN" not found; SQL statement:
+
+    alter table result_skin_concern 
+       add constraint FK8552gkknnn03ystsjajmdyk 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:11:48.992715+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RESULT_SKIN_CONCERN" not found; SQL statement:
+
+    alter table result_skin_concern 
+       add constraint FKcxhdbhaa7oh0j4nya3hjoqcu0 
+       foreign key (result_id) 
+       references quiz_result [42102-224]
+2025-04-17 08:11:49.012732+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SERVICE_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table service_skin_concerns 
+       add constraint FKrfoxhdnfgn2nby9dtyawnojgr 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:11:49.034305+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SERVICE_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table service_skin_concerns 
+       add constraint FKjj54xxcrjxgq8qsgkchsis1x0 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:11:49.048781+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SERVICES" not found; SQL statement:
+
+    alter table services 
+       add constraint FKhv7d5p40ipfq91065vlmqk8xv 
+       foreign key (category_id) 
+       references categorie [42102-224]
+2025-04-17 08:11:49.064727+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SKIN_ASSESSMENTS" not found; SQL statement:
+
+    alter table skin_assessments 
+       add constraint FK18mi5pwmqrvcyiuvjscl6h6iq 
+       foreign key (customer_id) 
+       references customer [42102-224]
+2025-04-17 08:11:49.081815+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SKIN_ASSESSMENTS" not found; SQL statement:
+
+    alter table skin_assessments 
+       add constraint FK360wt6brnbnnpkwpc1b9qbh7c 
+       foreign key (customer_profile_id) 
+       references customer_profile [42102-224]
+2025-04-17 08:11:49.098562+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SKIN_ASSESSMENTS" not found; SQL statement:
+
+    alter table skin_assessments 
+       add constraint FK3x665w5h4sufi9t0h2d8ut0t3 
+       foreign key (skin_type_id) 
+       references skin_type [42102-224]
+2025-04-17 08:11:49.114780+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER_ROLES" not found; SQL statement:
+
+    alter table user_roles 
+       add constraint FKh8ciramu9cc9q3qcqiv4ue8a6 
+       foreign key (role_id) 
+       references role [42102-224]
+2025-04-17 08:11:49.131250+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER_ROLES" not found; SQL statement:
+
+    alter table user_roles 
+       add constraint FKhfh9dx7w3ubf1co1vdev94g3f 
+       foreign key (user_id) 
+       references user [42102-224]
+2025-04-17 08:14:48.910133+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table appointment_services (\000d\000a        id bigint not null auto_increment,\000d\000a        created_at datetime(6),\000d\000a        end_time datetime(6),\000d\000a        price decimal(38,2),\000d\000a        start_time datetime(6),\000d\000a        status enum ('PENDING','IN_PROGRESS','COMPLETED','CANCELLED'),\000d\000a        treatment_results varchar(255),\000d\000a        updated_at datetime(6),\000d\000a        appointment_id bigint,\000d\000a        performed_by bigint,\000d\000a        service_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table appointment_services (
+        id bigint not null auto_increment,
+        created_at datetime(6),
+        end_time datetime(6),
+        price decimal(38,2),
+        start_time datetime(6),
+        status enum ('PENDING','IN_PROGRESS','COMPLETED','CANCELLED'),
+        treatment_results varchar(255),
+        updated_at datetime(6),
+        appointment_id bigint,
+        performed_by bigint,
+        service_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:48.931997+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table appointments (\000d\000a        id bigint not null auto_increment,\000d\000a        appointment_date datetime(6) not null,\000d\000a        cancellation_fee decimal(38,2),\000d\000a        cancellation_reason varchar(255),\000d\000a        cancelled_at datetime(6),\000d\000a        checkin_time datetime(6),\000d\000a        checkout_time datetime(6),\000d\000a        confirmed_at datetime(6),\000d\000a        created_at datetime(6) not null,\000d\000a        payment_method varchar(255),\000d\000a        payment_status varchar(255),\000d\000a        status enum ('PENDING','CONFIRMED','CHECKED_IN','IN_PROGRESS','CHECKED_OUT','COMPLETED','CANCELLED','NO_SHOW') not null,\000d\000a        total_amount decimal(38,2) not null,\000d\000a        updated_at datetime(6),\000d\000a        customer_id bigint not null,\000d\000a        therapist_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table appointments (
+        id bigint not null auto_increment,
+        appointment_date datetime(6) not null,
+        cancellation_fee decimal(38,2),
+        cancellation_reason varchar(255),
+        cancelled_at datetime(6),
+        checkin_time datetime(6),
+        checkout_time datetime(6),
+        confirmed_at datetime(6),
+        created_at datetime(6) not null,
+        payment_method varchar(255),
+        payment_status varchar(255),
+        status enum ('PENDING','CONFIRMED','CHECKED_IN','IN_PROGRESS','CHECKED_OUT','COMPLETED','CANCELLED','NO_SHOW') not null,
+        total_amount decimal(38,2) not null,
+        updated_at datetime(6),
+        customer_id bigint not null,
+        therapist_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:48.948231+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table assessment_services (\000d\000a        assessment_id bigint not null,\000d\000a        service_id bigint not null,\000d\000a        primary key (assessment_id, service_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table assessment_services (
+        assessment_id bigint not null,
+        service_id bigint not null,
+        primary key (assessment_id, service_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:48.958780+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table assessment_skin_concerns (\000d\000a        assessment_id bigint not null,\000d\000a        skin_concern_id bigint not null,\000d\000a        primary key (assessment_id, skin_concern_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table assessment_skin_concerns (
+        assessment_id bigint not null,
+        skin_concern_id bigint not null,
+        primary key (assessment_id, skin_concern_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:48.963419+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table blogs (\000d\000a        id bigint not null auto_increment,\000d\000a        content TEXT not null,\000d\000a        created_at datetime(6) not null,\000d\000a        featured bit,\000d\000a        image_url varchar(255),\000d\000a        published_date datetime(6),\000d\000a        status varchar(255) not null,\000d\000a        summary varchar(500),\000d\000a        title varchar(255) not null,\000d\000a        updated_at datetime(6) not null,\000d\000a        author_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table blogs (
+        id bigint not null auto_increment,
+        content TEXT not null,
+        created_at datetime(6) not null,
+        featured bit,
+        image_url varchar(255),
+        published_date datetime(6),
+        status varchar(255) not null,
+        summary varchar(500),
+        title varchar(255) not null,
+        updated_at datetime(6) not null,
+        author_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:48.979079+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table categories (\000d\000a        id bigint not null auto_increment,\000d\000a        created_at datetime(6) not null,\000d\000a        description varchar(1000),\000d\000a        name varchar(255) not null,\000d\000a        status varchar(255) not null,\000d\000a        updated_at datetime(6) not null,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table categories (
+        id bigint not null auto_increment,
+        created_at datetime(6) not null,
+        description varchar(1000),
+        name varchar(255) not null,
+        status varchar(255) not null,
+        updated_at datetime(6) not null,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:48.994702+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table customer_profiles (\000d\000a        id bigint not null auto_increment,\000d\000a        customer_id bigint,\000d\000a        skin_type_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table customer_profiles (
+        id bigint not null auto_increment,
+        customer_id bigint,
+        skin_type_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:48.994702+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table customer_skin_concerns (\000d\000a        customer_profile_id bigint not null,\000d\000a        skin_concern_id bigint not null\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table customer_skin_concerns (
+        customer_profile_id bigint not null,
+        skin_concern_id bigint not null
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.014842+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table customers (\000d\000a        id bigint not null auto_increment,\000d\000a        address varchar(255),\000d\000a        birthdate datetime(6),\000d\000a        created_at datetime(6),\000d\000a        email varchar(255),\000d\000a        first_name varchar(255) not null,\000d\000a        last_name varchar(255) not null,\000d\000a        notes varchar(255),\000d\000a        phone_number varchar(255),\000d\000a        updated_at datetime(6),\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table customers (
+        id bigint not null auto_increment,
+        address varchar(255),
+        birthdate datetime(6),
+        created_at datetime(6),
+        email varchar(255),
+        first_name varchar(255) not null,
+        last_name varchar(255) not null,
+        notes varchar(255),
+        phone_number varchar(255),
+        updated_at datetime(6),
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.027580+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table feedback (\000d\000a        id bigint not null auto_increment,\000d\000a        comment varchar(1000),\000d\000a        created_at datetime(6) not null,\000d\000a        rating integer not null,\000d\000a        updated_at datetime(6) not null,\000d\000a        appointment_id bigint not null,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table feedback (
+        id bigint not null auto_increment,
+        comment varchar(1000),
+        created_at datetime(6) not null,
+        rating integer not null,
+        updated_at datetime(6) not null,
+        appointment_id bigint not null,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.030038+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table option_skin_concern (\000d\000a        option_id bigint not null,\000d\000a        skin_concern_id bigint not null,\000d\000a        primary key (option_id, skin_concern_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table option_skin_concern (
+        option_id bigint not null,
+        skin_concern_id bigint not null,
+        primary key (option_id, skin_concern_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.045467+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table order_items (\000d\000a        id bigint not null auto_increment,\000d\000a        price decimal(38,2) not null,\000d\000a        quantity integer not null,\000d\000a        subtotal decimal(38,2) not null,\000d\000a        order_id bigint,\000d\000a        product_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table order_items (
+        id bigint not null auto_increment,
+        price decimal(38,2) not null,
+        quantity integer not null,
+        subtotal decimal(38,2) not null,
+        order_id bigint,
+        product_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.047609+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table orders (\000d\000a        id bigint not null auto_increment,\000d\000a        order_date datetime(6) not null,\000d\000a        phone_number varchar(255),\000d\000a        shipping_address varchar(255),\000d\000a        status enum ('PENDING','PROCESSING','SHIPPED','DELIVERED','CANCELLED'),\000d\000a        total_amount decimal(38,2) not null,\000d\000a        user_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table orders (
+        id bigint not null auto_increment,
+        order_date datetime(6) not null,
+        phone_number varchar(255),
+        shipping_address varchar(255),
+        status enum ('PENDING','PROCESSING','SHIPPED','DELIVERED','CANCELLED'),
+        total_amount decimal(38,2) not null,
+        user_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.064154+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table products (\000d\000a        id bigint not null auto_increment,\000d\000a        active bit not null,\000d\000a        brand varchar(50),\000d\000a        created_at datetime(6),\000d\000a        description varchar(1000),\000d\000a        image_url varchar(255),\000d\000a        name varchar(255) not null,\000d\000a        price decimal(38,2) not null,\000d\000a        stock integer,\000d\000a        updated_at datetime(6),\000d\000a        category_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table products (
+        id bigint not null auto_increment,
+        active bit not null,
+        brand varchar(50),
+        created_at datetime(6),
+        description varchar(1000),
+        image_url varchar(255),
+        name varchar(255) not null,
+        price decimal(38,2) not null,
+        stock integer,
+        updated_at datetime(6),
+        category_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.076781+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table profile_notes (\000d\000a        id bigint not null auto_increment,\000d\000a        created_at datetime(6),\000d\000a        note varchar(1000) not null,\000d\000a        created_by_id bigint,\000d\000a        customer_profile_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table profile_notes (
+        id bigint not null auto_increment,
+        created_at datetime(6),
+        note varchar(1000) not null,
+        created_by_id bigint,
+        customer_profile_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.083338+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table quiz_options (\000d\000a        id bigint not null auto_increment,\000d\000a        option_text varchar(255) not null,\000d\000a        weight integer,\000d\000a        question_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table quiz_options (
+        id bigint not null auto_increment,
+        option_text varchar(255) not null,
+        weight integer,
+        question_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.094378+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table quiz_questions (\000d\000a        id bigint not null auto_increment,\000d\000a        order_index integer,\000d\000a        question_text varchar(255) not null,\000d\000a        question_type enum ('SINGLE_CHOICE','MULTIPLE_CHOICE','TEXT_INPUT'),\000d\000a        quiz_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table quiz_questions (
+        id bigint not null auto_increment,
+        order_index integer,
+        question_text varchar(255) not null,
+        question_type enum ('SINGLE_CHOICE','MULTIPLE_CHOICE','TEXT_INPUT'),
+        quiz_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.094378+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table quiz_results (\000d\000a        id bigint not null auto_increment,\000d\000a        completed_at datetime(6),\000d\000a        result_summary varchar(1000),\000d\000a        quiz_id bigint,\000d\000a        user_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table quiz_results (
+        id bigint not null auto_increment,
+        completed_at datetime(6),
+        result_summary varchar(1000),
+        quiz_id bigint,
+        user_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.111671+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table quizzes (\000d\000a        id bigint not null auto_increment,\000d\000a        active bit,\000d\000a        created_at datetime(6),\000d\000a        description varchar(255),\000d\000a        title varchar(255),\000d\000a        updated_at datetime(6),\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table quizzes (
+        id bigint not null auto_increment,
+        active bit,
+        created_at datetime(6),
+        description varchar(255),
+        title varchar(255),
+        updated_at datetime(6),
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.117695+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table ratings (\000d\000a        id bigint not null auto_increment,\000d\000a        comment varchar(500),\000d\000a        is_public bit not null,\000d\000a        rating_date datetime(6) not null,\000d\000a        rating_value integer not null,\000d\000a        appointment_id bigint,\000d\000a        customer_id bigint,\000d\000a        service_id bigint,\000d\000a        specialist_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table ratings (
+        id bigint not null auto_increment,
+        comment varchar(500),
+        is_public bit not null,
+        rating_date datetime(6) not null,
+        rating_value integer not null,
+        appointment_id bigint,
+        customer_id bigint,
+        service_id bigint,
+        specialist_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.131011+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table result_recommended_service (\000d\000a        result_id bigint not null,\000d\000a        service_id bigint not null,\000d\000a        primary key (result_id, service_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table result_recommended_service (
+        result_id bigint not null,
+        service_id bigint not null,
+        primary key (result_id, service_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.143108+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table result_skin_concern (\000d\000a        result_id bigint not null,\000d\000a        skin_concern_id bigint not null,\000d\000a        primary key (result_id, skin_concern_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table result_skin_concern (
+        result_id bigint not null,
+        skin_concern_id bigint not null,
+        primary key (result_id, skin_concern_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.151399+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table service_skin_concerns (\000d\000a        service_id bigint not null,\000d\000a        skin_concern_id bigint not null,\000d\000a        primary key (service_id, skin_concern_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table service_skin_concerns (
+        service_id bigint not null,
+        skin_concern_id bigint not null,
+        primary key (service_id, skin_concern_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.160216+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table services (\000d\000a        id bigint not null auto_increment,\000d\000a        created_at datetime(6) not null,\000d\000a        description varchar(1000),\000d\000a        duration integer not null,\000d\000a        featured bit not null,\000d\000a        name varchar(255) not null,\000d\000a        price decimal(38,2) not null,\000d\000a        status enum ('PENDING','IN_PROGRESS','COMPLETED','CANCELLED') not null,\000d\000a        updated_at datetime(6) not null,\000d\000a        category_id bigint,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table services (
+        id bigint not null auto_increment,
+        created_at datetime(6) not null,
+        description varchar(1000),
+        duration integer not null,
+        featured bit not null,
+        name varchar(255) not null,
+        price decimal(38,2) not null,
+        status enum ('PENDING','IN_PROGRESS','COMPLETED','CANCELLED') not null,
+        updated_at datetime(6) not null,
+        category_id bigint,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.169658+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table skin_assessments (\000d\000a        id bigint not null auto_increment,\000d\000a        assessment_date datetime(6) not null,\000d\000a        created_at datetime(6),\000d\000a        notes varchar(1000),\000d\000a        recommendations varchar(1000),\000d\000a        updated_at datetime(6),\000d\000a        customer_id bigint not null,\000d\000a        customer_profile_id bigint,\000d\000a        skin_type_id bigint not null,\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table skin_assessments (
+        id bigint not null auto_increment,
+        assessment_date datetime(6) not null,
+        created_at datetime(6),
+        notes varchar(1000),
+        recommendations varchar(1000),
+        updated_at datetime(6),
+        customer_id bigint not null,
+        customer_profile_id bigint,
+        skin_type_id bigint not null,
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.181501+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table skin_concerns (\000d\000a        id bigint not null auto_increment,\000d\000a        description varchar(255),\000d\000a        name varchar(255),\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table skin_concerns (
+        id bigint not null auto_increment,
+        description varchar(255),
+        name varchar(255),
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.196310+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table skin_types (\000d\000a        id bigint not null auto_increment,\000d\000a        care_tips varchar(255),\000d\000a        characteristics varchar(255),\000d\000a        description varchar(255),\000d\000a        name varchar(255),\000d\000a        primary key (id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table skin_types (
+        id bigint not null auto_increment,
+        care_tips varchar(255),
+        characteristics varchar(255),
+        description varchar(255),
+        name varchar(255),
+        primary key (id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.208627+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "\000d\000a    create table user_roles (\000d\000a        user_id bigint not null,\000d\000a        role_id bigint not null,\000d\000a        primary key (user_id, role_id)\000d\000a    ) engine[*]=InnoDB"; expected "identifier"; SQL statement:
+
+    create table user_roles (
+        user_id bigint not null,
+        role_id bigint not null,
+        primary key (user_id, role_id)
+    ) engine=InnoDB [42001-224]
+2025-04-17 08:14:49.218596+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_PROFILES" not found (this database is empty); SQL statement:
+
+    alter table customer_profiles 
+       drop index UK_joftwv6r96fq3bdnu7q00hq1w [42104-224]
+2025-04-17 08:14:49.218596+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_PROFILES" not found; SQL statement:
+
+    alter table customer_profiles 
+       add constraint UK_joftwv6r96fq3bdnu7q00hq1w unique (custom [42102-224]
+2025-04-17 08:14:49.218596+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMERS" not found (this database is empty); SQL statement:
+
+    alter table customers 
+       drop index UK_rfbvkrffamfql7cjmen8v976v [42104-224]
+2025-04-17 08:14:49.218596+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMERS" not found; SQL statement:
+
+    alter table customers 
+       add constraint UK_rfbvkrffamfql7cjmen8v976v unique ( [42102-224]
+2025-04-17 08:14:49.224654+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FEEDBACK" not found (this database is empty); SQL statement:
+
+    alter table feedback 
+       drop index UK_eicffywgx67t4cyky7tckf3h [42104-224]
+2025-04-17 08:14:49.226097+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FEEDBACK" not found; SQL statement:
+
+    alter table feedback 
+       add constraint UK_eicffywgx67t4cyky7tckf3h unique (appointme [42102-224]
+2025-04-17 08:14:49.228090+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENT_SERVICES" not found; SQL statement:
+
+    alter table appointment_services 
+       add constraint FK7smp9csy21h26g51aii9gvfn8 
+       foreign key (appointment_id) 
+       references appointment [42102-224]
+2025-04-17 08:14:49.230280+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENT_SERVICES" not found; SQL statement:
+
+    alter table appointment_services 
+       add constraint FK61qvvsb25yjladbbi4hs6in6q 
+       foreign key (performed_by) 
+       references user [42102-224]
+2025-04-17 08:14:49.242991+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENT_SERVICES" not found; SQL statement:
+
+    alter table appointment_services 
+       add constraint FK68fbfnf0iy7uq0tfb5mjmm2hx 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:14:49.246393+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENTS" not found; SQL statement:
+
+    alter table appointments 
+       add constraint FKrlbb09f329sfsmftrh7y0yxtk 
+       foreign key (customer_id) 
+       references customer [42102-224]
+2025-04-17 08:14:49.257697+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "APPOINTMENTS" not found; SQL statement:
+
+    alter table appointments 
+       add constraint FKokyn1wetjc1lk3ujxk3lrf6cw 
+       foreign key (therapist_id) 
+       references user [42102-224]
+2025-04-17 08:14:49.266174+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ASSESSMENT_SERVICES" not found; SQL statement:
+
+    alter table assessment_services 
+       add constraint FKdgf6i7dw5hjr7k22v8x2ghnon 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:14:49.275350+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ASSESSMENT_SERVICES" not found; SQL statement:
+
+    alter table assessment_services 
+       add constraint FKsv5t67001wm1bsph4d305x7u9 
+       foreign key (assessment_id) 
+       references skin_assessment [42102-224]
+2025-04-17 08:14:49.282414+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ASSESSMENT_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table assessment_skin_concerns 
+       add constraint FKjmpq9nv7kldy0wm0o0b9vacgs 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:14:49.284940+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ASSESSMENT_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table assessment_skin_concerns 
+       add constraint FKn161jweyg2quw8bfvq612ikhi 
+       foreign key (assessment_id) 
+       references skin_assessment [42102-224]
+2025-04-17 08:14:49.296323+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "BLOGS" not found; SQL statement:
+
+    alter table blogs 
+       add constraint FKt8g0udj2fq40771g38t2t011n 
+       foreign key (author_id) 
+       references user [42102-224]
+2025-04-17 08:14:49.296323+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_PROFILES" not found; SQL statement:
+
+    alter table customer_profiles 
+       add constraint FKnjy1dugyof18fa21tu22fu98j 
+       foreign key (customer_id) 
+       references customer [42102-224]
+2025-04-17 08:14:49.310732+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_PROFILES" not found; SQL statement:
+
+    alter table customer_profiles 
+       add constraint FK4tucrd8na7r8em81p9qtg6vax 
+       foreign key (skin_type_id) 
+       references skin_type [42102-224]
+2025-04-17 08:14:49.317769+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table customer_skin_concerns 
+       add constraint FK2vxuy84uoe91qkn2qr1jwtep0 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:14:49.327345+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "CUSTOMER_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table customer_skin_concerns 
+       add constraint FKtp2kuopvb68ptx0n08a8wf2fq 
+       foreign key (customer_profile_id) 
+       references customer_profile [42102-224]
+2025-04-17 08:14:49.333749+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FEEDBACK" not found; SQL statement:
+
+    alter table feedback 
+       add constraint FK6puyfd8hdougii528jh0doddh 
+       foreign key (appointment_id) 
+       references appointment [42102-224]
+2025-04-17 08:14:49.349422+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OPTION_SKIN_CONCERN" not found; SQL statement:
+
+    alter table option_skin_concern 
+       add constraint FKbeyl1quemtvc8j2mftbhxnwcg 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:14:49.358729+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "OPTION_SKIN_CONCERN" not found; SQL statement:
+
+    alter table option_skin_concern 
+       add constraint FKip1oqi7iw7xstic7cea10n759 
+       foreign key (option_id) 
+       references quiz_option [42102-224]
+2025-04-17 08:14:49.363322+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ORDER_ITEMS" not found; SQL statement:
+
+    alter table order_items 
+       add constraint FKbioxgbv59vetrxe0ejfubep1w 
+       foreign key (order_id) 
+       references order [42102-224]
+2025-04-17 08:14:49.363322+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ORDER_ITEMS" not found; SQL statement:
+
+    alter table order_items 
+       add constraint FKocimc7dtr037rh4ls4l95nlfi 
+       foreign key (product_id) 
+       references product [42102-224]
+2025-04-17 08:14:49.380757+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ORDERS" not found; SQL statement:
+
+    alter table orders 
+       add constraint FK32ql8ubntj5uh44ph9659tiih 
+       foreign key (user_id) 
+       references user [42102-224]
+2025-04-17 08:14:49.382751+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUCTS" not found; SQL statement:
+
+    alter table products 
+       add constraint FKog2rp4qthbtt2lfyhfo32lsw9 
+       foreign key (category_id) 
+       references categorie [42102-224]
+2025-04-17 08:14:49.394792+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PROFILE_NOTES" not found; SQL statement:
+
+    alter table profile_notes 
+       add constraint FKrgrcrqqk0uerkug82gadeb7d9 
+       foreign key (created_by_id) 
+       references user [42102-224]
+2025-04-17 08:14:49.396902+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PROFILE_NOTES" not found; SQL statement:
+
+    alter table profile_notes 
+       add constraint FKt3aj2vnnchva2d6w8ax3sveup 
+       foreign key (customer_profile_id) 
+       references customer_profile [42102-224]
+2025-04-17 08:14:49.410594+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUIZ_OPTIONS" not found; SQL statement:
+
+    alter table quiz_options 
+       add constraint FKhkuvmd7qk1lmtq3hy9htpinkr 
+       foreign key (question_id) 
+       references quiz_question [42102-224]
+2025-04-17 08:14:49.413479+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUIZ_QUESTIONS" not found; SQL statement:
+
+    alter table quiz_questions 
+       add constraint FKanfmgf6ksbdnv7ojb0pfve54q 
+       foreign key (quiz_id) 
+       references quizze [42102-224]
+2025-04-17 08:14:49.423832+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUIZ_RESULTS" not found; SQL statement:
+
+    alter table quiz_results 
+       add constraint FKmmvfwhutqbn5u6n25e4405pw9 
+       foreign key (quiz_id) 
+       references quizze [42102-224]
+2025-04-17 08:14:49.431705+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUIZ_RESULTS" not found; SQL statement:
+
+    alter table quiz_results 
+       add constraint FKc31xkn83q9v6yf9gh2spkvxrc 
+       foreign key (user_id) 
+       references user [42102-224]
+2025-04-17 08:14:49.431705+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RATINGS" not found; SQL statement:
+
+    alter table ratings 
+       add constraint FK2y1t7p77ym3en66xplb7oo98f 
+       foreign key (appointment_id) 
+       references appointment [42102-224]
+2025-04-17 08:14:49.448888+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RATINGS" not found; SQL statement:
+
+    alter table ratings 
+       add constraint FKl4khx88jtvmxkvnt3elik528p 
+       foreign key (customer_id) 
+       references user [42102-224]
+2025-04-17 08:14:49.449942+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RATINGS" not found; SQL statement:
+
+    alter table ratings 
+       add constraint FK5lu9nh6g1l7vhogjj8h2qydyb 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:14:49.464175+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RATINGS" not found; SQL statement:
+
+    alter table ratings 
+       add constraint FKfkw75kvx3jiw2do4y8h75dnl2 
+       foreign key (specialist_id) 
+       references user [42102-224]
+2025-04-17 08:14:49.468640+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RESULT_RECOMMENDED_SERVICE" not found; SQL statement:
+
+    alter table result_recommended_service 
+       add constraint FK15s7o7ycpok65jojujhs0f4vp 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:14:49.478979+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RESULT_RECOMMENDED_SERVICE" not found; SQL statement:
+
+    alter table result_recommended_service 
+       add constraint FKr1gluoctmrpoja4fbn01fqu5s 
+       foreign key (result_id) 
+       references quiz_result [42102-224]
+2025-04-17 08:14:49.484717+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RESULT_SKIN_CONCERN" not found; SQL statement:
+
+    alter table result_skin_concern 
+       add constraint FK8552gkknnn03ystsjajmdyk 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:14:49.493971+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "RESULT_SKIN_CONCERN" not found; SQL statement:
+
+    alter table result_skin_concern 
+       add constraint FKcxhdbhaa7oh0j4nya3hjoqcu0 
+       foreign key (result_id) 
+       references quiz_result [42102-224]
+2025-04-17 08:14:49.496090+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SERVICE_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table service_skin_concerns 
+       add constraint FKrfoxhdnfgn2nby9dtyawnojgr 
+       foreign key (skin_concern_id) 
+       references skin_concern [42102-224]
+2025-04-17 08:14:49.510131+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SERVICE_SKIN_CONCERNS" not found; SQL statement:
+
+    alter table service_skin_concerns 
+       add constraint FKjj54xxcrjxgq8qsgkchsis1x0 
+       foreign key (service_id) 
+       references service [42102-224]
+2025-04-17 08:14:49.518083+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SERVICES" not found; SQL statement:
+
+    alter table services 
+       add constraint FKhv7d5p40ipfq91065vlmqk8xv 
+       foreign key (category_id) 
+       references categorie [42102-224]
+2025-04-17 08:14:49.526688+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SKIN_ASSESSMENTS" not found; SQL statement:
+
+    alter table skin_assessments 
+       add constraint FK18mi5pwmqrvcyiuvjscl6h6iq 
+       foreign key (customer_id) 
+       references customer [42102-224]
+2025-04-17 08:14:49.533122+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SKIN_ASSESSMENTS" not found; SQL statement:
+
+    alter table skin_assessments 
+       add constraint FK360wt6brnbnnpkwpc1b9qbh7c 
+       foreign key (customer_profile_id) 
+       references customer_profile [42102-224]
+2025-04-17 08:14:49.533122+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SKIN_ASSESSMENTS" not found; SQL statement:
+
+    alter table skin_assessments 
+       add constraint FK3x665w5h4sufi9t0h2d8ut0t3 
+       foreign key (skin_type_id) 
+       references skin_type [42102-224]
+2025-04-17 08:14:49.546062+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER_ROLES" not found; SQL statement:
+
+    alter table user_roles 
+       add constraint FKh8ciramu9cc9q3qcqiv4ue8a6 
+       foreign key (role_id) 
+       references role [42102-224]
+2025-04-17 08:14:49.554069+07:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER_ROLES" not found; SQL statement:
+
+    alter table user_roles 
+       add constraint FKhfh9dx7w3ubf1co1vdev94g3f 
+       foreign key (user_id) 
+       references user [42102-224]

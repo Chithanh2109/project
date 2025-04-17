@@ -2,6 +2,7 @@ package com.skincare.repository;
 
 import com.skincare.model.Appointment;
 import com.skincare.model.AppointmentStatus;
+import com.skincare.model.Customer;
 import com.skincare.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,7 @@ import java.util.List;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     
-    List<Appointment> findByCustomerOrderByAppointmentDateDesc(User customer);
+    List<Appointment> findByCustomerOrderByAppointmentDateDesc(Customer customer);
     
     List<Appointment> findByTherapistOrderByAppointmentDateDesc(User therapist);
     
@@ -27,7 +28,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             LocalDateTime start, LocalDateTime end);
     
     List<Appointment> findByCustomerAndStatusNotInAndAppointmentDateBetween(
-            User customer, List<AppointmentStatus> statuses, LocalDateTime start, LocalDateTime end);
+            Customer customer, List<AppointmentStatus> statuses, LocalDateTime start, LocalDateTime end);
     
     List<Appointment> findByTherapistAndStatusNotInAndAppointmentDateBetween(
             User therapist, List<AppointmentStatus> statuses, LocalDateTime start, LocalDateTime end);
@@ -45,13 +46,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
            "WHERE ((a.customer = :customer AND a.status NOT IN :excludedStatuses) OR " +
            "(a.therapist = :therapist AND a.status NOT IN :excludedStatuses)) AND " +
            "a.appointmentDate BETWEEN :start AND :end AND a.id <> :excludeId")
-    boolean existsConflictingAppointment(User customer, User therapist, List<AppointmentStatus> excludedStatuses,
+    boolean existsConflictingAppointment(Customer customer, User therapist, List<AppointmentStatus> excludedStatuses,
                                          LocalDateTime start, LocalDateTime end, Long excludeId);
     
     @Query("SELECT COUNT(a) > 0 FROM Appointment a " +
            "WHERE a.customer.id = :customerId " +
            "AND a.appointmentDate BETWEEN :startTime AND :endTime " +
-           "AND a.status != com.skincare.model.Appointment.AppointmentStatus.CANCELLED")
+           "AND a.status != com.skincare.model.AppointmentStatus.CANCELLED")
     boolean existsCustomerScheduleConflict(
             @Param("customerId") Long customerId,
             @Param("startTime") LocalDateTime startTime,
@@ -68,7 +69,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query("SELECT COUNT(a) > 0 FROM Appointment a " +
            "WHERE a.therapist.id = :therapistId " +
            "AND a.appointmentDate BETWEEN :startTime AND :endTime " +
-           "AND a.status != com.skincare.model.Appointment.AppointmentStatus.CANCELLED " +
+           "AND a.status != com.skincare.model.AppointmentStatus.CANCELLED " +
            "AND (:appointmentId IS NULL OR a.id != :appointmentId)")
     boolean existsTherapistScheduleConflict(
             @Param("therapistId") Long therapistId,

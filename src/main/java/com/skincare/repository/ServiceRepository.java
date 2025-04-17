@@ -41,6 +41,6 @@ public interface ServiceRepository extends JpaRepository<Service, Long> {
     @Query("SELECT c FROM Category c")
     List<Category> findAllCategories();
 
-    @Query("SELECT c FROM Category c WHERE c.active = true")
+    @Query("SELECT c FROM Category c WHERE c.status = 'ACTIVE'")
     List<Category> findActiveCategories();
 } 

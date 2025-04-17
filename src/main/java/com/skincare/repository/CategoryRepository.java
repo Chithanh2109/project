@@ -11,13 +11,11 @@ import com.skincare.model.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     
-    List<Category> findByActiveTrue();
+    List<Category> findByStatusEquals(String status);
     
-    List<Category> findByActiveTrueOrderByDisplayOrderAsc();
+    List<Category> findByStatusOrderByNameAsc(String status);
     
     Optional<Category> findByNameIgnoreCase(String name);
     
     List<Category> findByNameContainingIgnoreCase(String keyword);
-
-    List<Category> findByStatusOrderByNameAsc(String status);
 } 

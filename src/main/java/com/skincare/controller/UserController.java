@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skincare.model.User;
@@ -59,5 +60,10 @@ public class UserController {
     @GetMapping("/type/{userType}")
     public List<User> getUsersByType(@PathVariable UserType userType) {
         return userService.getUsersByType(userType);
+    }
+    
+    @GetMapping("/search")
+    public List<User> searchUsers(@RequestParam String keyword) {
+        return userService.searchUsers(keyword);
     }
 } 

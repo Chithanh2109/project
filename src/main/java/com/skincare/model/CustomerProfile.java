@@ -41,9 +41,6 @@ public class CustomerProfile {
     @JoinColumn(name = "skin_type_id")
     private SkinType skinType;
     
-    @OneToMany(mappedBy = "customerProfile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SkinAssessment> assessments = new ArrayList<>();
-    
     @ManyToMany
     @JoinTable(
         name = "customer_skin_concerns",
