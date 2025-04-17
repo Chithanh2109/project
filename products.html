@@ -4,81 +4,498 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sản phẩm - BeautyCare</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #f9f9f9;
+            --dark-color: #343a40;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Top Bar */
+        .top-bar {
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        /* Header */
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-link {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #ff6b6b;
+        }
+        
+        /* Filter Section */
+        .filter-section {
+            background-color: #f9f9f9;
+            padding: 30px 0;
+        }
+        
+        .filter-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .filter-group {
+            margin-bottom: 20px;
+        }
+        
+        .filter-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .filter-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .filter-list li {
+            margin-bottom: 8px;
+        }
+        
+        .filter-list a {
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .filter-list a:hover {
+            color: #ff6b6b;
+        }
+        
+        /* Product Grid */
+        .product-grid {
+            padding: 40px 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .product-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+            background-color: white;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .product-image {
+            height: 250px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .product-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-size: 14px;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+        }
+        
+        .btn.add-to-cart {
+            background-color: white;
+            border: 1px solid #ff6b6b;
+            color: #ff6b6b;
+        }
+        
+        .btn.add-to-cart:hover {
+            background-color: #ff6b6b;
+            color: white;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+        
+        .pagination-container {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .page-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .page-link:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .page-link.active {
+            background-color: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #ff6b6b;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            color: #ccc;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: #ff6b6b;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+            color: #aaa;
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding: 20px 20px 0;
+        }
+    </style>
 </head>
 <body>
     <!-- Top Bar -->
     <div class="top-bar">
-        Miễn phí vận chuyển cho đơn hàng từ 500.000đ
+        Miễn phí tư vấn và đánh giá da cho khách hàng mới
     </div>
 
     <!-- Header -->
     <header class="header">
-        <div class="nav-container">
-            <div class="logo">
-                BeautyCare
-            </div>
+        <div class="header-container">
+            <div class="logo">BeautyCare</div>
             <nav class="nav-menu">
                 <a href="/" class="nav-link">Trang chủ</a>
-                <a href="/products" class="nav-link">Sản phẩm</a>
-                <a href="/treatments" class="nav-link">Điều trị</a>
-                <a href="/about" class="nav-link">Về chúng tôi</a>
-                <a href="/contact" class="nav-link">Liên hệ</a>
-                <a href="/login" class="nav-link">Đăng nhập</a>
-                <a href="/cart" class="nav-link">Giỏ hàng</a>
+                <a href="/dich-vu" class="nav-link">Dịch vụ</a>
+                <a href="/san-pham" class="nav-link">Sản phẩm</a>
+                <a href="/ve-chung-toi" class="nav-link">Về chúng tôi</a>
+                <a href="/lien-he" class="nav-link">Liên hệ</a>
+                <a href="/dang-nhap" class="nav-link">Đăng nhập</a>
             </nav>
         </div>
     </header>
 
-    <!-- Product Filters -->
-    <section class="filters">
+    <!-- Filter Section -->
+    <section class="filter-section">
         <div class="filter-container">
-            <div class="filter-group">
-                <h3>Danh mục</h3>
-                <ul class="filter-list">
-                    <li><a href="/category/cleansers">Sản phẩm làm sạch</a></li>
-                    <li><a href="/category/toners">Toner</a></li>
-                    <li><a href="/category/serums">Serum</a></li>
-                    <li><a href="/category/moisturizers">Kem dưỡng ẩm</a></li>
-                    <li><a href="/category/sunscreen">Kem chống nắng</a></li>
-                    <li><a href="/category/masks">Mặt nạ</a></li>
-                </ul>
-            </div>
-            <div class="filter-group">
-                <h3>Loại da</h3>
-                <ul class="filter-list">
-                    <li><a href="/skin-type/dry">Da khô</a></li>
-                    <li><a href="/skin-type/oily">Da dầu</a></li>
-                    <li><a href="/skin-type/combination">Da hỗn hợp</a></li>
-                    <li><a href="/skin-type/sensitive">Da nhạy cảm</a></li>
-                </ul>
-            </div>
-            <div class="filter-group">
-                <h3>Vấn đề da</h3>
-                <ul class="filter-list">
-                    <li><a href="/concern/acne">Mụn</a></li>
-                    <li><a href="/concern/aging">Lão hóa</a></li>
-                    <li><a href="/concern/pigmentation">Thâm nám</a></li>
-                    <li><a href="/concern/dryness">Khô da</a></li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Product Grid -->
-    <section class="product-grid">
-        <div class="product-card" th:each="product : ${products}">
-            <img th:src="${product.image}" alt="${product.name}" class="product-image">
-            <div class="product-info">
-                <h3 class="product-title" th:text="${product.name}">Tên sản phẩm</h3>
-                <p class="product-description" th:text="${product.description}">Mô tả sản phẩm</p>
-                <p class="product-price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + 'đ'">
-                    Giá sản phẩm
-                </p>
-                <div class="product-actions">
-                    <a th:href="@{'/products/' + ${product.id}}" class="btn">Chi tiết</a>
-                    <button class="btn add-to-cart" th:data-product-id="${product.id}">Thêm vào giỏ</button>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="filter-group">
+                        <h3 class="filter-title">Danh mục</h3>
+                        <ul class="filter-list">
+                            <li><a href="/category/cleansers">Sản phẩm làm sạch</a></li>
+                            <li><a href="/category/toners">Toner</a></li>
+                            <li><a href="/category/serums">Serum</a></li>
+                            <li><a href="/category/moisturizers">Kem dưỡng ẩm</a></li>
+                            <li><a href="/category/sunscreen">Kem chống nắng</a></li>
+                            <li><a href="/category/masks">Mặt nạ</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h3 class="filter-title">Loại da</h3>
+                        <ul class="filter-list">
+                            <li><a href="/skin-type/dry">Da khô</a></li>
+                            <li><a href="/skin-type/oily">Da dầu</a></li>
+                            <li><a href="/skin-type/combination">Da hỗn hợp</a></li>
+                            <li><a href="/skin-type/sensitive">Da nhạy cảm</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h3 class="filter-title">Vấn đề da</h3>
+                        <ul class="filter-list">
+                            <li><a href="/concern/acne">Mụn</a></li>
+                            <li><a href="/concern/aging">Lão hóa</a></li>
+                            <li><a href="/concern/pigmentation">Thâm nám</a></li>
+                            <li><a href="/concern/dryness">Khô da</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <h3 class="filter-title">Giá</h3>
+                        <div class="price-range">
+                            <input type="range" min="0" max="2000000" value="1000000" class="form-range" id="price-range">
+                            <div class="d-flex justify-content-between mt-2">
+                                <span>0đ</span>
+                                <span>2.000.000đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-9">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2>Sản phẩm</h2>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">Sắp xếp:</span>
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option>Mặc định</option>
+                                <option>Giá: Thấp đến cao</option>
+                                <option>Giá: Cao đến thấp</option>
+                                <option>Tên: A-Z</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Grid -->
+                    <div class="row">
+                        <div class="col-md-4" th:each="product : ${products}">
+                            <div class="product-card">
+                                <img th:src="${product.image}" alt="${product.name}" class="product-image">
+                                <div class="product-info">
+                                    <h3 class="product-title" th:text="${product.name}">Tên sản phẩm</h3>
+                                    <p class="product-description" th:text="${product.description}">Mô tả sản phẩm</p>
+                                    <p class="product-price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + 'đ'">
+                                        Giá sản phẩm
+                                    </p>
+                                    <div class="product-actions">
+                                        <a th:href="@{'/products/' + ${product.id}}" class="btn">Chi tiết</a>
+                                        <button class="btn add-to-cart" th:data-product-id="${product.id}">Thêm vào giỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sample products for display -->
+                        <div class="col-md-4">
+                            <div class="product-card">
+                                <img src="https://source.unsplash.com/random/600x400/?cleanser" alt="Sữa rửa mặt" class="product-image">
+                                <div class="product-info">
+                                    <h3 class="product-title">Sữa rửa mặt dịu nhẹ</h3>
+                                    <p class="product-description">Sữa rửa mặt dịu nhẹ phù hợp với mọi loại da, giúp làm sạch sâu mà không gây khô căng.</p>
+                                    <p class="product-price">350.000đ</p>
+                                    <div class="product-actions">
+                                        <a href="/products/1" class="btn">Chi tiết</a>
+                                        <button class="btn add-to-cart" data-product-id="1">Thêm vào giỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="product-card">
+                                <img src="https://source.unsplash.com/random/600x400/?serum" alt="Serum" class="product-image">
+                                <div class="product-info">
+                                    <h3 class="product-title">Serum Vitamin C</h3>
+                                    <p class="product-description">Serum giàu Vitamin C giúp làm sáng da, mờ thâm nám và tăng cường sức đề kháng cho da.</p>
+                                    <p class="product-price">580.000đ</p>
+                                    <div class="product-actions">
+                                        <a href="/products/2" class="btn">Chi tiết</a>
+                                        <button class="btn add-to-cart" data-product-id="2">Thêm vào giỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="product-card">
+                                <img src="https://source.unsplash.com/random/600x400/?sunscreen" alt="Kem chống nắng" class="product-image">
+                                <div class="product-info">
+                                    <h3 class="product-title">Kem chống nắng SPF 50+</h3>
+                                    <p class="product-description">Kem chống nắng vật lý bảo vệ da khỏi tia UVA/UVB, phù hợp cho da nhạy cảm.</p>
+                                    <p class="product-price">420.000đ</p>
+                                    <div class="product-actions">
+                                        <a href="/products/3" class="btn">Chi tiết</a>
+                                        <button class="btn add-to-cart" data-product-id="3">Thêm vào giỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="product-card">
+                                <img src="https://source.unsplash.com/random/600x400/?moisturizer" alt="Kem dưỡng ẩm" class="product-image">
+                                <div class="product-info">
+                                    <h3 class="product-title">Kem dưỡng ẩm</h3>
+                                    <p class="product-description">Kem dưỡng ẩm chuyên sâu với ceramide và hyaluronic acid, giữ ẩm lâu dài cho da.</p>
+                                    <p class="product-price">390.000đ</p>
+                                    <div class="product-actions">
+                                        <a href="/products/4" class="btn">Chi tiết</a>
+                                        <button class="btn add-to-cart" data-product-id="4">Thêm vào giỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="product-card">
+                                <img src="https://source.unsplash.com/random/600x400/?toner" alt="Toner" class="product-image">
+                                <div class="product-info">
+                                    <h3 class="product-title">Toner cân bằng da</h3>
+                                    <p class="product-description">Toner không chứa cồn, làm dịu da và cân bằng độ pH sau khi rửa mặt.</p>
+                                    <p class="product-price">280.000đ</p>
+                                    <div class="product-actions">
+                                        <a href="/products/5" class="btn">Chi tiết</a>
+                                        <button class="btn add-to-cart" data-product-id="5">Thêm vào giỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="product-card">
+                                <img src="https://source.unsplash.com/random/600x400/?face-mask" alt="Mặt nạ" class="product-image">
+                                <div class="product-info">
+                                    <h3 class="product-title">Mặt nạ dưỡng ẩm</h3>
+                                    <p class="product-description">Mặt nạ giấy cung cấp độ ẩm tức thì, làm dịu và phục hồi da mệt mỏi.</p>
+                                    <p class="product-price">35.000đ</p>
+                                    <div class="product-actions">
+                                        <a href="/products/6" class="btn">Chi tiết</a>
+                                        <button class="btn add-to-cart" data-product-id="6">Thêm vào giỏ</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -127,12 +544,16 @@
             </div>
             <div class="footer-section">
                 <h3>Theo dõi chúng tôi</h3>
-                <ul class="footer-links">
-                    <li><a href="#">Facebook</a></li>
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">YouTube</a></li>
-                </ul>
+                <div class="social-links">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-youtube"></i></a>
+                    <a href="#"><i class="bi bi-tiktok"></i></a>
+                </div>
             </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2023 BeautyCare. Tất cả quyền được bảo lưu.</p>
         </div>
     </footer>
 

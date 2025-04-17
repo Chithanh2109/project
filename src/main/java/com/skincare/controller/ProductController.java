@@ -94,7 +94,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/category/{categoryId}")
+    @GetMapping("/api/category/{categoryId}")
     public ResponseEntity<Page<Product>> getProductsByCategory(@PathVariable Long categoryId, Pageable pageable) {
         return ResponseEntity.ok(productService.findByCategory(categoryId, pageable));
     }

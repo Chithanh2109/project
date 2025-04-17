@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${product.name} + ' - BeautyCare'">Chi tiết sản phẩm - BeautyCare</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        Miễn phí vận chuyển cho đơn hàng từ 500.000đ
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                BeautyCare
+            </div>
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">Trang chủ</a>
+                <a href="/products" class="nav-link">Sản phẩm</a>
+                <a href="/treatments" class="nav-link">Điều trị</a>
+                <a href="/about" class="nav-link">Về chúng tôi</a>
+                <a href="/contact" class="nav-link">Liên hệ</a>
+                <a href="/login" class="nav-link">Đăng nhập</a>
+                <a href="/cart" class="nav-link">Giỏ hàng</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Product Details -->
+    <section class="product-details">
+        <div class="product-container">
+            <div class="product-gallery">
+                <img th:src="${product.image}" alt="${product.name}" class="product-main-image">
+                <!-- Thêm hình ảnh khác của sản phẩm nếu có -->
+            </div>
+            <div class="product-info">
+                <h1 class="product-title" th:text="${product.name}">Tên sản phẩm</h1>
+                <div class="product-meta">
+                    <p class="product-category" th:if="${product.category != null}" th:text="'Danh mục: ' + ${product.category.name}">Danh mục: Loại sản phẩm</p>
+                    <p class="product-brand" th:if="${product.brand != null}" th:text="'Thương hiệu: ' + ${product.brand}">Thương hiệu: Tên thương hiệu</p>
+                </div>
+                <div class="product-price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + 'đ'">
+                    Giá sản phẩm
+                </div>
+                <div class="product-description" th:utext="${product.description}">
+                    Chi tiết mô tả sản phẩm
+                </div>
+                <div class="product-features" th:if="${product.features != null}">
+                    <h3>Đặc điểm nổi bật</h3>
+                    <ul>
+                        <li th:each="feature : ${product.features}" th:text="${feature}">Tính năng sản phẩm</li>
+                    </ul>
+                </div>
+                <div class="product-usage" th:if="${product.usage != null}">
+                    <h3>Hướng dẫn sử dụng</h3>
+                    <p th:utext="${product.usage}">Hướng dẫn sử dụng sản phẩm</p>
+                </div>
+                <div class="product-ingredients" th:if="${product.ingredients != null}">
+                    <h3>Thành phần</h3>
+                    <p th:utext="${product.ingredients}">Danh sách thành phần của sản phẩm</p>
+                </div>
+                <div class="product-actions">
+                    <div class="quantity-selector">
+                        <button class="quantity-btn decrease">-</button>
+                        <input type="number" min="1" value="1" id="product-quantity">
+                        <button class="quantity-btn increase">+</button>
+                    </div>
+                    <button class="btn add-to-cart" th:data-product-id="${product.id}">Thêm vào giỏ hàng</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    <section class="related-products" th:if="${relatedProducts != null and !relatedProducts.empty}">
+        <div class="section-title">
+            <h2>Sản phẩm liên quan</h2>
+        </div>
+        <div class="product-grid">
+            <div class="product-card" th:each="relatedProduct : ${relatedProducts}">
+                <img th:src="${relatedProduct.image}" alt="${relatedProduct.name}" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-title" th:text="${relatedProduct.name}">Tên sản phẩm</h3>
+                    <p class="product-price" th:text="${#numbers.formatDecimal(relatedProduct.price, 0, 'COMMA', 0, 'POINT')} + 'đ'">
+                        Giá sản phẩm
+                    </p>
+                    <div class="product-actions">
+                        <a th:href="@{'/products/' + ${relatedProduct.id}}" class="btn">Chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Về BeautyCare</h3>
+                <ul class="footer-links">
+                    <li><a href="/about">Giới thiệu</a></li>
+                    <li><a href="/contact">Liên hệ</a></li>
+                    <li><a href="/careers">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ khách hàng</h3>
+                <ul class="footer-links">
+                    <li><a href="/shipping">Vận chuyển</a></li>
+                    <li><a href="/returns">Đổi trả</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Tài khoản</h3>
+                <ul class="footer-links">
+                    <li><a href="/login">Đăng nhập</a></li>
+                    <li><a href="/register">Đăng ký</a></li>
+                    <li><a href="/orders">Đơn hàng</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Xử lý số lượng sản phẩm
+        document.querySelector('.decrease').addEventListener('click', function() {
+            const input = document.getElementById('product-quantity');
+            const value = parseInt(input.value);
+            if (value > 1) {
+                input.value = value - 1;
+            }
+        });
+
+        document.querySelector('.increase').addEventListener('click', function() {
+            const input = document.getElementById('product-quantity');
+            input.value = parseInt(input.value) + 1;
+        });
+
+        // Thêm vào giỏ hàng
+        document.querySelector('.add-to-cart').addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            const quantity = document.getElementById('product-quantity').value;
+            
+            fetch('/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    quantity: quantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Đã thêm sản phẩm vào giỏ hàng!');
+                } else {
+                    alert('Có lỗi xảy ra, vui lòng thử lại!');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

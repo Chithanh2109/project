@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,92 +16,111 @@
         }
         
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Roboto', sans-serif;
             line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Top Bar */
+        .top-bar {
+            background-color: #ff6b6b;
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            font-size: 14px;
         }
         
         /* Header */
-        .navbar {
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             padding: 15px 0;
         }
         
-        .navbar-brand {
+        .logo {
+            font-size: 24px;
             font-weight: bold;
-            color: var(--primary-color) !important;
-            font-size: 1.5rem;
+            color: #ff6b6b;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 20px;
         }
         
         .nav-link {
-            color: var(--dark-color);
+            color: #333;
+            text-decoration: none;
             font-weight: 500;
-            margin: 0 10px;
+            padding: 5px 10px;
             transition: all 0.3s;
         }
         
         .nav-link:hover {
-            color: var(--primary-color);
+            color: #ff6b6b;
         }
         
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1596178060810-72f53ce9a65c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') no-repeat center center/cover;
-            color: white;
-            padding: 150px 0;
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://source.unsplash.com/random/1200x600/?skincare') center/cover no-repeat;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
+            color: white;
         }
         
-        .hero h1 {
-            font-size: 3.5rem;
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
             font-weight: bold;
             margin-bottom: 20px;
         }
         
-        .hero p {
+        .hero-text {
             font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 30px;
-        }
-        
-        /* Categories Section */
-        .categories {
-            padding: 80px 0;
-            background-color: var(--light-color);
-        }
-        
-        .category-item {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
             margin-bottom: 30px;
-            position: relative;
         }
         
-        .category-item:hover {
-            transform: translateY(-10px);
+        .btn-primary {
+            background-color: #ff6b6b;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all 0.3s;
         }
         
-        .category-item img {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
+        .btn-primary:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
         }
         
-        .category-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        /* Featured Products */
-        .featured-products {
+        /* Features Section */
+        .features {
             padding: 80px 0;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
         
         .section-title {
@@ -111,121 +130,52 @@
         
         .section-title h2 {
             font-size: 2.5rem;
-            color: var(--dark-color);
-            position: relative;
-            display: inline-block;
-            padding-bottom: 15px;
+            color: #333;
+            margin-bottom: 15px;
         }
         
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background-color: var(--primary-color);
+        .section-title p {
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
         }
         
-        .product-card {
-            border: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s;
+        .feature-item {
+            text-align: center;
             margin-bottom: 30px;
         }
         
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        
-        .product-img {
-            height: 250px;
-            object-fit: cover;
-        }
-        
-        .product-title {
-            font-weight: bold;
-            margin: 15px 0 10px;
-        }
-        
-        .product-price {
-            font-size: 1.1rem;
-            color: var(--primary-color);
-            font-weight: bold;
-        }
-        
-        .product-rating {
-            color: #ffc107;
-            margin: 5px 0;
-        }
-        
-        /* Testimonials */
-        .testimonials {
-            padding: 80px 0;
-            background-color: var(--secondary-color);
-        }
-        
-        .testimonial-item {
-            text-align: center;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .testimonial-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            object-fit: cover;
-        }
-        
-        .testimonial-text {
-            font-style: italic;
+        .feature-icon {
+            font-size: 3rem;
+            color: #ff6b6b;
             margin-bottom: 20px;
         }
         
-        .testimonial-author {
-            font-weight: bold;
-            color: var(--dark-color);
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
         }
         
-        /* Newsletter */
-        .newsletter {
-            padding: 80px 0;
-            background: linear-gradient(to right, var(--primary-color), #ff9a9e);
-            color: white;
-        }
-        
-        .newsletter h2 {
-            margin-bottom: 20px;
+        .feature-text {
+            color: #666;
         }
         
         /* Footer */
-        footer {
-            background-color: var(--dark-color);
+        .footer {
+            background-color: #343a40;
             color: white;
-            padding: 60px 0 20px;
+            padding: 60px 0 30px;
         }
         
-        .footer-title {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            position: relative;
-            padding-bottom: 10px;
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
         }
         
-        .footer-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 2px;
-            background-color: var(--primary-color);
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
         }
         
         .footer-links {
@@ -234,346 +184,146 @@
         }
         
         .footer-links li {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .footer-links a {
-            color: #ddd;
+            color: #ccc;
             text-decoration: none;
             transition: all 0.3s;
         }
         
         .footer-links a:hover {
-            color: var(--primary-color);
-            padding-left: 5px;
+            color: #ff6b6b;
         }
         
-        .social-links a {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255,255,255,0.1);
+        .footer-bottom {
+            border-top: 1px solid #555;
+            margin-top: 30px;
+            padding-top: 20px;
             text-align: center;
-            line-height: 40px;
-            border-radius: 50%;
-            color: white;
-            margin-right: 10px;
-            transition: all 0.3s;
-        }
-        
-        .social-links a:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-5px);
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            margin-top: 40px;
-        }
-        
-        /* Buttons */
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary:hover {
-            background-color: #ff5252;
-            border-color: #ff5252;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-        }
-        
-        .btn-outline-primary {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            padding: 10px 25px;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        
-        .btn-outline-primary:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            font-size: 0.9rem;
+            color: #aaa;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">BeautyCare</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/products">Sản phẩm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">Giới thiệu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Liên hệ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Đăng nhập</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-primary ms-2" href="/register">Đăng ký</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        Miễn phí tư vấn và đánh giá da cho khách hàng mới
+    </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Chăm sóc làn da của bạn</h1>
-                    <p>Các sản phẩm chăm sóc da cao cấp với thành phần tự nhiên giúp làn da của bạn luôn tươi trẻ và rạng rỡ.</p>
-                    <a href="/products" class="btn btn-primary me-3">Khám phá sản phẩm</a>
-                    <a href="/consultation" class="btn btn-outline-light">Tư vấn miễn phí</a>
-                </div>
-            </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">BeautyCare</div>
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">Trang chủ</a>
+                <a href="/dich-vu" class="nav-link">Dịch vụ</a>
+                <a href="/san-pham" class="nav-link">Sản phẩm</a>
+                <a href="/ve-chung-toi" class="nav-link">Về chúng tôi</a>
+                <a href="/lien-he" class="nav-link">Liên hệ</a>
+                <a href="/dang-nhap" class="nav-link">Đăng nhập</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+        <div class="hero-content">
+            <h1 class="hero-title">Chăm sóc làn da của bạn</h1>
+            <p class="hero-text">Chúng tôi cung cấp các dịch vụ chăm sóc da chuyên nghiệp và các sản phẩm chất lượng cao để giúp bạn có một làn da khỏe mạnh và rạng rỡ</p>
+            <a href="/dich-vu" class="btn btn-primary">Xem dịch vụ</a>
         </div>
     </section>
 
-    <!-- Categories Section -->
-    <section class="categories">
+    <!-- Features Section -->
+    <section class="features">
         <div class="container">
             <div class="section-title">
-                <h2>Danh mục sản phẩm</h2>
+                <h2>Dịch vụ của chúng tôi</h2>
+                <p>Khám phá các dịch vụ chăm sóc da hàng đầu được cung cấp bởi đội ngũ chuyên gia có nhiều năm kinh nghiệm</p>
             </div>
+            
             <div class="row">
                 <div class="col-md-4">
-                    <div class="category-item">
-                        <img src="https://images.unsplash.com/photo-1556228852-6d35a585d566?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="Sản phẩm làm sạch">
-                        <div class="category-overlay">
-                            <h3>Sản phẩm làm sạch</h3>
-                            <a href="/products?category=cleansers" class="btn btn-outline-light mt-2">Xem thêm</a>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="bi bi-droplet"></i>
                         </div>
+                        <h3 class="feature-title">Chăm sóc cơ bản</h3>
+                        <p class="feature-text">Dịch vụ làm sạch và dưỡng ẩm cơ bản giúp làn da của bạn luôn tươi trẻ và rạng rỡ.</p>
                     </div>
                 </div>
+                
                 <div class="col-md-4">
-                    <div class="category-item">
-                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Serum & Dưỡng chất">
-                        <div class="category-overlay">
-                            <h3>Serum & Dưỡng chất</h3>
-                            <a href="/products?category=serums" class="btn btn-outline-light mt-2">Xem thêm</a>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="bi bi-emoji-smile"></i>
                         </div>
+                        <h3 class="feature-title">Trẻ hóa da</h3>
+                        <p class="feature-text">Các liệu pháp trẻ hóa da tiên tiến giúp giảm nếp nhăn và cải thiện độ đàn hồi.</p>
                     </div>
                 </div>
+                
                 <div class="col-md-4">
-                    <div class="category-item">
-                        <img src="https://images.unsplash.com/photo-1582072963301-d3a7a14d9d58?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Kem dưỡng ẩm">
-                        <div class="category-overlay">
-                            <h3>Kem dưỡng ẩm</h3>
-                            <a href="/products?category=moisturizers" class="btn btn-outline-light mt-2">Xem thêm</a>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="bi bi-shield-check"></i>
                         </div>
+                        <h3 class="feature-title">Điều trị chuyên sâu</h3>
+                        <p class="feature-text">Phương pháp điều trị chuyên sâu cho các vấn đề da khó như mụn, nám và sẹo.</p>
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Featured Products -->
-    <section class="featured-products">
-        <div class="container">
-            <div class="section-title">
-                <h2>Sản phẩm nổi bật</h2>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="card product-card">
-                        <img src="https://images.unsplash.com/photo-1567721913486-6585f069b332?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" class="card-img-top product-img" alt="Sữa rửa mặt dịu nhẹ">
-                        <div class="card-body">
-                            <h5 class="product-title">Sữa rửa mặt dịu nhẹ</h5>
-                            <div class="product-rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
-                                <span class="ms-2">(120)</span>
-                            </div>
-                            <p class="product-price">350.000₫</p>
-                            <a href="/products/1" class="btn btn-outline-primary w-100">Xem chi tiết</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card product-card">
-                        <img src="https://images.unsplash.com/photo-1625772452859-1c03d5bf1137?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" class="card-img-top product-img" alt="Serum Vitamin C">
-                        <div class="card-body">
-                            <h5 class="product-title">Serum Vitamin C</h5>
-                            <div class="product-rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star"></i>
-                                <span class="ms-2">(85)</span>
-                            </div>
-                            <p class="product-price">520.000₫</p>
-                            <a href="/products/2" class="btn btn-outline-primary w-100">Xem chi tiết</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card product-card">
-                        <img src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1169&q=80" class="card-img-top product-img" alt="Kem chống nắng SPF 50+">
-                        <div class="card-body">
-                            <h5 class="product-title">Kem chống nắng SPF 50+</h5>
-                            <div class="product-rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <span class="ms-2">(210)</span>
-                            </div>
-                            <p class="product-price">420.000₫</p>
-                            <a href="/products/3" class="btn btn-outline-primary w-100">Xem chi tiết</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card product-card">
-                        <img src="https://images.unsplash.com/photo-1596981628926-0559e8a72f60?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" class="card-img-top product-img" alt="Mặt nạ dưỡng ẩm">
-                        <div class="card-body">
-                            <h5 class="product-title">Mặt nạ dưỡng ẩm</h5>
-                            <div class="product-rating">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
-                                <span class="ms-2">(95)</span>
-                            </div>
-                            <p class="product-price">180.000₫</p>
-                            <a href="/products/4" class="btn btn-outline-primary w-100">Xem chi tiết</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center mt-5">
-                <a href="/products" class="btn btn-primary px-5">Xem tất cả sản phẩm</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="testimonials">
-        <div class="container">
-            <div class="section-title">
-                <h2>Khách hàng nói gì về chúng tôi</h2>
-            </div>
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="testimonial-item">
-                        <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Testimonial" class="testimonial-img">
-                        <p class="testimonial-text">"Sản phẩm của BeautyCare đã cải thiện làn da của tôi rất nhiều. Tôi đã tìm thấy các sản phẩm phù hợp với làn da nhạy cảm của mình."</p>
-                        <h5 class="testimonial-author">Nguyễn Thị Hương</h5>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="testimonial-item">
-                        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Testimonial" class="testimonial-img">
-                        <p class="testimonial-text">"Tôi đã dùng serum Vitamin C trong 3 tháng và thấy sự khác biệt rõ rệt. Các vết thâm mờ đi và da sáng hơn nhiều."</p>
-                        <h5 class="testimonial-author">Trần Minh Tâm</h5>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="testimonial-item">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Testimonial" class="testimonial-img">
-                        <p class="testimonial-text">"Dịch vụ tư vấn rất chuyên nghiệp và sản phẩm chất lượng. Tôi đã giới thiệu BeautyCare cho tất cả bạn bè của mình."</p>
-                        <h5 class="testimonial-author">Lê Văn Đức</h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Newsletter -->
-    <section class="newsletter">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center">
-                    <h2>Đăng ký nhận tin</h2>
-                    <p class="mb-4">Nhận thông tin về sản phẩm mới, khuyến mãi và các mẹo chăm sóc da.</p>
-                    <form class="d-flex justify-content-center">
-                        <div class="input-group mb-3" style="max-width: 500px;">
-                            <input type="email" class="form-control" placeholder="Email của bạn" required>
-                            <button class="btn btn-light" type="submit">Đăng ký</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h4 class="footer-title">Về BeautyCare</h4>
-                    <p>BeautyCare cung cấp các sản phẩm chăm sóc da chất lượng cao với thành phần tự nhiên, giúp bạn có làn da khỏe mạnh và rạng rỡ.</p>
-                    <div class="social-links mt-4">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Về BeautyCare</h3>
+                    <ul class="footer-links">
+                        <li><a href="/ve-chung-toi">Giới thiệu</a></li>
+                        <li><a href="/doi-ngu">Đội ngũ</a></li>
+                        <li><a href="/tuyen-dung">Tuyển dụng</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Dịch vụ</h3>
+                    <ul class="footer-links">
+                        <li><a href="/dich-vu/cham-soc-co-ban">Chăm sóc cơ bản</a></li>
+                        <li><a href="/dich-vu/tre-hoa-da">Trẻ hóa da</a></li>
+                        <li><a href="/dich-vu/dieu-tri-nam">Điều trị nám</a></li>
+                        <li><a href="/dich-vu/tri-mun">Trị mụn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Liên hệ</h3>
+                    <ul class="footer-links">
+                        <li><i class="bi bi-geo-alt"></i> 123 Đường ABC, Quận 1, TP.HCM</li>
+                        <li><i class="bi bi-telephone"></i> 0123 456 789</li>
+                        <li><i class="bi bi-envelope"></i> info@beautycare.com</li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Theo dõi chúng tôi</h3>
+                    <div class="social-links">
                         <a href="#"><i class="bi bi-facebook"></i></a>
                         <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-twitter"></i></a>
                         <a href="#"><i class="bi bi-youtube"></i></a>
+                        <a href="#"><i class="bi bi-tiktok"></i></a>
                     </div>
                 </div>
-                <div class="col-md-2 mb-4">
-                    <h4 class="footer-title">Liên kết</h4>
-                    <ul class="footer-links">
-                        <li><a href="/">Trang chủ</a></li>
-                        <li><a href="/products">Sản phẩm</a></li>
-                        <li><a href="/about">Giới thiệu</a></li>
-                        <li><a href="/contact">Liên hệ</a></li>
-                        <li><a href="/blog">Blog</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <h4 class="footer-title">Danh mục</h4>
-                    <ul class="footer-links">
-                        <li><a href="/products?category=cleansers">Sản phẩm làm sạch</a></li>
-                        <li><a href="/products?category=serums">Serum & Dưỡng chất</a></li>
-                        <li><a href="/products?category=moisturizers">Kem dưỡng ẩm</a></li>
-                        <li><a href="/products?category=sunscreens">Kem chống nắng</a></li>
-                        <li><a href="/products?category=masks">Mặt nạ</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <h4 class="footer-title">Liên hệ</h4>
-                    <ul class="footer-links">
-                        <li><i class="bi bi-geo-alt me-2"></i> 123 Nguyễn Huệ, Quận 1, TP.HCM</li>
-                        <li><i class="bi bi-telephone me-2"></i> (028) 1234 5678</li>
-                        <li><i class="bi bi-envelope me-2"></i> info@beautycare.com</li>
-                        <li><i class="bi bi-clock me-2"></i> Thứ 2 - Thứ 7: 9:00 - 20:00</li>
-                    </ul>
-                </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2024 BeautyCare. Tất cả quyền được bảo lưu.</p>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 BeautyCare. Tất cả quyền được bảo lưu.</p>
             </div>
         </div>
     </footer>
