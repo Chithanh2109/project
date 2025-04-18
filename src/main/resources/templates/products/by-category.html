@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${category} + ' - BeautyCare'">Danh mục sản phẩm - BeautyCare</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        Miễn phí vận chuyển cho đơn hàng từ 500.000đ
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                BeautyCare
+            </div>
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">Trang chủ</a>
+                <a href="/products" class="nav-link">Sản phẩm</a>
+                <a href="/treatments" class="nav-link">Điều trị</a>
+                <a href="/about" class="nav-link">Về chúng tôi</a>
+                <a href="/contact" class="nav-link">Liên hệ</a>
+                <a href="/login" class="nav-link">Đăng nhập</a>
+                <a href="/cart" class="nav-link">Giỏ hàng</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Category Header -->
+    <section class="category-header">
+        <div class="category-container">
+            <h1 class="category-title" th:text="${category}">Tên danh mục</h1>
+            <p class="category-description" th:if="${categoryDescription != null}" th:text="${categoryDescription}">
+                Mô tả về danh mục sản phẩm này
+            </p>
+        </div>
+    </section>
+
+    <!-- Filter Options -->
+    <section class="filters">
+        <div class="filter-container">
+            <div class="filter-group">
+                <h3>Sắp xếp theo</h3>
+                <ul class="filter-list">
+                    <li><a href="#" class="sort-option" data-sort="price-asc">Giá: Thấp đến cao</a></li>
+                    <li><a href="#" class="sort-option" data-sort="price-desc">Giá: Cao đến thấp</a></li>
+                    <li><a href="#" class="sort-option" data-sort="name-asc">Tên: A-Z</a></li>
+                    <li><a href="#" class="sort-option" data-sort="name-desc">Tên: Z-A</a></li>
+                </ul>
+            </div>
+            <div class="filter-group">
+                <h3>Khoảng giá</h3>
+                <div class="price-range">
+                    <input type="range" min="0" max="2000000" class="price-slider" id="price-slider">
+                    <div class="price-values">
+                        <span id="min-price">0đ</span> - <span id="max-price">2.000.000đ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section class="product-grid">
+        <div class="product-card" th:each="product : ${products}">
+            <img th:src="${product.image}" alt="${product.name}" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title" th:text="${product.name}">Tên sản phẩm</h3>
+                <p class="product-description" th:text="${product.description}">Mô tả sản phẩm</p>
+                <p class="product-price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + 'đ'">
+                    Giá sản phẩm
+                </p>
+                <div class="product-actions">
+                    <a th:href="@{'/products/' + ${product.id}}" class="btn">Chi tiết</a>
+                    <button class="btn add-to-cart" th:data-product-id="${product.id}">Thêm vào giỏ</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- No Products Message -->
+    <section class="no-products" th:if="${products.empty}">
+        <div class="message-container">
+            <h2>Không tìm thấy sản phẩm</h2>
+            <p>Hiện không có sản phẩm nào trong danh mục này. Vui lòng quay lại sau.</p>
+            <a href="/products" class="btn">Xem tất cả sản phẩm</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Về BeautyCare</h3>
+                <ul class="footer-links">
+                    <li><a href="/about">Giới thiệu</a></li>
+                    <li><a href="/contact">Liên hệ</a></li>
+                    <li><a href="/careers">Tuyển dụng</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ khách hàng</h3>
+                <ul class="footer-links">
+                    <li><a href="/shipping">Vận chuyển</a></li>
+                    <li><a href="/returns">Đổi trả</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Tài khoản</h3>
+                <ul class="footer-links">
+                    <li><a href="/login">Đăng nhập</a></li>
+                    <li><a href="/register">Đăng ký</a></li>
+                    <li><a href="/orders">Đơn hàng</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Thêm vào giỏ hàng
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                fetch('/api/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        productId: productId,
+                        quantity: 1
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Đã thêm sản phẩm vào giỏ hàng!');
+                    } else {
+                        alert('Có lỗi xảy ra, vui lòng thử lại!');
+                    }
+                });
+            });
+        });
+
+        // Xử lý thanh trượt giá
+        const priceSlider = document.getElementById('price-slider');
+        const minPriceDisplay = document.getElementById('min-price');
+        const maxPriceDisplay = document.getElementById('max-price');
+
+        priceSlider.addEventListener('input', function() {
+            const value = this.value;
+            const formattedPrice = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+            maxPriceDisplay.textContent = formattedPrice;
+        });
+    </script>
+</body>
+</html> 
