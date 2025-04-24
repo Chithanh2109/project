@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SimpleBeauty - Trung tâm Chăm sóc Da</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e2b6a6;
+            --secondary-color: #5c4742;
+            --accent-color: #9a6d64;
+            --light-color: #f8f3ef;
+            --dark-color: #3a302d;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+        
+        .nav-link {
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            color: var(--accent-color);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--dark-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+        
+        .hero {
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1560750588-73207b1ef5b8');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 0;
+            text-align: center;
+        }
+        
+        .service-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .service-img {
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .specialist-card {
+            text-align: center;
+        }
+        
+        .specialist-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 40px 0;
+        }
+        
+        .footer-links a {
+            color: var(--light-color);
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">SimpleBeauty</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#services">Dịch vụ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#specialists">Chuyên viên</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#blog">Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Liên hệ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="quiz.html">Trắc nghiệm da</a>
+                    </li>
+                </ul>
+                <div class="ms-3">
+                    <a href="login.html" class="btn btn-outline-secondary me-2">Đăng nhập</a>
+                    <a href="appointment.html" class="btn btn-primary">Đặt lịch</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Trải nghiệm chăm sóc da chuyên nghiệp</h1>
+            <p class="lead mb-5">Khám phá các dịch vụ chăm sóc da cao cấp từ các chuyên gia hàng đầu</p>
+            <div>
+                <a href="appointment.html" class="btn btn-primary btn-lg px-4 me-2">Đặt lịch ngay</a>
+                <a href="#services" class="btn btn-outline-light btn-lg px-4">Tìm hiểu thêm</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Dịch vụ của chúng tôi</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="service-card h-100">
+                        <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2" class="service-img w-100" alt="Chăm sóc da cơ bản">
+                        <div class="p-4">
+                            <h5>Chăm sóc da cơ bản</h5>
+                            <p>Dịch vụ làm sạch da chuyên sâu, giúp cải thiện kết cấu và làm sáng da</p>
+                            <a href="service-details.html" class="btn btn-sm btn-primary">Chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card h-100">
+                        <img src="https://images.unsplash.com/photo-1574621100236-d882c8a9c9ef" class="service-img w-100" alt="Trị liệu chuyên sâu">
+                        <div class="p-4">
+                            <h5>Trị liệu chuyên sâu</h5>
+                            <p>Phương pháp điều trị chuyên sâu cho các vấn đề da phức tạp như mụn, thâm nám</p>
+                            <a href="service-details.html" class="btn btn-sm btn-primary">Chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="service-card h-100">
+                        <img src="https://images.unsplash.com/photo-1470259078422-826894b933aa" class="service-img w-100" alt="Liệu pháp trẻ hóa">
+                        <div class="p-4">
+                            <h5>Liệu pháp trẻ hóa</h5>
+                            <p>Công nghệ tiên tiến giúp làm mờ nếp nhăn, cải thiện độ đàn hồi và làm săn chắc da</p>
+                            <a href="service-details.html" class="btn btn-sm btn-primary">Chi tiết</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="services.html" class="btn btn-outline-secondary px-4">Xem tất cả dịch vụ</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Banner -->
+    <section class="bg-secondary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <h2>Không chắc chắn về loại da của bạn?</h2>
+                    <p class="lead">Hãy thử bài trắc nghiệm nhanh của chúng tôi để nhận các đề xuất dịch vụ phù hợp với làn da của bạn.</p>
+                </div>
+                <div class="col-lg-5 text-lg-end mt-3 mt-lg-0">
+                    <a href="quiz.html" class="btn btn-light btn-lg">Làm trắc nghiệm ngay</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Specialists Section -->
+    <section id="specialists" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Đội ngũ Chuyên viên</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="specialist-card">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" class="specialist-img" alt="Nguyễn Thị Mai">
+                        <h5>Nguyễn Thị Mai</h5>
+                        <p class="text-muted">Chuyên gia điều trị mụn</p>
+                        <p><small>5+ năm kinh nghiệm</small></p>
+                        <a href="specialist-details.html" class="btn btn-sm btn-outline-secondary">Xem hồ sơ</a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="specialist-card">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" class="specialist-img" alt="Trần Minh Tâm">
+                        <h5>Trần Minh Tâm</h5>
+                        <p class="text-muted">Chuyên gia trẻ hóa da</p>
+                        <p><small>8+ năm kinh nghiệm</small></p>
+                        <a href="specialist-details.html" class="btn btn-sm btn-outline-secondary">Xem hồ sơ</a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="specialist-card">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="specialist-img" alt="Lê Văn Dũng">
+                        <h5>Lê Văn Dũng</h5>
+                        <p class="text-muted">Chuyên gia điều trị sẹo</p>
+                        <p><small>6+ năm kinh nghiệm</small></p>
+                        <a href="specialist-details.html" class="btn btn-sm btn-outline-secondary">Xem hồ sơ</a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="specialist-card">
+                        <img src="https://randomuser.me/api/portraits/women/24.jpg" class="specialist-img" alt="Phạm Thị Hương">
+                        <h5>Phạm Thị Hương</h5>
+                        <p class="text-muted">Chuyên gia điều trị nám</p>
+                        <p><small>7+ năm kinh nghiệm</small></p>
+                        <a href="specialist-details.html" class="btn btn-sm btn-outline-secondary">Xem hồ sơ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Khách hàng nói gì về chúng tôi</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="mb-3 text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="card-text">"Dịch vụ chăm sóc da tại SimpleBeauty thật sự tuyệt vời. Sau 3 tháng điều trị, làn da của tôi đã cải thiện rõ rệt."</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <img src="https://randomuser.me/api/portraits/women/70.jpg" class="rounded-circle me-3" width="50" height="50" alt="Testimonial">
+                                <div>
+                                    <h6 class="mb-0">Trần Thanh Hà</h6>
+                                    <small class="text-muted">Khách hàng</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="mb-3 text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="card-text">"Các chuyên viên tại đây rất chuyên nghiệp và tận tình. Họ đã giúp tôi giải quyết vấn đề mụn tôi đã đau khổ nhiều năm."</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <img src="https://randomuser.me/api/portraits/men/72.jpg" class="rounded-circle me-3" width="50" height="50" alt="Testimonial">
+                                <div>
+                                    <h6 class="mb-0">Nguyễn Minh Tuấn</h6>
+                                    <small class="text-muted">Khách hàng</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="mb-3 text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <p class="card-text">"Liệu trình trẻ hóa da tại SimpleBeauty thật đáng tiền. Tôi đã nhận được rất nhiều lời khen về làn da của mình sau khi điều trị."</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <img src="https://randomuser.me/api/portraits/women/32.jpg" class="rounded-circle me-3" width="50" height="50" alt="Testimonial">
+                                <div>
+                                    <h6 class="mb-0">Lê Thu Hằng</h6>
+                                    <small class="text-muted">Khách hàng</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Section -->
+    <section id="blog" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Bài viết mới nhất</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1511852365831-2e09b58e0417" class="card-img-top" alt="Blog post">
+                        <div class="card-body">
+                            <h5 class="card-title">5 bước chăm sóc da buổi tối hiệu quả</h5>
+                            <p class="card-text">Khám phá quy trình 5 bước giúp làn da của bạn được phục hồi tối ưu trong giấc ngủ...</p>
+                            <a href="blog-details.html" class="btn btn-outline-primary">Đọc thêm</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <small>Đăng ngày 15/04/2023</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1586798658502-0dc367cb2776" class="card-img-top" alt="Blog post">
+                        <div class="card-body">
+                            <h5 class="card-title">Cách chọn kem chống nắng phù hợp với loại da</h5>
+                            <p class="card-text">Tìm hiểu cách chọn kem chống nắng phù hợp với từng loại da để bảo vệ da tối ưu...</p>
+                            <a href="blog-details.html" class="btn btn-outline-primary">Đọc thêm</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <small>Đăng ngày 08/04/2023</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <img src="https://images.unsplash.com/photo-1498843053639-170ff2122f35" class="card-img-top" alt="Blog post">
+                        <div class="card-body">
+                            <h5 class="card-title">Dinh dưỡng và làn da khỏe mạnh</h5>
+                            <p class="card-text">Các loại thực phẩm giàu dưỡng chất giúp cải thiện sức khỏe làn da từ bên trong...</p>
+                            <a href="blog-details.html" class="btn btn-outline-primary">Đọc thêm</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <small>Đăng ngày 01/04/2023</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="blog.html" class="btn btn-outline-secondary px-4">Xem tất cả bài viết</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2 class="mb-4">Liên hệ với chúng tôi</h2>
+                    <p class="mb-4">Hãy liên hệ với chúng tôi để được tư vấn miễn phí hoặc đặt lịch hẹn.</p>
+                    <div class="mb-4">
+                        <h5>Thông tin liên hệ</h5>
+                        <p><i class="fas fa-map-marker-alt me-2"></i>123 Nguyễn Văn Linh, Quận 7, TP. Hồ Chí Minh</p>
+                        <p><i class="fas fa-phone me-2"></i>(028) 3456 7890</p>
+                        <p><i class="fas fa-envelope me-2"></i>info@simplebeauty.vn</p>
+                    </div>
+                    <div>
+                        <h5>Giờ làm việc</h5>
+                        <p>Thứ Hai - Thứ Bảy: 9:00 - 20:00</p>
+                        <p>Chủ Nhật: 10:00 - 17:00</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-4 mt-lg-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Gửi tin nhắn cho chúng tôi</h5>
+                            <form>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="Họ và tên">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" placeholder="Email">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="tel" class="form-control" placeholder="Số điện thoại">
+                                </div>
+                                <div class="mb-3">
+                                    <textarea class="form-control" rows="4" placeholder="Tin nhắn"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Gửi tin nhắn</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5 class="mb-3">SimpleBeauty</h5>
+                    <p>Trung tâm chăm sóc da hàng đầu, mang đến cho bạn làn da khỏe mạnh và rạng rỡ với các dịch vụ chăm sóc da chuyên nghiệp.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 footer-links mb-4 mb-md-0">
+                    <h5 class="mb-3">Liên kết</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Trang chủ</a></li>
+                        <li class="mb-2"><a href="#services">Dịch vụ</a></li>
+                        <li class="mb-2"><a href="#specialists">Chuyên viên</a></li>
+                        <li class="mb-2"><a href="#blog">Blog</a></li>
+                        <li class="mb-2"><a href="#contact">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 footer-links mb-4 mb-md-0">
+                    <h5 class="mb-3">Dịch vụ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Chăm sóc da cơ bản</a></li>
+                        <li class="mb-2"><a href="#">Trị liệu mụn</a></li>
+                        <li class="mb-2"><a href="#">Trị liệu nám</a></li>
+                        <li class="mb-2"><a href="#">Trẻ hóa da</a></li>
+                        <li class="mb-2"><a href="#">Phục hồi da</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 footer-links">
+                    <h5 class="mb-3">Tải ứng dụng</h5>
+                    <p>Tải ứng dụng SimpleBeauty để đặt lịch dễ dàng và nhận nhiều ưu đãi hấp dẫn.</p>
+                    <div class="mt-3">
+                        <a href="#" class="me-2"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/2560px-Google_Play_Store_badge_EN.svg.png" alt="Google Play" width="120"></a>
+                        <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/2560px-Download_on_the_App_Store_Badge.svg.png" alt="App Store" width="120"></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4 bg-light opacity-25">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2023 SimpleBeauty. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Đặt lịch hẹn - SimpleBeauty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e2b6a6;
+            --secondary-color: #5c4742;
+            --accent-color: #9a6d64;
+            --light-color: #f8f3ef;
+            --dark-color: #3a302d;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        .navbar-brand {
+            font-weight: 700;
+        }
+        .page-header {
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 60px 0;
+        }
+        .booking-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .service-card {
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .service-card.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(226, 182, 166, 0.05);
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--dark-color);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(226, 182, 166, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                SimpleBeauty
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/services">Dịch vụ</a>
+                    </li>
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Tài khoản</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>Hồ sơ</a>
+                            <a class="dropdown-item" href="/appointments"><i class="fas fa-calendar-check me-2"></i>Lịch hẹn</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/admin" sec:authorize="hasRole('ROLE_ADMIN')"><i class="fas fa-cog me-2"></i>Quản trị</a>
+                            <div class="dropdown-divider" sec:authorize="hasRole('ROLE_ADMIN')"></div>
+                            <form th:action="@{/logout}" method="post" class="dropdown-item p-0">
+                                <button type="submit" class="btn btn-link text-decoration-none text-reset p-2"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header text-center">
+        <div class="container">
+            <h1>Đặt lịch hẹn</h1>
+            <p class="lead">Chọn dịch vụ và thời gian phù hợp với bạn</p>
+        </div>
+    </section>
+
+    <!-- Booking Form -->
+    <section class="container py-5">
+        <div class="booking-container">
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${error}">Lỗi</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            
+            <form th:action="@{/appointments/book}" method="post" id="bookingForm">
+                <!-- Step 1: Choose Service -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Bước 1: Chọn dịch vụ</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div th:each="service : ${services}" class="col-md-4 mb-3">
+                                <div th:id="'service-card-' + ${service.id}" class="card service-card h-100" th:classappend="${service.id == selectedServiceId ? 'selected' : ''}">
+                                    <img th:src="${service.imageUrl != null ? service.imageUrl : 'https://via.placeholder.com/350x200'}" class="card-img-top" th:alt="${service.name}">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${service.name}">Tên dịch vụ</h5>
+                                        <p class="card-text" th:text="${service.shortDescription}">Mô tả ngắn</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(service.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">1,000,000 VNĐ</span>
+                                            <span class="text-muted"><i class="far fa-clock me-1"></i> <span th:text="${service.durationMinutes + ' phút'}">60 phút</span></span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-white border-top-0">
+                                        <div class="form-check">
+                                            <input type="radio" th:id="'service-' + ${service.id}" name="serviceId" th:value="${service.id}" class="form-check-input" th:checked="${service.id == selectedServiceId}" required>
+                                            <label class="form-check-label" th:for="'service-' + ${service.id}">Chọn dịch vụ này</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Choose Date and Time -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Bước 2: Chọn ngày và giờ</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="appointmentDate" class="form-label">Ngày</label>
+                                    <input type="date" class="form-control" id="appointmentDate" name="appointmentDate" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="appointmentTime" class="form-label">Giờ</label>
+                                    <select class="form-select" id="appointmentTime" name="appointmentTime" required>
+                                        <option value="">Chọn giờ</option>
+                                        <option value="09:00">09:00</option>
+                                        <option value="10:00">10:00</option>
+                                        <option value="11:00">11:00</option>
+                                        <option value="13:00">13:00</option>
+                                        <option value="14:00">14:00</option>
+                                        <option value="15:00">15:00</option>
+                                        <option value="16:00">16:00</option>
+                                        <option value="17:00">17:00</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Additional Information -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Bước 3: Thông tin bổ sung</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Ghi chú (không bắt buộc)</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Nhập các yêu cầu đặc biệt hoặc thông tin bổ sung"></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Đặt lịch</button>
+                    <a href="/services" class="btn btn-secondary btn-lg ms-2">Hủy</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>SimpleBeauty Skin Therapy Center</h5>
+                    <p>Chuyên nghiệp trong chăm sóc và điều trị các vấn đề về da với công nghệ hiện đại và đội ngũ chuyên gia hàng đầu.</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Liên hệ</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Nguyễn Văn Linh, Quận 7, TP.HCM</li>
+                        <li><i class="fas fa-phone me-2"></i> (028) 3456 7890</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@simplebeauty.vn</li>
+                    </ul>
+                    <h5 class="mt-4">Giờ làm việc</h5>
+                    <p>Thứ Hai - Thứ Bảy: 9:00 - 20:00<br>Chủ Nhật: 10:00 - 17:00</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Liên kết nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Trang chủ</a></li>
+                        <li><a href="/about" class="text-white">Giới thiệu</a></li>
+                        <li><a href="/services" class="text-white">Dịch vụ</a></li>
+                        <li><a href="/appointments" class="text-white">Lịch hẹn của tôi</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2023 SimpleBeauty. Tất cả quyền được bảo lưu.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('appointmentDate').setAttribute('min', today);
+        
+        // Handle service card selection
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove selected class from all cards
+                document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+                
+                // Add selected class to clicked card
+                this.classList.add('selected');
+                
+                // Check the radio button
+                const radioId = this.querySelector('input[type="radio"]').id;
+                document.getElementById(radioId).checked = true;
+            });
+        });
+    </script>
+</body>
+</html>

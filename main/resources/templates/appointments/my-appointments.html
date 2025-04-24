@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Lịch hẹn của tôi - SimpleBeauty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e2b6a6;
+            --secondary-color: #5c4742;
+            --accent-color: #9a6d64;
+            --light-color: #f8f3ef;
+            --dark-color: #3a302d;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+        }
+        .navbar-brand {
+            font-weight: 700;
+        }
+        .page-header {
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 60px 0;
+        }
+        .appointment-card {
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+        .appointment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--dark-color);
+        }
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                SimpleBeauty
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/services">Dịch vụ</a>
+                    </li>
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i> <span sec:authentication="name">Tài khoản</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>Hồ sơ</a>
+                            <a class="dropdown-item active" href="/appointments"><i class="fas fa-calendar-check me-2"></i>Lịch hẹn</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/admin" sec:authorize="hasRole('ROLE_ADMIN')"><i class="fas fa-cog me-2"></i>Quản trị</a>
+                            <div class="dropdown-divider" sec:authorize="hasRole('ROLE_ADMIN')"></div>
+                            <form th:action="@{/logout}" method="post" class="dropdown-item p-0">
+                                <button type="submit" class="btn btn-link text-decoration-none text-reset p-2"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header text-center">
+        <div class="container">
+            <h1>Lịch hẹn của tôi</h1>
+            <p class="lead">Quản lý các lịch hẹn đã đặt</p>
+        </div>
+    </section>
+
+    <!-- Appointments List -->
+    <section class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Danh sách lịch hẹn</h2>
+            <a href="/appointments/book" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Đặt lịch mới
+            </a>
+        </div>
+        
+        <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:if="${param.success[0] == 'booked'}">Đặt lịch thành công! Chúng tôi sẽ xác nhận lịch hẹn của bạn sớm.</span>
+            <span th:if="${param.success[0] == 'cancelled'}">Hủy lịch hẹn thành công!</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:if="${param.error[0] == 'unauthorized'}">Bạn không có quyền thực hiện hành động này.</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <div th:if="${appointments.isEmpty()}" class="text-center py-5">
+            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+            <h4>Bạn chưa có lịch hẹn nào</h4>
+            <p>Hãy đặt lịch để trải nghiệm dịch vụ của chúng tôi</p>
+            <a href="/appointments/book" class="btn btn-primary mt-2">Đặt lịch ngay</a>
+        </div>
+        
+        <div th:unless="${appointments.isEmpty()}" class="row">
+            <div class="col-md-4 mb-4" th:each="appointment : ${appointments}">
+                <div class="card appointment-card h-100">
+                    <div class="card-header" th:classappend="${
+                        appointment.status.name() == 'PENDING' ? 'bg-warning text-dark' : 
+                        appointment.status.name() == 'CONFIRMED' ? 'bg-primary text-white' : 
+                        appointment.status.name() == 'COMPLETED' ? 'bg-success text-white' : 
+                        'bg-secondary text-white'
+                    }">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0" th:text="${appointment.service.name}">Tên dịch vụ</h5>
+                            <span class="badge" th:classappend="${
+                                appointment.status.name() == 'PENDING' ? 'bg-light text-dark' : 
+                                appointment.status.name() == 'CONFIRMED' ? 'bg-light text-dark' : 
+                                appointment.status.name() == 'COMPLETED' ? 'bg-light text-dark' : 
+                                'bg-light text-dark'
+                            }" th:text="${appointment.status}">Trạng thái</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <p class="mb-1"><i class="far fa-calendar-alt me-2"></i> <strong>Ngày:</strong> <span th:text="${#temporals.format(appointment.appointmentTime, 'dd/MM/yyyy')}">01/01/2023</span></p>
+                            <p class="mb-1"><i class="far fa-clock me-2"></i> <strong>Giờ:</strong> <span th:text="${#temporals.format(appointment.appointmentTime, 'HH:mm')}">10:00</span></p>
+                            <p class="mb-0"><i class="fas fa-hourglass-half me-2"></i> <strong>Thời gian:</strong> <span th:text="${appointment.service.durationMinutes + ' phút'}">60 phút</span></p>
+                        </div>
+                        
+                        <p class="mb-1"><strong>Giá:</strong> <span class="text-primary fw-bold" th:text="${#numbers.formatDecimal(appointment.service.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">1,000,000 VNĐ</span></p>
+                        
+                        <div th:if="${appointment.notes}" class="mt-3">
+                            <p class="mb-1"><strong>Ghi chú:</strong></p>
+                            <p class="mb-0 text-muted" th:text="${appointment.notes}">Ghi chú của khách hàng</p>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{'/appointments/' + ${appointment.id}}" class="btn btn-outline-primary">Chi tiết</a>
+                            <form th:if="${appointment.status.name() == 'PENDING' || appointment.status.name() == 'CONFIRMED'}" th:action="@{'/appointments/' + ${appointment.id} + '/cancel'}" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn hủy lịch hẹn này?')">
+                                <button type="submit" class="btn btn-outline-danger">Hủy lịch</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5>SimpleBeauty Skin Therapy Center</h5>
+                    <p>Chuyên nghiệp trong chăm sóc và điều trị các vấn đề về da với công nghệ hiện đại và đội ngũ chuyên gia hàng đầu.</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Liên hệ</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> 123 Nguyễn Văn Linh, Quận 7, TP.HCM</li>
+                        <li><i class="fas fa-phone me-2"></i> (028) 3456 7890</li>
+                        <li><i class="fas fa-envelope me-2"></i> info@simplebeauty.vn</li>
+                    </ul>
+                    <h5 class="mt-4">Giờ làm việc</h5>
+                    <p>Thứ Hai - Thứ Bảy: 9:00 - 20:00<br>Chủ Nhật: 10:00 - 17:00</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Liên kết nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Trang chủ</a></li>
+                        <li><a href="/about" class="text-white">Giới thiệu</a></li>
+                        <li><a href="/services" class="text-white">Dịch vụ</a></li>
+                        <li><a href="/appointments/book" class="text-white">Đặt lịch</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2023 SimpleBeauty. Tất cả quyền được bảo lưu.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SimpleBeauty</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #e2b6a6;
+            --secondary-color: #5c4742;
+            --accent-color: #9a6d64;
+            --light-color: #f8f3ef;
+            --dark-color: #3a302d;
+            --success-color: #28a745;
+            --info-color: #17a2b8;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-color);
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            background-color: var(--secondary-color);
+            color: white;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            padding: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: var(--primary-color);
+        }
+        
+        .sidebar-menu a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .topbar {
+            background-color: white;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card {
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .stat-card-1 {
+            background: linear-gradient(45deg, #7367f0, #ce9ffc);
+        }
+        
+        .stat-card-2 {
+            background: linear-gradient(45deg, #17a2b8, #90caf9);
+        }
+        
+        .stat-card-3 {
+            background: linear-gradient(45deg, #28a745, #84e29a);
+        }
+        
+        .stat-card-4 {
+            background: linear-gradient(45deg, #ff9f43, #ffbd59);
+        }
+        
+        .stat-icon {
+            font-size: 48px;
+            opacity: 0.6;
+        }
+        
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table thead th {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            font-weight: 500;
+        }
+        
+        .badge-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .badge-pending {
+            background-color: #ffecb5;
+            color: #d1a000;
+        }
+        
+        .badge-confirmed {
+            background-color: #c3e6cb;
+            color: #28a745;
+        }
+        
+        .badge-completed {
+            background-color: #b8daff;
+            color: #0d6efd;
+        }
+        
+        .badge-cancelled {
+            background-color: #f5c6cb;
+            color: #dc3545;
+        }
+        
+        .badge-no-show {
+            background-color: #d6d8db;
+            color: #6c757d;
+        }
+        
+        .btn-action {
+            padding: 5px 10px;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>SimpleBeauty</h3>
+            <p>Admin Dashboard</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="dashboard.html" class="active">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="appointments.html">
+                    <i class="far fa-calendar-alt"></i> Lịch hẹn
+                </a>
+            </li>
+            <li>
+                <a href="customers.html">
+                    <i class="fas fa-users"></i> Khách hàng
+                </a>
+            </li>
+            <li>
+                <a href="services.html">
+                    <i class="fas fa-spa"></i> Dịch vụ
+                </a>
+            </li>
+            <li>
+                <a href="specialists.html">
+                    <i class="fas fa-user-md"></i> Chuyên viên
+                </a>
+            </li>
+            <li>
+                <a href="reports.html">
+                    <i class="fas fa-chart-bar"></i> Báo cáo
+                </a>
+            </li>
+            <li>
+                <a href="settings.html">
+                    <i class="fas fa-cog"></i> Cài đặt
+                </a>
+            </li>
+            <li>
+                <a href="../index.html">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <div class="topbar">
+            <h4>Dashboard</h4>
+            <div class="user-info">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Admin" class="user-avatar">
+                <div>
+                    <h6 class="mb-0">Nguyễn Thu Hằng</h6>
+                    <small class="text-muted">Admin</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card stat-card stat-card-1">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h3 class="mb-0">145</h3>
+                            <p class="mb-0">Lịch hẹn mới</p>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="far fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    <small>Tăng 12% so với tháng trước</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card stat-card-2">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h3 class="mb-0">3,587</h3>
+                            <p class="mb-0">Khách hàng</p>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <small>Tăng 8% so với tháng trước</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card stat-card-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h3 class="mb-0">28</h3>
+                            <p class="mb-0">Dịch vụ</p>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                    </div>
+                    <small>Thêm 3 dịch vụ mới</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card stat-card-4">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h3 class="mb-0">75.8M</h3>
+                            <p class="mb-0">Doanh thu (VNĐ)</p>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                    </div>
+                    <small>Tăng 15% so với tháng trước</small>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts -->
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Doanh thu theo tháng</h5>
+                        <canvas id="revenueChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Trạng thái lịch hẹn</h5>
+                        <canvas id="appointmentStatusChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Appointments -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title">Lịch hẹn gần đây</h5>
+                    <a href="appointments.html" class="btn btn-sm btn-primary">Xem tất cả</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Khách hàng</th>
+                                <th>Dịch vụ</th>
+                                <th>Chuyên viên</th>
+                                <th>Ngày giờ</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#APT001</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="" class="rounded-circle me-2" width="30" height="30">
+                                        <div>Nguyễn Thị Mai</div>
+                                    </div>
+                                </td>
+                                <td>Trị liệu mụn chuyên sâu</td>
+                                <td>Trần Minh Tâm</td>
+                                <td>18/04/2023 10:00</td>
+                                <td><span class="badge-status badge-confirmed">Xác nhận</span></td>
+                                <td>
+                                    <a href="#" class="btn-action btn-sm btn-info text-white"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-success text-white"><i class="fas fa-check"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-danger text-white"><i class="fas fa-times"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#APT002</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" class="rounded-circle me-2" width="30" height="30">
+                                        <div>Lê Văn Dũng</div>
+                                    </div>
+                                </td>
+                                <td>Chăm sóc da cơ bản</td>
+                                <td>Phạm Thị Hương</td>
+                                <td>18/04/2023 13:30</td>
+                                <td><span class="badge-status badge-pending">Chờ xác nhận</span></td>
+                                <td>
+                                    <a href="#" class="btn-action btn-sm btn-info text-white"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-success text-white"><i class="fas fa-check"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-danger text-white"><i class="fas fa-times"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#APT003</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="" class="rounded-circle me-2" width="30" height="30">
+                                        <div>Lê Thu Hằng</div>
+                                    </div>
+                                </td>
+                                <td>Liệu pháp trẻ hóa da</td>
+                                <td>Nguyễn Thị Mai</td>
+                                <td>18/04/2023 15:00</td>
+                                <td><span class="badge-status badge-completed">Hoàn thành</span></td>
+                                <td>
+                                    <a href="#" class="btn-action btn-sm btn-info text-white"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-secondary text-white"><i class="fas fa-comment"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#APT004</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="" class="rounded-circle me-2" width="30" height="30">
+                                        <div>Trần Văn Bình</div>
+                                    </div>
+                                </td>
+                                <td>Trị liệu nám</td>
+                                <td>Trần Minh Tâm</td>
+                                <td>17/04/2023 09:00</td>
+                                <td><span class="badge-status badge-cancelled">Đã hủy</span></td>
+                                <td>
+                                    <a href="#" class="btn-action btn-sm btn-info text-white"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-primary text-white"><i class="fas fa-redo"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#APT005</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/women/24.jpg" alt="" class="rounded-circle me-2" width="30" height="30">
+                                        <div>Nguyễn Thị Hương</div>
+                                    </div>
+                                </td>
+                                <td>Chăm sóc da chuyên sâu</td>
+                                <td>Lê Văn Dũng</td>
+                                <td>17/04/2023 11:15</td>
+                                <td><span class="badge-status badge-no-show">Không đến</span></td>
+                                <td>
+                                    <a href="#" class="btn-action btn-sm btn-info text-white"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-primary text-white"><i class="fas fa-phone"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Customers -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title">Khách hàng mới</h5>
+                    <a href="customers.html" class="btn btn-sm btn-primary">Xem tất cả</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Khách hàng</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Ngày đăng ký</th>
+                                <th>Số lần sử dụng dịch vụ</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#CUS238</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/women/53.jpg" alt="" class="rounded-circle me-2" width="30" height="30">
+                                        <div>Phạm Thị Lan</div>
+                                    </div>
+                                </td>
+                                <td>lan.pham@gmail.com</td>
+                                <td>0912 345 678</td>
+                                <td>18/04/2023</td>
+                                <td>1</td>
+                                <td>
+                                    <a href="#" class="btn-action btn-sm btn-info text-white"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-primary text-white"><i class="fas fa-edit"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#CUS237</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="" class="rounded-circle me-2" width="30" height="30">
+                                        <div>Nguyễn Văn Cường</div>
+                                    </div>
+                                </td>
+                                <td>cuong.nguyen@gmail.com</td>
+                                <td>0918 765 432</td>
+                                <td>17/04/2023</td>
+                                <td>0</td>
+                                <td>
+                                    <a href="#" class="btn-action btn-sm btn-info text-white"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-primary text-white"><i class="fas fa-edit"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#CUS236</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="" class="rounded-circle me-2" width="30" height="30">
+                                        <div>Trần Thị Hoa</div>
+                                    </div>
+                                </td>
+                                <td>hoa.tran@gmail.com</td>
+                                <td>0923 456 789</td>
+                                <td>16/04/2023</td>
+                                <td>2</td>
+                                <td>
+                                    <a href="#" class="btn-action btn-sm btn-info text-white"><i class="fas fa-eye"></i></a>
+                                    <a href="#" class="btn-action btn-sm btn-primary text-white"><i class="fas fa-edit"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+                datasets: [{
+                    label: 'Doanh thu (triệu VNĐ)',
+                    data: [45.2, 52.8, 59.3, 64.7, 70.2, 75.8, 82.3, 68.9, 73.5, 79.8, 85.6, 91.2],
+                    backgroundColor: 'rgba(114, 103, 240, 0.2)',
+                    borderColor: '#7367f0',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointBackgroundColor: '#7367f0'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // Appointment Status Chart
+        const appointmentStatusCtx = document.getElementById('appointmentStatusChart').getContext('2d');
+        const appointmentStatusChart = new Chart(appointmentStatusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Chờ xác nhận', 'Xác nhận', 'Hoàn thành', 'Đã hủy', 'Không đến'],
+                datasets: [{
+                    label: 'Trạng thái lịch hẹn',
+                    data: [25, 40, 20, 10, 5],
+                    backgroundColor: [
+                        '#ffc107',
+                        '#28a745',
+                        '#17a2b8',
+                        '#dc3545',
+                        '#6c757d'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+    </script>
+</body>
+</html> 
